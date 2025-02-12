@@ -17,12 +17,22 @@ app = Flask(__name__)
 
 # Session 配置
 app.secret_key = 'your-super-secret-key-here'  # 使用固定的密钥
-app.config['SESSION_COOKIE_SECURE'] = True  # 暂时关闭 HTTPS 要求
+app.config['SESSION_COOKIE_SECURE'] = False  # 在开发环境中关闭 HTTPS 要求
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # 修改为 Lax
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # 允许跨域请求
 app.config['PERMANENT_SESSION_LIFETIME'] = 1800  # session 过期时间设为 30 分钟
 app.config['SESSION_COOKIE_DOMAIN'] = None  # 允许所有域名
 app.config['SESSION_COOKIE_PATH'] = '/'  # Cookie路径
+app.config['SESSION_COOKIE_NAME'] = 'erp_session'  # 设置特定的 session cookie 名称
+
+# 在每個請求前檢查 session
+@app.before_request
+def before_request():
+    print("當前 session:", dict(session))
+    print(f"請求路徑: {request.path}")
+    print(f"請求方法: {request.method}")
+    print(f"Cookie: {request.cookies}")
+    print(f"Origin: {request.headers.get('Origin')}")
 
 # CORS 配置
 CORS(app, resources={
@@ -35,7 +45,7 @@ CORS(app, resources={
         "supports_credentials": True,
         "allow_headers": ["Content-Type", "Authorization", "Accept", "X-Line-Signature"],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "expose_headers": ["Content-Type", "Authorization"],
+        "expose_headers": ["Content-Type", "Authorization", "Set-Cookie"],
         "max_age": 600
     }
 })
@@ -55,7 +65,7 @@ def after_request(response):
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization,Accept,X-Line-Signature'
         response.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,OPTIONS'
         response.headers['Access-Control-Max-Age'] = '600'
-        response.headers['Access-Control-Expose-Headers'] = 'Content-Type,Authorization'
+        response.headers['Access-Control-Expose-Headers'] = 'Content-Type,Authorization,Set-Cookie'
         response.headers['Vary'] = 'Origin'
     
     # 處理 OPTIONS 請求

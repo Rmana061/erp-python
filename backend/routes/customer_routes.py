@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 from backend.config.database import get_db_connection
-from backend.utils.password_utils import hash_password
+from hash_password import verify_password, hash_password
 import datetime
 
 customer_bp = Blueprint('customer', __name__)
@@ -331,10 +331,11 @@ def get_customer_detail(customer_id):
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # 查询客户信息
+            # 查询客户信息，添加更多字段
             cursor.execute("""
                 SELECT id, username, company_name, contact_name, 
-                       phone, email, address, line_account, viewable_products, remark
+                       phone, email, address, line_account, viewable_products, 
+                       remark, created_at, updated_at, status
                 FROM customers 
                 WHERE id = %s AND status = 'active'
             """, (customer_id,))
@@ -346,16 +347,25 @@ def get_customer_detail(customer_id):
                     "message": "找不到客戶資料"
                 }), 404
 
-            # 构建返回数据
+            # 构建返回数据，添加更多字段
             columns = ['id', 'username', 'company_name', 'contact_name', 
-                      'phone', 'email', 'address', 'line_account', 'viewable_products', 'remark']
+                      'phone', 'email', 'address', 'line_account', 
+                      'viewable_products', 'remark', 'created_at', 
+                      'updated_at', 'status']
             customer_data = dict(zip(columns, result))
+            
+            # 格式化日期
+            if customer_data.get('created_at'):
+                customer_data['created_at'] = customer_data['created_at'].strftime('%Y-%m-%d %H:%M:%S')
+            if customer_data.get('updated_at'):
+                customer_data['updated_at'] = customer_data['updated_at'].strftime('%Y-%m-%d %H:%M:%S')
             
             # 将 contact_name 映射为 contact_person
             if 'contact_name' in customer_data:
                 customer_data['contact_person'] = customer_data['contact_name']
                 del customer_data['contact_name']
 
+            print("返回的客户数据:", customer_data)  # 添加调试日志
             return jsonify({
                 "status": "success",
                 "data": customer_data

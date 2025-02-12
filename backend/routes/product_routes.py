@@ -514,4 +514,52 @@ def unlock_date():
         return jsonify({
             'status': 'error',
             'message': str(e)
+        }), 500
+
+@product_bp.route('/products/<int:product_id>/detail', methods=['POST'])
+def get_product_detail(product_id):
+    try:
+        data = request.json
+        if not data.get('type') == 'admin':
+            return jsonify({
+                'status': 'error',
+                'message': 'Unauthorized access'
+            }), 403
+
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT id, name, description, image_url, dm_url, 
+                       min_order_qty, max_order_qty, product_unit, 
+                       shipping_time, special_date, created_at, updated_at 
+                FROM products
+                WHERE id = %s AND status = 'active'
+            """, (product_id,))
+            
+            result = cursor.fetchone()
+            if not result:
+                return jsonify({
+                    'status': 'error',
+                    'message': '找不到該產品'
+                }), 404
+
+            columns = [desc[0] for desc in cursor.description]
+            product_data = dict(zip(columns, result))
+            
+            # 格式化日期
+            if product_data.get('created_at'):
+                product_data['created_at'] = product_data['created_at'].strftime('%Y-%m-%d %H:%M:%S')
+            if product_data.get('updated_at'):
+                product_data['updated_at'] = product_data['updated_at'].strftime('%Y-%m-%d %H:%M:%S')
+
+            return jsonify({
+                'status': 'success',
+                'data': product_data
+            })
+            
+    except Exception as e:
+        print(f"Error in get_product_detail: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
         }), 500 
