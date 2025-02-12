@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import session, jsonify
+from flask import session, jsonify, request
 from backend.models.admin import Admin
 
 def require_permission(permission):
@@ -8,9 +8,18 @@ def require_permission(permission):
         def decorated_function(*args, **kwargs):
             print(f"檢查權限: {permission}")
             print(f"當前 session: {dict(session)}")
+            print(f"請求 headers: {dict(request.headers)}")
             
-            # 檢查是否已登入
+            # 首先从 session 中获取 admin_id
             admin_id = session.get('admin_id')
+            
+            # 如果 session 中没有，则尝试从 Authorization header 中获取
+            if not admin_id:
+                auth_header = request.headers.get('Authorization')
+                if auth_header and auth_header.startswith('Bearer '):
+                    admin_id = auth_header.split(' ')[1]
+                    print(f"從 Authorization header 獲取 admin_id: {admin_id}")
+            
             if not admin_id:
                 print("未找到 admin_id")
                 return jsonify({
@@ -18,9 +27,16 @@ def require_permission(permission):
                     'message': '請先登入'
                 }), 401
 
-            # 直接從 session 中獲取權限
-            permissions = session.get('permissions', {})
-            print(f"從 session 獲取的權限: {permissions}")
+            # 如果 session 中没有权限信息，则从数据库获取
+            permissions = session.get('permissions')
+            if not permissions:
+                admin_info = Admin.get_by_id(admin_id)
+                if admin_info and admin_info.get('permissions'):
+                    permissions = admin_info['permissions']
+                    # 将权限信息存入 session
+                    session['admin_id'] = admin_id
+                    session['permissions'] = permissions
+                    print(f"從數據庫獲取並更新權限: {permissions}")
             
             if not permissions:
                 print("未找到權限信息")

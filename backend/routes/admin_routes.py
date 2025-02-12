@@ -49,6 +49,20 @@ def get_admin_list():
 def add_admin():
     try:
         data = request.json
+        print("接收到的数据:", data)
+        
+        # 获取当前管理员ID
+        admin_id = session.get('admin_id')
+        if not admin_id:
+            auth_header = request.headers.get('Authorization')
+            if auth_header and auth_header.startswith('Bearer '):
+                admin_id = auth_header.split(' ')[1]
+        
+        if not admin_id:
+            return jsonify({
+                "status": "error",
+                "message": "未登入或登入已過期"
+            }), 401
         
         with get_db_connection() as conn:
             cursor = conn.cursor()
@@ -120,7 +134,7 @@ def add_admin():
         }), 500
 
 @admin_bp.route('/admin/update', methods=['POST'])
-@require_permission('can_edit_personnel')
+@require_permission('can_add_personnel')
 def update_admin():
     try:
         data = request.get_json()
@@ -139,6 +153,28 @@ def update_admin():
 
         with get_db_connection() as conn:
             cursor = conn.cursor()
+
+            # 检查账号是否与其他管理员重复
+            cursor.execute("""
+                SELECT id FROM administrators 
+                WHERE admin_account = %s AND id != %s AND status = 'active'
+            """, (admin_account, admin_id))
+            if cursor.fetchone():
+                return jsonify({
+                    "status": "error",
+                    "message": "管理員帳號已存在"
+                }), 400
+
+            # 检查工号是否与其他管理员重复
+            cursor.execute("""
+                SELECT id FROM administrators 
+                WHERE staff_no = %s AND id != %s AND status = 'active'
+            """, (staff_no, admin_id))
+            if cursor.fetchone():
+                return jsonify({
+                    "status": "error",
+                    "message": "工號已存在"
+                }), 400
 
             update_fields = [
                 "admin_account = %s",
