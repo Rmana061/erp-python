@@ -311,30 +311,44 @@ def update_order_status():
                 'message': '缺少必要參數'
             }), 400
 
-        # 如果是核准訂單，需要檢查出貨日期
-        if data['status'] == '已確認' and 'shipping_date' not in data:
-            return jsonify({
-                'status': 'error',
-                'message': '核准訂單時需要提供出貨日期'
-            }), 400
-
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # 更新訂單狀態和出貨日期
+            # 如果是更新為已出貨狀態，先獲取原有的出貨日期
+            if data['status'] == '已出貨':
+                cursor.execute("""
+                    SELECT shipping_date, supplier_note
+                    FROM order_details
+                    WHERE id = %s
+                """, (data['order_id'],))
+                result = cursor.fetchone()
+                if result:
+                    shipping_date = result[0]
+                    supplier_note = result[1]
+                else:
+                    shipping_date = None
+                    supplier_note = None
+            else:
+                shipping_date = data.get('shipping_date')
+                supplier_note = data.get('supplier_note')
+
+            # 更新訂單狀態，保留原有的出貨日期和供應商備註
             update_sql = """
                 UPDATE order_details 
                 SET order_status = %s,
-                    shipping_date = %s,
-                    supplier_note = %s,
+                    shipping_date = COALESCE(%s, shipping_date),
+                    supplier_note = COALESCE(%s, supplier_note),
                     updated_at = NOW()
                 WHERE id = %s
                 RETURNING order_id;
             """
             
-            shipping_date = data.get('shipping_date') if data['status'] == '已確認' else None
-            supplier_note = data.get('supplier_note')
-            cursor.execute(update_sql, (data['status'], shipping_date, supplier_note, data['order_id']))
+            cursor.execute(update_sql, (
+                data['status'], 
+                shipping_date,
+                supplier_note,
+                data['order_id']
+            ))
             
             result = cursor.fetchone()
             if not result:

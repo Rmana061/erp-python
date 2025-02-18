@@ -1,0 +1,182 @@
+-- 建立資料庫
+CREATE DATABASE my_database;
+\c my_database;
+
+-- 建立 ENUM 类型（避免 PostgreSQL 语法错误）
+DO $$ 
+BEGIN 
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'customer_status') THEN
+        CREATE TYPE customer_status AS ENUM ('active', 'inactive');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'product_status') THEN
+        CREATE TYPE product_status AS ENUM ('available', 'unavailable');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'order_status') THEN
+        CREATE TYPE order_status AS ENUM ('待確認', '已確認', '已出貨', '完成', '取消');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'operation_type') THEN
+        CREATE TYPE operation_type AS ENUM ('新增', '刪除', '修改', '查詢');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_type') THEN
+        CREATE TYPE user_type AS ENUM ('客戶', '管理員');
+    END IF;
+END $$;
+
+
+
+
+-- 建立 customers 資料表
+CREATE TABLE customers (
+    id BIGSERIAL PRIMARY KEY,
+    company_name VARCHAR(255) NOT NULL,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    line_account VARCHAR(255),
+    contact_name VARCHAR(100),
+    phone VARCHAR(50),
+    email VARCHAR(255),
+    address VARCHAR(255),
+    viewable_products TEXT,
+    status customer_status NOT NULL DEFAULT 'active',
+    remark TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 建立 products 資料表
+CREATE TABLE products (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    image_url VARCHAR(255),
+    dm_url VARCHAR(255),
+    min_order_qty INT DEFAULT 1,
+    max_order_qty INT,
+    product_unit VARCHAR(50) NOT NULL,
+    special_date BOOLEAN DEFAULT FALSE,
+    status product_status NOT NULL DEFAULT 'available',
+    shipping_time VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TYPE product_status ADD VALUE 'active';
+
+-- 建立 orders 資料表
+CREATE TABLE orders (
+    id BIGSERIAL PRIMARY KEY,
+    order_number VARCHAR(50) UNIQUE NOT NULL,
+    customer_id BIGINT NOT NULL REFERENCES customers(id),
+    order_confirmed BOOLEAN DEFAULT FALSE,
+    order_shipped BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 建立 order_details 資料表
+CREATE TABLE order_details (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT NOT NULL REFERENCES orders(id),
+    product_id BIGINT NOT NULL REFERENCES products(id),
+    product_quantity INT NOT NULL,
+    product_unit VARCHAR(50) NOT NULL,
+    order_status order_status NOT NULL DEFAULT '待確認',
+    shipping_date DATE,
+    remark TEXT,
+    supplier_note TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 建立 logs 資料表
+CREATE TABLE logs (
+    id BIGSERIAL PRIMARY KEY,
+    table_name VARCHAR(255) NOT NULL,
+    operation_type operation_type NOT NULL,
+    record_id BIGINT,
+    operation_detail TEXT,
+    performed_by BIGINT NOT NULL,
+    user_type user_type NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 建立 permission_levels 資料表
+CREATE TABLE permission_levels (
+    id BIGSERIAL PRIMARY KEY,
+    level_name VARCHAR(50) NOT NULL,
+    can_approve_orders BOOLEAN NOT NULL DEFAULT FALSE,
+    can_edit_orders BOOLEAN NOT NULL DEFAULT FALSE,
+    can_close_order_dates BOOLEAN NOT NULL DEFAULT FALSE,
+    can_add_customer BOOLEAN NOT NULL DEFAULT FALSE,
+    can_add_product BOOLEAN NOT NULL DEFAULT FALSE,
+    can_add_personnel BOOLEAN NOT NULL DEFAULT FALSE,
+    can_view_system_logs BOOLEAN NOT NULL DEFAULT FALSE,
+    can_decide_product_view BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 插入權限等級
+INSERT INTO permission_levels (level_name, can_approve_orders, can_edit_orders, can_close_order_dates, can_add_customer, can_add_product, can_add_personnel, can_view_system_logs, can_decide_product_view, created_at, updated_at)
+VALUES
+('最高權限', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, NOW(), NOW()),
+('審核權限', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, NOW(), NOW()),
+('基本權限', FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, NOW(), NOW()),
+('檢視權限', FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NOW(), NOW());
+
+-- 建立 administrators 資料表
+CREATE TABLE administrators (
+    id BIGSERIAL PRIMARY KEY,
+    admin_account VARCHAR(100) UNIQUE NOT NULL,
+    admin_password VARCHAR(255) NOT NULL,
+    admin_name VARCHAR(100) NOT NULL,
+    staff_no VARCHAR(50),
+    permission_level_id BIGINT NOT NULL REFERENCES permission_levels(id),
+    status customer_status NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 插入管理員帳號
+INSERT INTO administrators (admin_account, admin_password, admin_name, staff_no, permission_level_id, status, created_at, updated_at)
+VALUES
+('1', '1', 'Super Admin', 'A000', (SELECT id FROM permission_levels WHERE level_name = '最高權限'), 'active', NOW(), NOW());
+
+-- 建立 locked_dates 資料表
+CREATE TABLE locked_dates (
+    id BIGSERIAL PRIMARY KEY,
+    locked_date DATE UNIQUE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 建立 `updated_at` 自动更新触发器
+CREATE OR REPLACE FUNCTION set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 为所有需要自动更新时间戳的表添加触发器
+DO $$ 
+DECLARE tbl RECORD;
+BEGIN
+    FOR tbl IN 
+        SELECT tablename FROM pg_tables 
+        WHERE schemaname = 'public' 
+        AND tablename IN ('customers', 'products', 'orders', 'order_details', 'permission_levels', 'administrators')
+    LOOP
+        EXECUTE format(
+            'CREATE TRIGGER trigger_update_%I 
+            BEFORE UPDATE ON %I
+            FOR EACH ROW 
+            EXECUTE FUNCTION set_timestamp();', 
+            tbl.tablename, tbl.tablename
+        );
+    END LOOP;
+END $$;
