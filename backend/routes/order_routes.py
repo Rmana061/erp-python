@@ -1,90 +1,115 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from backend.config.database import get_db_connection
 from datetime import datetime
+from backend.utils.email_utils import EmailSender
+import threading
 
 order_bp = Blueprint('order', __name__, url_prefix='/api')
+
+def send_order_email(customer_email, order_data):
+    try:
+        email_sender = EmailSender()
+        email_sender.send_order_confirmation(customer_email, order_data)
+    except Exception as e:
+        print(f"發送郵件時出錯: {str(e)}")
 
 @order_bp.route('/orders/create', methods=['POST'])
 def create_order():
     try:
-        data = request.json
-        print("Received order data:", data)
+        data = request.get_json()
         
-        # 驗證必填字段
-        required_fields = ['order_number', 'customer_id']
-        for field in required_fields:
-            if field not in data:
-
-                return jsonify({
-                    'status': 'error',
-                    'message': f'缺少必填欄位: {field}'
-                }), 400
-
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            try:
-                # 1. 首先創建主訂單
-                order_sql = """
-                    INSERT INTO orders (order_number, customer_id, created_at)
-                    VALUES (%s, %s, %s)
-                    RETURNING id;
-
-                """
-                
-                cursor.execute(order_sql, (
-                    data['order_number'],
-                    data['customer_id'],
-                    datetime.now()
-                ))
-                
-                order_id = cursor.fetchone()[0]
-
-                # 2. 然後創建訂單詳情
-                details_sql = """
+            # 創建訂單記錄
+            cursor.execute("""
+                INSERT INTO orders (
+                    order_number, customer_id,
+                    order_confirmed, order_shipped,
+                    created_at, updated_at
+                ) VALUES (
+                    %s, %s, false, false, NOW(), NOW()
+                ) RETURNING id
+            """, (
+                data['order_number'],
+                data['customer_id']
+            ))
+            
+            order_id = cursor.fetchone()[0]
+            
+            # 創建訂單項目
+            for product in data['products']:
+                cursor.execute("""
                     INSERT INTO order_details (
                         order_id, product_id, product_quantity,
                         product_unit, order_status, shipping_date,
-                        remark, created_at
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
-                """
-
-                # 遍歷所有產品並創建詳情記錄
-                for product in data['products']:
-                    cursor.execute(details_sql, (
-                        order_id,
-                        product['product_id'],
-                        product['product_quantity'],
-                        product['product_unit'],
-                        product['order_status'],
-                        product['shipping_date'] if product['shipping_date'] else None,
-                        product.get('remark', ''),
-                        datetime.now()
-                    ))
-                
-                conn.commit()
-                
-                return jsonify({
-                    'status': 'success',
-                    'message': '訂單創建成功',
-                    'data': {
-                        'order_id': order_id,
-                        'order_number': data['order_number']
-                    }
-                }), 201
-                
-            except Exception as e:
-                conn.rollback()
-                raise e
+                        remark, created_at, updated_at
+                    ) VALUES (
+                        %s, %s, %s, %s, %s, %s, %s, NOW(), NOW()
+                    )
+                """, (
+                    order_id,
+                    product['product_id'],
+                    product['product_quantity'],
+                    product['product_unit'],
+                    product['order_status'],
+                    product['shipping_date'],
+                    product.get('remark', '')
+                ))
             
-            finally:
-                cursor.close()
+            # 獲取客戶郵箱和訂單詳細信息
+            cursor.execute("""
+                SELECT email FROM customers 
+                WHERE id = %s AND status = 'active'
+            """, (data['customer_id'],))
+            customer_email = cursor.fetchone()[0]
+            
+            # 準備訂單數據
+            order_data = {
+                'order_number': data['order_number'],
+                'order_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'items': []
+            }
+            
+            # 獲取訂單項目詳細信息
+            for item in data['products']:
+                cursor.execute("""
+                    SELECT name, product_unit 
+                    FROM products 
+                    WHERE id = %s
+                """, (item['product_id'],))
+                product_info = cursor.fetchone()
                 
+                order_data['items'].append({
+                    'product_name': product_info[0],
+                    'quantity': item['product_quantity'],
+                    'unit': product_info[1],
+                    'shipping_date': item['shipping_date'] if item['shipping_date'] else '待確認'
+                })
+            
+            conn.commit()
+            
+            # 先返回成功響應
+            response = jsonify({
+                "status": "success",
+                "message": "訂單創建成功",
+                "order_id": order_id
+            })
+            
+            # 異步發送郵件
+            thread = threading.Thread(
+                target=send_order_email,
+                args=(customer_email, order_data)
+            )
+            thread.start()
+            
+            return response, 201
+            
     except Exception as e:
         print(f"Error in create_order: {str(e)}")
         return jsonify({
-            'status': 'error',
-            'message': str(e)
+            "status": "error",
+            "message": str(e)
         }), 500
 
 @order_bp.route('/orders/list', methods=['POST'])

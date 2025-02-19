@@ -1,5 +1,9 @@
 import os
 import sys
+from dotenv import load_dotenv
+
+# 載入環境變數
+load_dotenv()
 
 # 將專案根目錄添加到 Python 路徑
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -16,14 +20,14 @@ from backend.routes.line_bot_routes import line_bot_bp
 app = Flask(__name__)
 
 # Session 配置
-app.secret_key = 'your-super-secret-key-here'  # 使用固定的密钥
-app.config['SESSION_COOKIE_SECURE'] = False  # 在开发环境中关闭 HTTPS 要求
+app.secret_key = os.getenv('SESSION_SECRET_KEY')
+app.config['SESSION_COOKIE_SECURE'] = False  # 在開發環境中關閉 HTTPS 要求
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # 允许跨域请求
-app.config['PERMANENT_SESSION_LIFETIME'] = 1800  # session 过期时间设为 30 分钟
-app.config['SESSION_COOKIE_DOMAIN'] = None  # 允许所有域名
-app.config['SESSION_COOKIE_PATH'] = '/'  # Cookie路径
-app.config['SESSION_COOKIE_NAME'] = 'erp_session'  # 设置特定的 session cookie 名称
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # 允許跨域請求
+app.config['PERMANENT_SESSION_LIFETIME'] = 1800  # session 過期時間設為 30 分鐘
+app.config['SESSION_COOKIE_DOMAIN'] = None  # 允許所有域名
+app.config['SESSION_COOKIE_PATH'] = '/'  # Cookie路徑
+app.config['SESSION_COOKIE_NAME'] = os.getenv('SESSION_COOKIE_NAME')
 
 # 在每個請求前檢查 session
 @app.before_request
@@ -35,13 +39,10 @@ def before_request():
     print(f"Origin: {request.headers.get('Origin')}")
 
 # CORS 配置
+ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS').split(',')
 CORS(app, resources={
     r"/*": {
-        "origins": [
-            "http://localhost:5173",
-            "https://0235-111-249-212-122.ngrok-free.app",
-            "https://a789-111-249-212-122.ngrok-free.app"
-        ],
+        "origins": ALLOWED_ORIGINS,
         "supports_credentials": True,
         "allow_headers": ["Content-Type", "Authorization", "Accept", "X-Line-Signature"],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -54,12 +55,7 @@ CORS(app, resources={
 @app.after_request
 def after_request(response):
     origin = request.headers.get('Origin')
-    allowed_origins = [
-        "http://localhost:5173",
-        "https://0235-111-249-212-122.ngrok-free.app",
-        "https://a789-111-249-212-122.ngrok-free.app"
-    ]
-    if origin in allowed_origins:
+    if origin in ALLOWED_ORIGINS:
         response.headers['Access-Control-Allow-Origin'] = origin
         response.headers['Access-Control-Allow-Credentials'] = 'true'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization,Accept,X-Line-Signature'

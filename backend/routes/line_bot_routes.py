@@ -6,17 +6,21 @@ from linebot.models import (
     TemplateSendMessage, ButtonsTemplate, PostbackTemplateAction,
     URIAction
 )
-from backend.config.config import LINE_CONFIG
+import os
+from dotenv import load_dotenv
 from backend.config.database import get_db_connection
 from urllib.parse import quote
 import requests
 from flask_cors import CORS
 
+# 載入環境變數
+load_dotenv()
+
 line_bot_bp = Blueprint('line_bot', __name__)
 CORS(line_bot_bp)
 
-line_bot_api = LineBotApi(LINE_CONFIG['CHANNEL_ACCESS_TOKEN'])
-handler = WebhookHandler(LINE_CONFIG['CHANNEL_SECRET'])
+line_bot_api = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
+handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 
 
 @line_bot_bp.route("/generate-bind-url", methods=['POST'])
@@ -31,12 +35,12 @@ def generate_bind_url():
                 "message": "缺少客戶ID"
             }), 400
             
-        # 使用 LIFF URL，确保 customer_id 正确传递
+        # 使用 LIFF URL，确保 customer_id 正確傳遞
         line_login_url = (
-            f"https://liff.line.me/{LINE_CONFIG['LIFF_ID']}"
+            f"https://liff.line.me/{os.getenv('LINE_LIFF_ID')}"
             f"?customer_id={customer_id}"
         )
-        print(f"Generated LIFF URL: {line_login_url}")  # 添加调试日志
+        print(f"Generated LIFF URL: {line_login_url}")  # 添加調試日誌
         
         return jsonify({
             "status": "success",
@@ -71,7 +75,7 @@ def callback():
 @line_bot_bp.route("/line-binding", methods=['GET'])
 def line_login_callback():
     try:
-        # 获取授权码和状态
+        # 獲取授權碼和狀態
         code = request.args.get('code')
         state = request.args.get('state')  # state 中包含了 customer_id
         error = request.args.get('error')
@@ -89,14 +93,14 @@ def line_login_callback():
                 "message": "缺少必要參數"
             }), 400
 
-        # 使用授权码获取访问令牌
+        # 使用授權碼獲取訪問令牌
         token_url = "https://api.line.me/oauth2/v2.1/token"
         token_data = {
             "grant_type": "authorization_code",
             "code": code,
-            "redirect_uri": LINE_CONFIG['LIFF_ENDPOINT'],
-            "client_id": LINE_CONFIG['CHANNEL_ID'],
-            "client_secret": LINE_CONFIG['CHANNEL_SECRET']
+            "redirect_uri": os.getenv('LINE_LIFF_ENDPOINT'),
+            "client_id": os.getenv('LINE_CHANNEL_ID'),
+            "client_secret": os.getenv('LINE_CHANNEL_SECRET')
         }
         token_response = requests.post(token_url, data=token_data)
         token_json = token_response.json()
@@ -104,7 +108,7 @@ def line_login_callback():
         if 'error' in token_json:
             raise Exception(f"獲取訪問令牌失敗: {token_json.get('error_description')}")
 
-        # 使用访问令牌获取用户信息
+        # 使用訪問令牌獲取用戶信息
         profile_url = "https://api.line.me/v2/profile"
         headers = {
             "Authorization": f"Bearer {token_json['access_token']}"
@@ -115,19 +119,19 @@ def line_login_callback():
         if 'error' in profile_json:
             raise Exception(f"獲取用戶信息失敗: {profile_json.get('error_description')}")
 
-        # 绑定 LINE 账号
+        # 綁定 LINE 帳號
         bind_response = bind_line_account(state, profile_json['userId'])
         
         if bind_response.status_code != 200:
             raise Exception(f"綁定失敗: {bind_response.json().get('message')}")
 
-        # 重定向到前端绑定成功页面
-        return redirect(f"{LINE_CONFIG['FRONTEND_URL']}/account-settings")
+        # 重定向到前端綁定成功頁面
+        return redirect(f"{os.getenv('LINE_FRONTEND_URL')}/account-settings")
 
     except Exception as e:
         print(f"Error in LINE login callback: {str(e)}")
         error_message = str(e)
-        return redirect(f"{LINE_CONFIG['FRONTEND_URL']}/account-settings?error={quote(error_message)}")
+        return redirect(f"{os.getenv('LINE_FRONTEND_URL')}/account-settings?error={quote(error_message)}")
 
 @line_bot_bp.route("/bind", methods=['POST', 'OPTIONS'])
 def bind():
