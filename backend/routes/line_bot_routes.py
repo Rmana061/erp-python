@@ -17,11 +17,30 @@ from flask_cors import CORS
 load_dotenv()
 
 line_bot_bp = Blueprint('line_bot', __name__)
-CORS(line_bot_bp)
+CORS(line_bot_bp, supports_credentials=True, origins=[
+    'http://localhost:5173',
+    'https://0235-111-249-212-122.ngrok-free.app',
+    'https://a789-111-249-212-122.ngrok-free.app',
+    'https://liff.line.me'
+])
 
 line_bot_api = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
 
+@line_bot_bp.after_request
+def after_request(response):
+    origin = request.headers.get('Origin')
+    if origin in [
+        'http://localhost:5173',
+        'https://0235-111-249-212-122.ngrok-free.app',
+        'https://a789-111-249-212-122.ngrok-free.app',
+        'https://liff.line.me'
+    ]:
+        response.headers.add('Access-Control-Allow-Origin', origin)
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 
 @line_bot_bp.route("/generate-bind-url", methods=['POST'])
 def generate_bind_url():
@@ -35,12 +54,12 @@ def generate_bind_url():
                 "message": "缺少客戶ID"
             }), 400
             
-        # 使用 LIFF URL，确保 customer_id 正確傳遞
+        # 直接使用LIFF URL并确保customer_id正确编码
         line_login_url = (
-            f"https://liff.line.me/{os.getenv('LINE_LIFF_ID')}"
-            f"?customer_id={customer_id}"
+            f"https://liff.line.me/2006853614-o8b5wmgq"
+            f"?customer_id={quote(str(customer_id))}"
         )
-        print(f"Generated LIFF URL: {line_login_url}")  # 添加調試日誌
+        print(f"Generated LIFF URL: {line_login_url}")
         
         return jsonify({
             "status": "success",
@@ -72,22 +91,35 @@ def callback():
 
     return 'OK'
 
-@line_bot_bp.route("/line-binding", methods=['GET'])
+@line_bot_bp.route("/line-binding", methods=['POST', 'OPTIONS'])
 def line_login_callback():
+    if request.method == 'OPTIONS':
+        return '', 204
+        
     try:
-        # 獲取授權碼和狀態
-        code = request.args.get('code')
-        state = request.args.get('state')  # state 中包含了 customer_id
-        error = request.args.get('error')
-        error_description = request.args.get('error_description')
+        # 从请求体获取数据
+        data = request.get_json()
+        if not data:
+            data = request.form  # 如果不是 JSON，尝试从表单数据获取
+            
+        # 添加调试日志
+        print("Received callback with data:", data)
+        print("Headers:", dict(request.headers))
+        
+        code = data.get('code')
+        customer_id = data.get('customer_id')  # 直接从请求体获取
+        error = data.get('error')
+        error_description = data.get('error_description')
 
         if error:
+            print(f"Authorization error: {error} - {error_description}")
             return jsonify({
                 "status": "error",
                 "message": error_description or "授權失敗"
             }), 400
 
-        if not code or not state:
+        if not code:
+            print("Missing code parameter")
             return jsonify({
                 "status": "error",
                 "message": "缺少必要參數"
@@ -102,36 +134,88 @@ def line_login_callback():
             "client_id": os.getenv('LINE_CHANNEL_ID'),
             "client_secret": os.getenv('LINE_CHANNEL_SECRET')
         }
+        
+        print("Token request data:", token_data)
+        
         token_response = requests.post(token_url, data=token_data)
         token_json = token_response.json()
+        
+        print("Token response:", token_json)
 
         if 'error' in token_json:
-            raise Exception(f"獲取訪問令牌失敗: {token_json.get('error_description')}")
+            error_msg = f"獲取訪問令牌失敗: {token_json.get('error_description')}"
+            print(error_msg)
+            return jsonify({
+                "status": "error",
+                "message": error_msg
+            }), 400
 
         # 使用訪問令牌獲取用戶信息
         profile_url = "https://api.line.me/v2/profile"
         headers = {
             "Authorization": f"Bearer {token_json['access_token']}"
         }
+        
+        print("Profile request headers:", headers)
+        
         profile_response = requests.get(profile_url, headers=headers)
         profile_json = profile_response.json()
+        
+        print("Profile response:", profile_json)
 
         if 'error' in profile_json:
-            raise Exception(f"獲取用戶信息失敗: {profile_json.get('error_description')}")
+            error_msg = f"獲取用戶信息失敗: {profile_json.get('error_description')}"
+            print(error_msg)
+            return jsonify({
+                "status": "error",
+                "message": error_msg
+            }), 400
+
+        if not customer_id:
+            return jsonify({
+                "status": "error",
+                "message": "缺少客戶ID"
+            }), 400
 
         # 綁定 LINE 帳號
-        bind_response = bind_line_account(state, profile_json['userId'])
-        
-        if bind_response.status_code != 200:
-            raise Exception(f"綁定失敗: {bind_response.json().get('message')}")
-
-        # 重定向到前端綁定成功頁面
-        return redirect(f"{os.getenv('LINE_FRONTEND_URL')}/account-settings")
+        try:
+            with get_db_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    UPDATE customers 
+                    SET line_account = %s,
+                        updated_at = NOW()
+                    WHERE id = %s AND status = 'active'
+                    RETURNING id
+                """, (profile_json['userId'], customer_id))
+                
+                result = cursor.fetchone()
+                if not result:
+                    return jsonify({
+                        "status": "error",
+                        "message": "客戶不存在或狀態不正確"
+                    }), 400
+                    
+                conn.commit()
+                
+                return jsonify({
+                    "status": "success",
+                    "message": "LINE帳號綁定成功"
+                })
+                
+        except Exception as e:
+            print(f"Database error: {str(e)}")
+            return jsonify({
+                "status": "error",
+                "message": f"資料庫錯誤: {str(e)}"
+            }), 500
 
     except Exception as e:
         print(f"Error in LINE login callback: {str(e)}")
-        error_message = str(e)
-        return redirect(f"{os.getenv('LINE_FRONTEND_URL')}/account-settings?error={quote(error_message)}")
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
 @line_bot_bp.route("/bind", methods=['POST', 'OPTIONS'])
 def bind():
@@ -143,68 +227,77 @@ def bind():
         customer_id = data.get('customer_id')
         line_user_id = data.get('line_user_id')
         
+        print("Received bind request:", data)
+        print("Headers:", dict(request.headers))
+        
         if not customer_id or not line_user_id:
             return jsonify({
                 "status": "error",
                 "message": "缺少必要參數"
             }), 400
             
-        return bind_line_account(customer_id, line_user_id)
-        
+        try:
+            with get_db_connection() as conn:
+                cursor = conn.cursor()
+                
+                # 检查是否已经绑定
+                cursor.execute("""
+                    SELECT id, company_name FROM customers 
+                    WHERE line_account = %s AND id != %s AND status = 'active'
+                """, (line_user_id, customer_id))
+                
+                existing = cursor.fetchone()
+                if existing:
+                    return jsonify({
+                        "status": "error",
+                        "message": f"此LINE帳號已被其他客戶綁定"
+                    }), 400
+                
+                # 更新绑定
+                cursor.execute("""
+                    UPDATE customers 
+                    SET line_account = %s,
+                        updated_at = NOW()
+                    WHERE id = %s AND status = 'active'
+                    RETURNING id, company_name
+                """, (line_user_id, customer_id))
+                
+                result = cursor.fetchone()
+                if not result:
+                    return jsonify({
+                        "status": "error",
+                        "message": "客戶不存在或狀態不正確"
+                    }), 400
+                    
+                conn.commit()
+                
+                # 发送欢迎消息
+                try:
+                    line_bot_api.push_message(
+                        line_user_id,
+                        TextSendMessage(text=f'您好！您的帳號已成功綁定。')
+                    )
+                except Exception as e:
+                    print(f"Error sending welcome message: {str(e)}")
+                
+                return jsonify({
+                    "status": "success",
+                    "message": "LINE帳號綁定成功"
+                })
+                
+        except Exception as e:
+            print(f"Database error: {str(e)}")
+            return jsonify({
+                "status": "error",
+                "message": f"資料庫錯誤: {str(e)}"
+            }), 500
+            
     except Exception as e:
         print(f"Error in bind: {str(e)}")
         return jsonify({
             "status": "error",
             "message": str(e)
         }), 500
-
-def bind_line_account(customer_id, line_user_id):
-    try:
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            
-            # 檢查是否已經綁定到其他帳號（排除當前客戶）
-            cursor.execute("""
-                SELECT id, company_name FROM customers 
-                WHERE line_account = %s AND id != %s AND status = 'active'
-            """, (line_user_id, customer_id))
-            
-            existing_binding = cursor.fetchone()
-            if existing_binding:
-                raise Exception(f"此LINE帳號已被其他客戶 {existing_binding[1]} 綁定")
-            
-            # 更新客戶的LINE帳號
-            cursor.execute("""
-                UPDATE customers 
-                SET line_account = %s,
-                    updated_at = NOW()
-                WHERE id = %s AND status = 'active'
-                RETURNING id, company_name
-            """, (line_user_id, customer_id))
-            
-            result = cursor.fetchone()
-            if not result:
-                raise Exception("找不到客戶資料或客戶狀態不正確")
-                
-            conn.commit()
-            
-            # 發送歡迎訊息
-            try:
-                # 發送歡迎訊息
-                line_bot_api.push_message(
-                    line_user_id,
-                    TextSendMessage(text=f'{result[1]} 您好！\n您的帳號已成功綁定。')
-                )
-            except Exception as e:
-                print(f"Error sending welcome message: {str(e)}")
-            
-            return jsonify({
-                "status": "success",
-                "message": "LINE帳號綁定成功"
-            })
-            
-    except Exception as e:
-        raise Exception(f"綁定失敗: {str(e)}")
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):

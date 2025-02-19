@@ -6,6 +6,65 @@ import threading
 
 order_bp = Blueprint('order', __name__, url_prefix='/api')
 
+# 通用的郵件發送函數
+def send_email_async(email_func, recipient_email, order_data):
+    try:
+        email_sender = EmailSender()
+        thread = threading.Thread(
+            target=email_func,
+            args=(email_sender, recipient_email, order_data)
+        )
+        thread.start()
+    except Exception as e:
+        print(f"發送郵件時出錯: {str(e)}")
+
+# 常量定義
+ORDER_DETAIL_SQL = """
+    SELECT 
+        o.order_number,
+        o.created_at as order_date,
+        o.updated_at as confirm_date,
+        c.email as customer_email,
+        json_agg(json_build_object(
+            'product_name', p.name,
+            'quantity', od.product_quantity,
+            'unit', od.product_unit,
+            'shipping_date', od.shipping_date,
+            'remark', od.remark,
+            'supplier_note', od.supplier_note,
+            'order_status', od.order_status
+        )) as items
+    FROM orders o
+    JOIN order_details od ON o.id = od.order_id
+    JOIN products p ON od.product_id = p.id
+    JOIN customers c ON o.customer_id = c.id
+    WHERE o.order_number = %s
+    GROUP BY o.order_number, o.created_at, o.updated_at, c.email
+"""
+
+# 通用的錯誤響應函數
+def error_response(message, status_code=400):
+    return jsonify({
+        'status': 'error',
+        'message': message
+    }), status_code
+
+# 通用的成功響應函數
+def success_response(data=None, message=None):
+    response = {'status': 'success'}
+    if message:
+        response['message'] = message
+    if data:
+        response['data'] = data
+    return jsonify(response)
+
+# 格式化日期時間
+def format_datetime(dt):
+    return dt.strftime('%Y-%m-%d %H:%M:%S') if dt else None
+
+def format_date(dt):
+    return dt.strftime('%Y-%m-%d') if dt else None
+
 def send_order_email(customer_email, order_data):
     try:
         email_sender = EmailSender()
@@ -20,12 +79,22 @@ def send_cancel_email(customer_email, order_data):
 @order_bp.route('/orders/create', methods=['POST'])
 def create_order():
     try:
-        data = request.get_json()
-        
+        data = request.json
+        if not data or 'order_number' not in data or 'customer_id' not in data or 'products' not in data:
+            return error_response('缺少必要參數')
+
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # 創建訂單記錄
+            # 檢查訂單編號是否已存在
+            cursor.execute("""
+                SELECT id FROM orders WHERE order_number = %s
+            """, (data['order_number'],))
+            
+            if cursor.fetchone():
+                return error_response('訂單編號已存在')
+
+            # 創建訂單
             cursor.execute("""
                 INSERT INTO orders (
                     order_number, customer_id,
@@ -61,71 +130,38 @@ def create_order():
                     product.get('remark', '')
                 ))
             
-            # 獲取客戶郵箱和訂單詳細信息
-            cursor.execute("""
-                SELECT email FROM customers 
-                WHERE id = %s AND status = 'active'
-            """, (data['customer_id'],))
-            customer_email = cursor.fetchone()[0]
+            # 獲取訂單詳細信息用於發送郵件
+            cursor.execute(ORDER_DETAIL_SQL, (data['order_number'],))
+            order_info = cursor.fetchone()
             
-            # 準備訂單數據
-            order_data = {
-                'order_number': data['order_number'],
-                'order_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                'items': []
-            }
-            
-            # 獲取訂單項目詳細信息
-            for item in data['products']:
-                cursor.execute("""
-                    SELECT name, product_unit 
-                    FROM products 
-                    WHERE id = %s
-                """, (item['product_id'],))
-                product_info = cursor.fetchone()
+            if order_info:
+                # 準備郵件數據
+                email_data = {
+                    'order_number': order_info[0],
+                    'order_date': format_datetime(order_info[1]),
+                    'items': order_info[4]
+                }
                 
-                order_data['items'].append({
-                    'product_name': product_info[0],
-                    'quantity': item['product_quantity'],
-                    'unit': product_info[1],
-                    'shipping_date': item['shipping_date'] if item['shipping_date'] else '待確認'
-                })
+                # 在新線程中發送郵件
+                customer_email = order_info[3]
+                threading.Thread(
+                    target=send_order_email,
+                    args=(customer_email, email_data)
+                ).start()
             
             conn.commit()
-            
-            # 先返回成功響應
-            response = jsonify({
-                "status": "success",
-                "message": "訂單創建成功",
-                "order_id": order_id
-            })
-            
-            # 異步發送郵件
-            thread = threading.Thread(
-                target=send_order_email,
-                args=(customer_email, order_data)
-            )
-            thread.start()
-            
-            return response, 201
+            return success_response(message='訂單創建成功')
             
     except Exception as e:
         print(f"Error in create_order: {str(e)}")
-        return jsonify({
-            "status": "error",
-            "message": str(e)
-        }), 500
+        return error_response(str(e), 500)
 
 @order_bp.route('/orders/list', methods=['POST'])
 def get_orders():
     try:
         data = request.json
-        customer_id = data.get('customer_id')
-        if not customer_id:
-            return jsonify({
-                'status': 'error',
-                'message': '缺少客戶ID'
-            }), 400
+        if not data or 'customer_id' not in data:
+            return error_response('缺少客戶ID')
 
         with get_db_connection() as conn:
             cursor = conn.cursor()
@@ -154,7 +190,7 @@ def get_orders():
                 ORDER BY o.created_at DESC, od.created_at ASC;
             """
             
-            cursor.execute(sql, (customer_id,))
+            cursor.execute(sql, (data['customer_id'],))
             
             # 獲取列名
             columns = [desc[0] for desc in cursor.description]
@@ -168,7 +204,7 @@ def get_orders():
                     orders[order_id] = {
                         'order_id': row['order_id'],
                         'order_number': row['order_number'],
-                        'created_at': row['order_created_at'].strftime('%Y-%m-%d %H:%M:%S') if row['order_created_at'] else None,
+                        'created_at': format_datetime(row['order_created_at']),
                         'products': []
                     }
                 
@@ -179,123 +215,76 @@ def get_orders():
                     'product_quantity': row['product_quantity'],
                     'product_unit': row['product_unit'],
                     'order_status': row['order_status'],
-                    'shipping_date': row['shipping_date'].strftime('%Y-%m-%d') if row['shipping_date'] else None,
-                    'remark': row['remark'],
-                    'supplier_note': row['supplier_note']
+                    'shipping_date': format_date(row['shipping_date']),
+                    'remark': row['remark'] or '',
+                    'supplier_note': row['supplier_note'] or ''
                 })
             
-            cursor.close()
-            
-            # 將字典轉換為列表並返回
-            orders_list = list(orders.values())
-            
-            return jsonify({
-                'status': 'success',
-                'data': orders_list
-            })
+            return success_response(data=list(orders.values()))
             
     except Exception as e:
         print(f"Error in get_orders: {str(e)}")
-        return jsonify({
-            'status': 'error',
-            'message': str(e)
-        }), 500
+        return error_response(str(e), 500)
 
 @order_bp.route('/orders/cancel', methods=['POST'])
 def cancel_order():
     try:
         data = request.json
         if not data or 'order_number' not in data:
-            return jsonify({
-                'status': 'error',
-                'message': '缺少訂單編號'
-            }), 400
+            return error_response('缺少訂單編號')
 
         with get_db_connection() as conn:
             cursor = conn.cursor()
 
             # 獲取訂單和客戶信息
-            cursor.execute("""
-                SELECT o.id, o.order_number, c.email, c.company_name,
-                       p.name as product_name, od.product_quantity, od.product_unit
-                FROM orders o
-                JOIN customers c ON o.customer_id = c.id
-                JOIN order_details od ON o.id = od.order_id
-                JOIN products p ON od.product_id = p.id
-                WHERE o.order_number = %s
-            """, (data['order_number'],))
+            cursor.execute(ORDER_DETAIL_SQL, (data['order_number'],))
+            order_info = cursor.fetchone()
             
-            order_info = cursor.fetchall()
             if not order_info:
-                return jsonify({
-                    'status': 'error',
-                    'message': '找不到該訂單'
-                }), 404
+                return error_response('找不到該訂單', 404)
 
             # 檢查所有產品是否都是待確認狀態
-            for item in order_info:
-                cursor.execute("""
-                    SELECT order_status 
-                    FROM order_details 
-                    WHERE order_id = %s
-                """, (item[0],))
-                status = cursor.fetchone()
-                if status[0] != '待確認':
-                    return jsonify({
-                        'status': 'error',
-                        'message': '只有待確認狀態的訂單可以取消'
-                    }), 400
+            all_pending = all(item['order_status'] == '待確認' for item in order_info[4])
+            if not all_pending:
+                return error_response('只有待確認狀態的訂單可以取消', 400)
 
             # 準備郵件數據
-            customer_email = order_info[0][2]
-            order_data = {
-                'order_number': data['order_number'],
-                'cancel_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                'items': [
-                    {
-                        'product_name': item[4],
-                        'quantity': item[5],
-                        'unit': item[6]
-                    }
-                    for item in order_info
-                ]
+            email_data = {
+                'order_number': order_info[0],
+                'cancel_date': format_datetime(datetime.now()),
+                'items': order_info[4]
             }
 
-            # 刪除訂單詳情
+            # 刪除訂單詳情和主訂單
             cursor.execute("""
-                DELETE FROM order_details
-                USING orders
-                WHERE orders.id = order_details.order_id
-                AND orders.order_number = %s
-            """, (data['order_number'],))
-
-            # 刪除主訂單
-            cursor.execute("""
+                WITH deleted_details AS (
+                    DELETE FROM order_details
+                    USING orders
+                    WHERE orders.id = order_details.order_id
+                    AND orders.order_number = %s
+                    RETURNING 1
+                )
                 DELETE FROM orders
                 WHERE order_number = %s
-            """, (data['order_number'],))
+                RETURNING 1;
+            """, (data['order_number'], data['order_number']))
+
+            if not cursor.fetchone():
+                return error_response('訂單刪除失敗', 400)
 
             conn.commit()
-            cursor.close()
 
             # 異步發送取消訂單郵件
-            thread = threading.Thread(
+            threading.Thread(
                 target=send_cancel_email,
-                args=(customer_email, order_data)
-            )
-            thread.start()
+                args=(order_info[3], email_data)
+            ).start()
 
-            return jsonify({
-                'status': 'success',
-                'message': '訂單已取消'
-            })
+            return success_response(message='訂單已取消')
 
     except Exception as e:
         print(f"Error in cancel_order: {str(e)}")
-        return jsonify({
-            'status': 'error',
-            'message': str(e)
-        }), 500
+        return error_response(str(e), 500)
 
 @order_bp.route('/orders/today', methods=['POST'])
 def get_today_orders():
@@ -316,7 +305,8 @@ def get_today_orders():
                     od.product_unit,
                     od.order_status,
                     od.shipping_date,
-                    od.remark
+                    od.remark,
+                    od.supplier_note
                 FROM orders o
                 JOIN order_details od ON o.id = od.order_id
                 JOIN customers c ON o.customer_id = c.id
@@ -336,45 +326,37 @@ def get_today_orders():
                 orders.append({
                     'id': row['detail_id'],
                     'order_id': row['order_id'],
-                    'date': row['order_date'].isoformat(),  # 使用 ISO 格式返回時間
+                    'date': format_datetime(row['order_date']),
                     'customer': row['customer_name'],
                     'item': row['product_name'],
                     'quantity': str(row['product_quantity']),
                     'unit': row['product_unit'],
                     'orderNumber': row['order_number'],
-                    'shipping_date': row['shipping_date'].isoformat() if row['shipping_date'] else None,
+                    'shipping_date': format_date(row['shipping_date']),
                     'note': row['remark'] or '',
+                    'supplier_note': row['supplier_note'] or '',
                     'status': row['order_status']
                 })
             
-            cursor.close()
-            
-            return jsonify({
-                'status': 'success',
-                'data': orders
-            })
+            return success_response(data=orders)
             
     except Exception as e:
         print(f"Error in get_today_orders: {str(e)}")
-        return jsonify({
-            'status': 'error',
-            'message': str(e)
-        }), 500
+        return error_response(str(e), 500)
 
 @order_bp.route('/orders/update-status', methods=['POST'])
 def update_order_status():
     try:
         data = request.json
         if not data or 'order_id' not in data or 'status' not in data:
-            return jsonify({
-                'status': 'error',
-                'message': '缺少必要參數'
-            }), 400
+            return error_response('缺少必要參數')
 
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # 如果是更新為已出貨狀態，先獲取原有的出貨日期
+            # 獲取出貨日期和供應商備註
+            shipping_date = None
+            supplier_note = None
             if data['status'] == '已出貨':
                 cursor.execute("""
                     SELECT shipping_date, supplier_note
@@ -383,102 +365,59 @@ def update_order_status():
                 """, (data['order_id'],))
                 result = cursor.fetchone()
                 if result:
-                    shipping_date = result[0]
-                    supplier_note = result[1]
-                else:
-                    shipping_date = None
-                    supplier_note = None
+                    shipping_date, supplier_note = result
             else:
                 shipping_date = data.get('shipping_date')
                 supplier_note = data.get('supplier_note')
 
-            # 更新訂單狀態，保留原有的出貨日期和供應商備註
-            update_sql = """
+            # 更新訂單狀態
+            cursor.execute("""
                 UPDATE order_details 
                 SET order_status = %s,
                     shipping_date = COALESCE(%s, shipping_date),
                     supplier_note = COALESCE(%s, supplier_note),
                     updated_at = NOW()
                 WHERE id = %s
-                RETURNING order_id;
-            """
-            
-            cursor.execute(update_sql, (
-                data['status'], 
-                shipping_date,
-                supplier_note,
-                data['order_id']
-            ))
+                RETURNING order_id, (
+                    SELECT order_number 
+                    FROM orders 
+                    WHERE id = order_details.order_id
+                );
+            """, (data['status'], shipping_date, supplier_note, data['order_id']))
             
             result = cursor.fetchone()
             if not result:
-                return jsonify({
-                    'status': 'error',
-                    'message': '找不到該訂單'
-                }), 404
+                return error_response('找不到該訂單', 404)
+
+            order_id, order_number = result
 
             # 如果狀態是已駁回，發送郵件通知
             if data['status'] == '已取消':
-                # 獲取訂單詳細信息用於發送郵件
-                cursor.execute("""
-                    SELECT 
-                        o.order_number,
-                        o.updated_at as reject_date,
-                        c.email as customer_email,
-                        json_agg(json_build_object(
-                            'product_name', p.name,
-                            'quantity', od.product_quantity,
-                            'unit', od.product_unit,
-                            'shipping_date', od.shipping_date,
-                            'remark', od.remark,
-                            'supplier_note', od.supplier_note
-                        )) as items
-                    FROM orders o
-                    JOIN order_details od ON o.id = od.order_id
-                    JOIN products p ON od.product_id = p.id
-                    JOIN customers c ON o.customer_id = c.id
-                    WHERE o.id = %s
-                    GROUP BY o.order_number, o.updated_at, c.email
-                """, (result[0],))
-
+                cursor.execute(ORDER_DETAIL_SQL, (str(order_number),))
                 order_info = cursor.fetchone()
                 if order_info:
-                    # 準備郵件數據
                     email_data = {
                         'order_number': order_info[0],
-                        'confirm_date': order_info[1].strftime('%Y-%m-%d %H:%M:%S'),
-                        'items': order_info[3]
+                        'confirm_date': format_datetime(order_info[2]),
+                        'items': order_info[4]
                     }
-                    
-                    # 在新線程中發送郵件
-                    customer_email = order_info[2]
-                    email_sender = EmailSender()
                     threading.Thread(
-                        target=email_sender.send_order_rejected,
-                        args=(customer_email, email_data)
+                        target=lambda: EmailSender().send_order_rejected(order_info[3], email_data)
                     ).start()
 
-            # 更新主訂單的更新時間
+            # 更新主訂單時間戳
             cursor.execute("""
                 UPDATE orders 
                 SET updated_at = NOW()
                 WHERE id = %s;
-            """, (result[0],))
+            """, (order_id,))
 
             conn.commit()
-            cursor.close()
-
-            return jsonify({
-                'status': 'success',
-                'message': '訂單狀態更新成功'
-            })
+            return success_response(message='訂單狀態更新成功')
 
     except Exception as e:
         print(f"Error in update_order_status: {str(e)}")
-        return jsonify({
-            'status': 'error',
-            'message': str(e)
-        }), 500
+        return error_response(str(e), 500)
 
 @order_bp.route('/orders/pending', methods=['POST'])
 def get_pending_orders():
@@ -597,96 +536,57 @@ def update_order_confirmed():
     try:
         data = request.json
         if not data or 'order_number' not in data:
-            return jsonify({
-                'status': 'error',
-                'message': '缺少訂單編號'
-            }), 400
+            return error_response('缺少訂單編號')
 
         with get_db_connection() as conn:
             cursor = conn.cursor()
 
-            # 檢查訂單所有產品狀態
-            cursor.execute("""
-                SELECT od.order_status 
-                FROM orders o
-                JOIN order_details od ON o.id = od.order_id
-                WHERE o.order_number = %s
-            """, (data['order_number'],))
-
-            statuses = [row[0] for row in cursor.fetchall()]
+            # 獲取訂單詳細信息
+            cursor.execute(ORDER_DETAIL_SQL, (data['order_number'],))
+            order_info = cursor.fetchone()
             
-            # 檢查是否所有產品都是已確認或已取消狀態
+            if not order_info:
+                return error_response('找不到該訂單', 404)
+
+            # 檢查訂單狀態
+            statuses = [item['order_status'] for item in order_info[4]]
             all_confirmed_or_cancelled = all(status in ['已確認', '已取消'] for status in statuses)
             has_confirmed = any(status == '已確認' for status in statuses)
             
-            if all_confirmed_or_cancelled:
-                # 更新訂單確認狀態
-                cursor.execute("""
-                    UPDATE orders 
-                    SET order_confirmed = true,
-                        updated_at = NOW()
-                    WHERE order_number = %s
-                """, (data['order_number'],))
+            if not all_confirmed_or_cancelled:
+                return error_response('尚有產品未完成審核', 400)
 
-                # 只有當訂單中有已確認的產品時才發送確認郵件
-                if has_confirmed:
-                    # 獲取訂單詳細信息用於發送郵件
-                    cursor.execute("""
-                        SELECT 
-                            o.order_number,
-                            o.updated_at as confirm_date,
-                            c.email as customer_email,
-                            json_agg(json_build_object(
-                                'product_name', p.name,
-                                'quantity', od.product_quantity,
-                                'unit', od.product_unit,
-                                'shipping_date', od.shipping_date,
-                                'remark', od.remark,
-                                'supplier_note', od.supplier_note
-                            )) as items
-                        FROM orders o
-                        JOIN order_details od ON o.id = od.order_id
-                        JOIN products p ON od.product_id = p.id
-                        JOIN customers c ON o.customer_id = c.id
-                        WHERE o.order_number = %s
-                        GROUP BY o.order_number, o.updated_at, c.email
-                    """, (data['order_number'],))
+            # 更新訂單確認狀態
+            cursor.execute("""
+                UPDATE orders 
+                SET order_confirmed = true,
+                    updated_at = NOW()
+                WHERE order_number = %s
+                RETURNING 1
+            """, (data['order_number'],))
 
-                    order_info = cursor.fetchone()
-                    if order_info:
-                        # 準備郵件數據
-                        email_data = {
-                            'order_number': order_info[0],
-                            'confirm_date': order_info[1].strftime('%Y-%m-%d %H:%M:%S'),
-                            'items': order_info[3]
-                        }
-                        
-                        # 在新線程中發送郵件
-                        customer_email = order_info[2]
-                        email_sender = EmailSender()
-                        threading.Thread(
-                            target=email_sender.send_order_approved,
-                            args=(customer_email, email_data)
-                        ).start()
+            if not cursor.fetchone():
+                return error_response('訂單更新失敗', 400)
 
-                conn.commit()
+            conn.commit()
+
+            # 只有當訂單中有已確認的產品時才發送確認郵件
+            if has_confirmed:
+                email_data = {
+                    'order_number': order_info[0],
+                    'confirm_date': format_datetime(order_info[2]),
+                    'items': order_info[4]
+                }
                 
-                return jsonify({
-                    'status': 'success',
-                    'message': '訂單確認狀態已更新'
-                })
-            else:
-                return jsonify({
-                    'status': 'error',
-                    'message': '尚有產品未完成審核'
-                }), 400
+                threading.Thread(
+                    target=lambda: EmailSender().send_order_approved(order_info[3], email_data)
+                ).start()
+
+            return success_response(message='訂單確認狀態已更新')
 
     except Exception as e:
         print(f"Error in update_order_confirmed: {str(e)}")
-        return jsonify({
-            'status': 'error',
-            'message': str(e)
-        }), 500
+        return error_response(str(e), 500)
 
 @order_bp.route('/orders/update-shipped', methods=['POST'])
 def update_order_shipped():
