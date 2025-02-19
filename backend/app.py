@@ -40,16 +40,7 @@ def before_request():
 
 # CORS 配置
 ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS').split(',')
-CORS(app, resources={
-    r"/*": {
-        "origins": ALLOWED_ORIGINS,
-        "supports_credentials": True,
-        "allow_headers": ["Content-Type", "Authorization", "Accept", "X-Line-Signature"],
-        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "expose_headers": ["Content-Type", "Authorization", "Set-Cookie"],
-        "max_age": 600
-    }
-})
+CORS(app)  # 允許所有來源的 CORS 請求
 
 # 设置响应头
 @app.after_request
