@@ -16,26 +16,27 @@ from flask_cors import CORS
 # 載入環境變數
 load_dotenv()
 
-line_bot_bp = Blueprint('line_bot', __name__)
-CORS(line_bot_bp, supports_credentials=True, origins=[
-    'http://localhost:5173',
-    'https://0235-111-249-212-122.ngrok-free.app',
-    'https://a789-111-249-212-122.ngrok-free.app',
-    'https://liff.line.me'
-])
+# 从环境变量获取配置
+LINE_CHANNEL_ACCESS_TOKEN = os.getenv('LINE_CHANNEL_ACCESS_TOKEN')
+LINE_CHANNEL_SECRET = os.getenv('LINE_CHANNEL_SECRET')
+LINE_CHANNEL_ID = os.getenv('LINE_CHANNEL_ID')
+LINE_LIFF_ID = os.getenv('LINE_LIFF_ID')
+LINE_LIFF_ENDPOINT = os.getenv('LINE_LIFF_ENDPOINT')
+LINE_BOT_BASIC_ID = os.getenv('LINE_BOT_BASIC_ID')
 
-line_bot_api = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
-handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
+# 允许的来源域名
+ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS').split(',')
+
+line_bot_bp = Blueprint('line_bot', __name__)
+CORS(line_bot_bp, supports_credentials=True, origins=ALLOWED_ORIGINS)
+
+line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
+handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 @line_bot_bp.after_request
 def after_request(response):
     origin = request.headers.get('Origin')
-    if origin in [
-        'http://localhost:5173',
-        'https://0235-111-249-212-122.ngrok-free.app',
-        'https://a789-111-249-212-122.ngrok-free.app',
-        'https://liff.line.me'
-    ]:
+    if origin in ALLOWED_ORIGINS:
         response.headers.add('Access-Control-Allow-Origin', origin)
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
@@ -54,9 +55,9 @@ def generate_bind_url():
                 "message": "缺少客戶ID"
             }), 400
             
-        # 直接使用LIFF URL并确保customer_id正确编码
+        # 使用环境变量中的 LIFF ID
         line_login_url = (
-            f"https://liff.line.me/2006853614-o8b5wmgq"
+            f"https://liff.line.me/{LINE_LIFF_ID}"
             f"?customer_id={quote(str(customer_id))}"
         )
         print(f"Generated LIFF URL: {line_login_url}")
@@ -97,17 +98,15 @@ def line_login_callback():
         return '', 204
         
     try:
-        # 从请求体获取数据
         data = request.get_json()
         if not data:
-            data = request.form  # 如果不是 JSON，尝试从表单数据获取
+            data = request.form
             
-        # 添加调试日志
         print("Received callback with data:", data)
         print("Headers:", dict(request.headers))
         
         code = data.get('code')
-        customer_id = data.get('customer_id')  # 直接从请求体获取
+        customer_id = data.get('customer_id')
         error = data.get('error')
         error_description = data.get('error_description')
 
@@ -130,9 +129,9 @@ def line_login_callback():
         token_data = {
             "grant_type": "authorization_code",
             "code": code,
-            "redirect_uri": os.getenv('LINE_LIFF_ENDPOINT'),
-            "client_id": os.getenv('LINE_CHANNEL_ID'),
-            "client_secret": os.getenv('LINE_CHANNEL_SECRET')
+            "redirect_uri": LINE_LIFF_ENDPOINT,
+            "client_id": LINE_CHANNEL_ID,
+            "client_secret": LINE_CHANNEL_SECRET
         }
         
         print("Token request data:", token_data)
