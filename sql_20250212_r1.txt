@@ -18,7 +18,7 @@ BEGIN
     END IF;
 
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'operation_type') THEN
-        CREATE TYPE operation_type AS ENUM ('新增', '刪除', '修改', '查詢');
+        CREATE TYPE operation_type AS ENUM ('新增', '刪除', '修改');
     END IF;
 
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_type') THEN
@@ -97,12 +97,18 @@ CREATE TABLE logs (
     id BIGSERIAL PRIMARY KEY,
     table_name VARCHAR(255) NOT NULL,
     operation_type operation_type NOT NULL,
-    record_id BIGINT,
-    operation_detail TEXT,
+    record_id BIGINT NOT NULL,
+    operation_detail JSONB NOT NULL,
     performed_by BIGINT NOT NULL,
     user_type user_type NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 创建日志表索引
+CREATE INDEX idx_logs_table_name ON logs(table_name);
+CREATE INDEX idx_logs_operation_type ON logs(operation_type);
+CREATE INDEX idx_logs_created_at ON logs(created_at);
+CREATE INDEX idx_logs_performed_by ON logs(performed_by);
 
 -- 建立 permission_levels 資料表
 CREATE TABLE permission_levels (

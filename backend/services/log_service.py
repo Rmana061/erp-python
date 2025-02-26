@@ -1,0 +1,460 @@
+import json
+from datetime import datetime
+from typing import Dict, Any, Optional
+
+class LogService:
+    def __init__(self, db_connection):
+        self.conn = db_connection
+        
+    def _get_changes(self, old_data: Optional[Dict[str, Any]], new_data: Optional[Dict[str, Any]], operation_type: str = None) -> Dict[str, Any]:
+        """計算數據變更"""
+        print(f"Processing changes - operation_type: {operation_type}")
+        print(f"Old data: {json.dumps(old_data, ensure_ascii=False, indent=2) if old_data else None}")
+        print(f"New data: {json.dumps(new_data, ensure_ascii=False, indent=2) if new_data else None}")
+
+        # 處理新增和刪除操作
+        if operation_type in ['新增', '刪除']:
+            data = new_data if operation_type == '新增' else old_data
+            if isinstance(data, dict) and 'message' in data:
+                try:
+                    # 嘗試解析 JSON 格式的消息
+                    message_data = json.loads(data['message']) if isinstance(data['message'], str) else data['message']
+                    if isinstance(message_data, dict):
+                        # 處理結構化數據
+                        products_info = []
+                        for product in message_data.get('products', []):
+                            product_info = {
+                                'name': product.get('name', ''),
+                                'quantity': str(product.get('quantity', '')),
+                                'shipping_date': product.get('shipping_date', '待確認'),
+                                'supplier_note': product.get('supplier_note', '-')
+                            }
+                            if not product_info['name'] and 'product' in product:
+                                product_info['name'] = product['product']
+                            products_info.append(product_info)
+
+                        return {
+                            'message': {
+                                'order_number': message_data.get('order_number', ''),
+                                'status': message_data.get('status', '待確認'),
+                                'products': products_info
+                            },
+                            'operation_type': operation_type
+                        }
+                except json.JSONDecodeError:
+                    # 如果不是 JSON 格式，按原來的方式處理
+                    message_parts = data['message'].split('、')
+                    order_info = {}
+                    products_info = []
+                    current_product = {}
+                    
+                    for part in message_parts:
+                        if ':' in part:
+                            key, value = part.split(':', 1)
+                            key = key.strip()
+                            value = value.strip()
+                            if key == '訂單號':
+                                order_info['order_number'] = value
+                            elif key == '狀態':
+                                order_info['status'] = value if value != 'undefined' else '待確認'
+                            elif key == '產品':
+                                if current_product:
+                                    products_info.append(current_product)
+                                current_product = {'name': value}
+                            elif key == '數量':
+                                if current_product:
+                                    current_product['quantity'] = value
+                            elif key == '出貨日期':
+                                if current_product:
+                                    current_product['shipping_date'] = value if value not in ['undefined', ''] else '待確認'
+                            elif key == '備註' or key == 'supplier_note':
+                                if current_product:
+                                    current_product['supplier_note'] = value if value not in ['-', '', 'undefined'] else '-'
+
+                    if current_product:
+                        products_info.append(current_product)
+
+                return {
+                        'message': {
+                            'order_number': order_info.get('order_number', ''),
+                            'status': order_info.get('status', '待確認'),
+                            'products': products_info
+                        },
+                        'operation_type': operation_type
+                    }
+        
+        # 處理修改和審核操作
+        if isinstance(old_data, dict) and isinstance(new_data, dict):
+            # 處理審核操作
+            if operation_type == '審核':
+                # 获取订单号
+                order_number = ''
+                if isinstance(new_data, dict):
+                    if isinstance(new_data.get('message'), str):
+                        # 处理字符串格式
+                        parts = new_data['message'].split('、')
+                        for part in parts:
+                            if '訂單號:' in part:
+                                order_number = part.split(':')[1]
+                                break
+                    elif isinstance(new_data.get('message'), dict):
+                        order_number = new_data['message'].get('order_number', '')
+                
+                # 构建审核变更记录
+                audit_changes = {
+                    'message': {
+                        'order_number': order_number,
+                        'status': {
+                            'before': '待確認',
+                            'after': '已確認'
+                        }
+                    }
+                }
+                
+                # 如果有出货日期信息，添加到记录中
+                if isinstance(new_data, dict) and 'shipping_dates' in new_data:
+                    audit_changes['shipping_dates'] = new_data['shipping_dates']
+                
+                return audit_changes
+
+            # 處理一般修改操作
+            old_message = old_data.get('message', '')
+            new_message = new_data.get('message', '')
+            
+            # 解析字符串格式的消息
+            if isinstance(old_message, str):
+                old_parts = {}
+                for part in old_message.split('、'):
+                    if ':' in part:
+                        key, value = part.split(':', 1)
+                        old_parts[key.strip()] = value.strip()
+                old_message = {
+                    'order_number': old_parts.get('訂單號', ''),
+                    'status': old_parts.get('狀態', '待確認'),
+                    'products': [{
+                        'name': old_parts.get('產品', ''),
+                        'quantity': old_parts.get('數量', ''),
+                        'shipping_date': old_parts.get('出貨日期', '待確認'),
+                        'supplier_note': old_parts.get('備註', '-')
+                    }]
+                }
+            
+            if isinstance(new_message, str):
+                new_parts = {}
+                for part in new_message.split('、'):
+                    if ':' in part:
+                        key, value = part.split(':', 1)
+                        new_parts[key.strip()] = value.strip()
+                new_message = {
+                    'order_number': new_parts.get('訂單號', ''),
+                    'status': new_parts.get('狀態', '待確認'),
+                    'products': [{
+                        'name': new_parts.get('產品', ''),
+                        'quantity': new_parts.get('數量', ''),
+                        'shipping_date': new_parts.get('出貨日期', '待確認'),
+                        'supplier_note': new_parts.get('備註', '-')
+                    }]
+                }
+
+            try:
+                changes = {}
+                old_product = old_message.get('products', [{}])[0]
+                new_product = new_message.get('products', [{}])[0]
+                
+                # 檢查數量變更
+                if old_product.get('quantity', '') != new_product.get('quantity', ''):
+                    changes['quantity'] = {
+                        'before': old_product.get('quantity', ''),
+                        'after': new_product.get('quantity', '')
+                    }
+                
+                # 檢查出貨日期變更
+                if old_product.get('shipping_date', '') != new_product.get('shipping_date', ''):
+                    changes['shipping_date'] = {
+                        'before': old_product.get('shipping_date', '待確認'),
+                        'after': new_product.get('shipping_date', '待確認')
+                    }
+                
+                # 檢查供應商備註變更
+                if old_product.get('supplier_note', '') != new_product.get('supplier_note', ''):
+                    changes['note'] = {
+                        'before': old_product.get('supplier_note', '-'),
+                        'after': new_product.get('supplier_note', '-')
+                    }
+                
+                if changes:  # 如果有變更，返回修改操作
+                    return {
+                        'message': {
+                            'order_number': new_message.get('order_number', '') if isinstance(new_message, dict) else '',
+                            'status': new_message.get('status', '待確認') if isinstance(new_message, dict) else '待確認',
+                            'products': [{
+                                'name': new_product.get('name', ''),
+                                'changes': changes
+                            }]
+                        },
+                        'operation_type': '修改'
+                    }
+                
+            except Exception as e:
+                print(f"Error processing changes: {str(e)}")
+                return {'message': '處理變更時發生錯誤', 'operation_type': None}
+        
+        return {'message': '無變更', 'operation_type': None}
+
+    def log_operation(self, table_name: str, operation_type: str, record_id: int, 
+                     old_data: Optional[Dict[str, Any]], new_data: Optional[Dict[str, Any]], 
+                     performed_by: int, user_type: str) -> bool:
+        """記錄操作日誌"""
+        try:
+            print(f"Received log operation request:")
+            print(f"Table: {table_name}")
+            print(f"Operation: {operation_type}")
+            print(f"Record ID: {record_id}")
+            
+            # 處理日期序列化
+            def serialize_datetime(obj):
+                if isinstance(obj, datetime):
+                    return obj.strftime('%Y-%m-%d %H:%M:%S')
+                return obj
+
+            # 序列化數據
+            if old_data:
+                old_data = json.loads(json.dumps(old_data, default=serialize_datetime, ensure_ascii=False))
+            if new_data:
+                new_data = json.loads(json.dumps(new_data, default=serialize_datetime, ensure_ascii=False))
+
+            print(f"New data: {json.dumps(new_data, ensure_ascii=False)}")
+            print(f"Performed by: {performed_by}")
+            print(f"User type: {user_type}")
+            
+            # 檢查是否存在最近的日誌記錄
+            cursor = self.conn.cursor()
+            cursor.execute("""
+                SELECT id 
+                FROM logs 
+                WHERE table_name = %s 
+                AND operation_type = %s 
+                AND record_id = %s 
+                AND performed_by = %s 
+                AND created_at > NOW() - INTERVAL '2 seconds'
+                LIMIT 1
+            """, (table_name, operation_type, record_id, performed_by))
+            
+            if cursor.fetchone():
+                print(f"Duplicate log detected for {operation_type} on {table_name} with ID {record_id}")
+                return True  # 已存在相同记录，视为成功
+            
+            # 計算當前變更詳情
+            operation_detail = self._get_changes(old_data, new_data, operation_type)
+            
+            # 如果找到最近的記錄，嘗試合併變更
+            if operation_type == '修改':
+                recent_log = cursor.fetchone()
+                
+                # 確保兩個記錄都有正確的格式
+                if isinstance(operation_detail.get('message'), dict) and \
+                   isinstance(recent_log, tuple):
+                    
+                    # 獲取當前和已存在的產品信息
+                    recent_products = recent_log[1]
+                    current_products = operation_detail['message'].get('products', [{}])[0]
+                    
+                    # 合併 changes
+                    merged_changes = recent_products.get('changes', {}).copy()
+                    current_changes = current_products.get('changes', {})
+                    
+                    # 更新合併的變更
+                    for change_type in ['quantity', 'shipping_date', 'note']:
+                        if change_type in current_changes:
+                            if change_type in merged_changes:
+                                # 如果已存在，只更新 after 值
+                                merged_changes[change_type]['after'] = current_changes[change_type]['after']
+                            else:
+                                # 如果不存在，添加新的變更
+                                merged_changes[change_type] = current_changes[change_type]
+                    
+                    # 更新現有記錄
+                    cursor.execute("""
+                        UPDATE logs 
+                        SET operation_detail = %s::jsonb,
+                            created_at = NOW()
+                        WHERE id = %s
+                    """, (
+                        json.dumps({
+                            'message': {
+                                'order_number': operation_detail['message']['order_number'],
+                                'status': operation_detail['message']['status'],
+                                'products': [{
+                                    'name': current_products['name'],
+                                    'changes': merged_changes
+                                }]
+                            },
+                            'operation_type': '修改'
+                        }, ensure_ascii=False),
+                        recent_log[0]
+                    ))
+                    self.conn.commit()
+                    return True
+            
+            # 如果是新記錄或無法合併，則創建新記錄
+            if operation_type in ['新增', '刪除', '審核'] or \
+               (operation_detail.get('operation_type') is not None):
+                cursor.execute("""
+                    INSERT INTO logs 
+                    (table_name, operation_type, record_id, operation_detail, 
+                     performed_by, user_type, created_at)
+                    VALUES (%s, %s, %s, %s::jsonb, %s, %s, NOW())
+                """, (
+                    table_name,
+                    operation_type,
+                    record_id,
+                    json.dumps(operation_detail, ensure_ascii=False),
+                    performed_by,
+                    user_type
+                ))
+                self.conn.commit()
+                return True
+            
+            return False
+            
+        except Exception as e:
+            print(f"Error logging operation: {str(e)}")
+            self.conn.rollback()
+            return False
+
+    def get_logs(self,
+                table_name: Optional[str] = None,
+                operation_type: Optional[str] = None,
+                start_date: Optional[str] = None,
+                end_date: Optional[str] = None,
+                user_type: Optional[str] = None,
+                performed_by: Optional[int] = None,
+                limit: int = 100,
+                offset: int = 0) -> tuple:
+        """
+        獲取日志記錄
+        
+        參數:
+            table_name: 表名篩選
+            operation_type: 操作類型篩選
+            start_date: 開始日期
+            end_date: 結束日期
+            user_type: 用戶類型篩選
+            performed_by: 操作者ID篩選
+            limit: 返回記錄數限制
+            offset: 分頁偏移量
+            
+        返回:
+            tuple: (日志記錄列表, 總記錄數)
+        """
+        try:
+            cursor = self.conn.cursor()
+            
+            # 构建基础查询
+            base_query = """
+                SELECT 
+                    l.created_at,
+                    l.user_type,
+                    COALESCE(a.admin_name, c.company_name) as performer_name,
+                    l.table_name,
+                    CASE 
+                        WHEN l.table_name = 'orders' THEN o.order_number
+                        WHEN l.table_name = 'products' THEN p.name
+                        WHEN l.table_name = 'customers' THEN cust.company_name
+                        WHEN l.table_name = 'administrators' THEN adm.admin_name
+                        ELSE l.record_id::text
+                    END as record_detail,
+                    l.operation_type,
+                    l.operation_detail,
+                    l.id,
+                    l.performed_by
+                FROM logs l
+                LEFT JOIN administrators a ON l.performed_by = a.id AND l.user_type = '管理員'
+                LEFT JOIN customers c ON l.performed_by = c.id AND l.user_type = '客戶'
+                LEFT JOIN orders o ON l.table_name = 'orders' AND l.record_id = o.id
+                LEFT JOIN products p ON l.table_name = 'products' AND l.record_id = p.id
+                LEFT JOIN customers cust ON l.table_name = 'customers' AND l.record_id = cust.id
+                LEFT JOIN administrators adm ON l.table_name = 'administrators' AND l.record_id = adm.id
+            """
+            
+            conditions = []
+            params = []
+            
+            if table_name:
+                conditions.append("l.table_name = %s")
+                params.append(table_name)
+            
+            if operation_type:
+                conditions.append("l.operation_type = %s")
+                params.append(operation_type)
+                
+            if start_date:
+                conditions.append("l.created_at >= %s")
+                params.append(start_date)
+                
+            if end_date:
+                conditions.append("l.created_at <= %s")
+                params.append(end_date)
+                
+            if user_type:
+                conditions.append("l.user_type = %s")
+                params.append(user_type)
+                
+            if performed_by:
+                conditions.append("l.performed_by = %s")
+                params.append(performed_by)
+            
+            where_clause = " AND ".join(conditions) if conditions else "1=1"
+            
+            # 获取总记录数
+            count_query = f"""
+                SELECT COUNT(*) 
+                FROM logs l 
+                WHERE {where_clause}
+            """
+            cursor.execute(count_query, params)
+            total_count = cursor.fetchone()[0]
+            
+            # 获取日志记录
+            query = f"""
+                {base_query}
+                WHERE {where_clause}
+                ORDER BY l.created_at DESC
+                LIMIT %s OFFSET %s
+            """
+            
+            cursor.execute(query, params + [limit, offset])
+            logs = cursor.fetchall()
+            
+            # 转换日志记录为字典列表
+            log_list = []
+            for log in logs:
+                try:
+                    operation_detail = log[6]
+                    if isinstance(operation_detail, str):
+                        try:
+                            operation_detail = json.loads(operation_detail)
+                        except json.JSONDecodeError:
+                            operation_detail = {'message': operation_detail}
+                except Exception as e:
+                    print(f"Error processing operation_detail: {e}")
+                    operation_detail = {'message': str(log[6])}
+
+                log_dict = {
+                    'created_at': log[0].strftime('%Y-%m-%d %H:%M:%S'),
+                    'user_type': log[1],
+                    'performer_name': log[2],
+                    'table_name': log[3],
+                    'record_detail': log[4],
+                    'operation_type': log[5],
+                    'operation_detail': operation_detail,
+                    'id': log[7],
+                    'performed_by': log[8]
+                }
+                log_list.append(log_dict)
+            
+            return logs, total_count
+            
+        except Exception as e:
+            print(f"Error getting logs: {str(e)}")
+            return [], 0 
