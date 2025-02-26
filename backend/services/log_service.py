@@ -27,7 +27,8 @@ class LogService:
                                 'name': product.get('name', ''),
                                 'quantity': str(product.get('quantity', '')),
                                 'shipping_date': product.get('shipping_date', '待確認'),
-                                'supplier_note': product.get('supplier_note', '-')
+                                'supplier_note': product.get('supplier_note', '-'),
+                                'remark': product.get('remark', '-')
                             }
                             if not product_info['name'] and 'product' in product:
                                 product_info['name'] = product['product']
@@ -67,7 +68,10 @@ class LogService:
                             elif key == '出貨日期':
                                 if current_product:
                                     current_product['shipping_date'] = value if value not in ['undefined', ''] else '待確認'
-                            elif key == '備註' or key == 'supplier_note':
+                            elif key == '備註':
+                                if current_product:
+                                    current_product['remark'] = value if value not in ['-', '', 'undefined'] else '-'
+                            elif key == '供應商備註' or key == 'supplier_note':
                                 if current_product:
                                     current_product['supplier_note'] = value if value not in ['-', '', 'undefined'] else '-'
 
@@ -135,7 +139,8 @@ class LogService:
                         'name': old_parts.get('產品', ''),
                         'quantity': old_parts.get('數量', ''),
                         'shipping_date': old_parts.get('出貨日期', '待確認'),
-                        'supplier_note': old_parts.get('備註', '-')
+                        'remark': old_parts.get('備註', '-'),
+                        'supplier_note': old_parts.get('供應商備註', '-')
                     }]
                 }
             
@@ -152,7 +157,8 @@ class LogService:
                         'name': new_parts.get('產品', ''),
                         'quantity': new_parts.get('數量', ''),
                         'shipping_date': new_parts.get('出貨日期', '待確認'),
-                        'supplier_note': new_parts.get('備註', '-')
+                        'remark': new_parts.get('備註', '-'),
+                        'supplier_note': new_parts.get('供應商備註', '-')
                     }]
                 }
 
@@ -175,9 +181,16 @@ class LogService:
                         'after': new_product.get('shipping_date', '待確認')
                     }
                 
+                # 檢查客戶備註變更
+                if old_product.get('remark', '') != new_product.get('remark', ''):
+                    changes['remark'] = {
+                        'before': old_product.get('remark', '-'),
+                        'after': new_product.get('remark', '-')
+                    }
+                
                 # 檢查供應商備註變更
                 if old_product.get('supplier_note', '') != new_product.get('supplier_note', ''):
-                    changes['note'] = {
+                    changes['supplier_note'] = {
                         'before': old_product.get('supplier_note', '-'),
                         'after': new_product.get('supplier_note', '-')
                     }
@@ -264,7 +277,7 @@ class LogService:
                     current_changes = current_products.get('changes', {})
                     
                     # 更新合併的變更
-                    for change_type in ['quantity', 'shipping_date', 'note']:
+                    for change_type in ['quantity', 'shipping_date', 'remark', 'supplier_note']:
                         if change_type in current_changes:
                             if change_type in merged_changes:
                                 # 如果已存在，只更新 after 值

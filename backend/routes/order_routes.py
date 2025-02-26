@@ -184,7 +184,7 @@ def create_order():
             
             # 记录日志
             cursor.execute("""
-                SELECT p.name, od.product_quantity, od.shipping_date, od.supplier_note
+                SELECT p.name, od.product_quantity, od.shipping_date, od.supplier_note, od.remark
                 FROM order_details od
                 JOIN products p ON od.product_id = p.id
                 WHERE od.order_id = %s
@@ -193,14 +193,16 @@ def create_order():
 
             products_info = []
             for detail in order_details:
-                product_name, quantity, shipping_date, supplier_note = detail
+                product_name, quantity, shipping_date, supplier_note, remark = detail
                 shipping_date_str = shipping_date.strftime('%Y-%m-%d') if shipping_date else '待確認'
                 supplier_note_str = supplier_note if supplier_note else '-'
+                remark_str = remark if remark else '-'
                 products_info.append({
                     'name': product_name,
                     'quantity': str(quantity),
                     'shipping_date': shipping_date_str,
-                    'supplier_note': supplier_note_str
+                    'supplier_note': supplier_note_str,
+                    'remark': remark_str
                 })
 
             # 將消息轉換為 JSON 字符串
