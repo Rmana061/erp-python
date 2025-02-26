@@ -93,7 +93,12 @@ def log_operation(table_name, operation_type, record_id, old_data, new_data, per
     try:
         with get_db_connection() as conn:
             log_service = LogService(conn)
-            log_service.log_operation(
+            print(f"Logging operation: {operation_type} on {table_name} with ID {record_id}")
+            print(f"Old data: {json.dumps(old_data, ensure_ascii=False) if old_data else None}")
+            print(f"New data: {json.dumps(new_data, ensure_ascii=False) if new_data else None}")
+            print(f"Performed by: {performed_by}, User type: {user_type}")
+            
+            result = log_service.log_operation(
                 table_name=table_name,
                 operation_type=operation_type,
                 record_id=record_id,
@@ -102,8 +107,17 @@ def log_operation(table_name, operation_type, record_id, old_data, new_data, per
                 performed_by=performed_by,
                 user_type=user_type
             )
+            
+            if result:
+                print(f"Successfully logged {operation_type} operation")
+                conn.commit()
+            else:
+                print(f"Failed to log {operation_type} operation")
+                
+            return result
     except Exception as e:
         print(f"Error logging operation: {str(e)}")
+        return False
 
 @order_bp.route('/orders/create', methods=['POST'])
 def create_order():
@@ -316,17 +330,22 @@ def cancel_order():
                 SELECT 
                     o.id as order_id,
                     o.order_number,
+                    o.customer_id,
+                    c.email as customer_email,
                     json_agg(json_build_object(
+                        'product_name', p.name,
                         'name', p.name,
                         'quantity', od.product_quantity,
+                        'unit', od.product_unit,
                         'shipping_date', COALESCE(to_char(od.shipping_date, 'YYYY-MM-DD'), '待確認'),
                         'remark', COALESCE(od.remark, '-')
                     )) as products
                 FROM orders o
                 JOIN order_details od ON o.id = od.order_id
                 JOIN products p ON od.product_id = p.id
+                JOIN customers c ON o.customer_id = c.id
                 WHERE o.order_number = %s
-                GROUP BY o.id, o.order_number
+                GROUP BY o.id, o.order_number, o.customer_id, c.email
             """, (data['order_number'],))
             
             order_info = cursor.fetchone()
@@ -349,12 +368,22 @@ def cancel_order():
             message = {
                 'order_number': order_info[1],
                 'status': '待確認',
-                'products': order_info[2]
+                'products': order_info[4]
             }
             
             old_data = {
                 'message': json.dumps(message, ensure_ascii=False)
             }
+
+            # 準備郵件數據
+            email_data = {
+                'order_number': order_info[1],
+                'cancel_date': format_datetime(datetime.now()),
+                'items': order_info[4]
+            }
+            
+            customer_email = order_info[3]
+            customer_id = order_info[2]  # 获取客户ID
 
             # 刪除訂單詳情和主訂單
             cursor.execute("""
@@ -374,16 +403,22 @@ def cancel_order():
             if not deleted_order_id:
                 return error_response('訂單刪除失敗', 400)
 
-            # 記錄日誌
+            # 記錄日誌 - 使用客户ID作为performed_by
             log_operation(
                 table_name='orders',
                 operation_type='刪除',
                 record_id=order_info[0],
                 old_data=old_data,
                 new_data=None,
-                performed_by=session.get('customer_id'),
+                performed_by=customer_id,  # 使用客户ID而不是session中的customer_id
                 user_type='客戶'
             )
+
+            # 發送取消訂單郵件通知
+            threading.Thread(
+                target=send_cancel_email,
+                args=(customer_email, email_data)
+            ).start()
 
             conn.commit()
             return success_response(message='訂單已取消')
@@ -539,8 +574,7 @@ def update_order_status():
             new_message = f"訂單號:{original_order['order_number']}、產品:{original_order['product_name']}、數量:{quantity or original_order['product_quantity']}、狀態:{status}、出貨日期:{shipping_date or '待確認'}、供應商備註:{supplier_note or '-'}"
 
             # 記錄操作日誌
-            log_service = LogService(conn)
-            log_service.log_operation(
+            log_operation(
                 table_name='orders',
                 operation_type='修改',
                 record_id=original_order['order_id'],
