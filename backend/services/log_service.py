@@ -71,7 +71,7 @@ class LogService:
                             elif key == '備註':
                                 if current_product:
                                     current_product['remark'] = value if value not in ['-', '', 'undefined'] else '-'
-                            elif key == '供應商備註' or key == 'supplier_note':
+                            elif key == '供應商備註':
                                 if current_product:
                                     current_product['supplier_note'] = value if value not in ['-', '', 'undefined'] else '-'
 

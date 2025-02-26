@@ -535,8 +535,8 @@ def update_order_status():
             cursor.execute(update_query, params)
 
             # 準備日誌記錄
-            old_message = f"訂單號:{original_order['order_number']}、產品:{original_order['product_name']}、數量:{original_order['product_quantity']}、狀態:{original_order['order_status']}、出貨日期:{original_order['shipping_date'] or '待確認'}、備註:{original_order['supplier_note'] or '-'}"
-            new_message = f"訂單號:{original_order['order_number']}、產品:{original_order['product_name']}、數量:{quantity or original_order['product_quantity']}、狀態:{status}、出貨日期:{shipping_date or '待確認'}、備註:{supplier_note or '-'}"
+            old_message = f"訂單號:{original_order['order_number']}、產品:{original_order['product_name']}、數量:{original_order['product_quantity']}、狀態:{original_order['order_status']}、出貨日期:{original_order['shipping_date'] or '待確認'}、供應商備註:{original_order['supplier_note'] or '-'}"
+            new_message = f"訂單號:{original_order['order_number']}、產品:{original_order['product_name']}、數量:{quantity or original_order['product_quantity']}、狀態:{status}、出貨日期:{shipping_date or '待確認'}、供應商備註:{supplier_note or '-'}"
 
             # 記錄操作日誌
             log_service = LogService(conn)
