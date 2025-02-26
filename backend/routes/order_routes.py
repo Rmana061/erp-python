@@ -525,6 +525,7 @@ def update_order_status():
                     od.order_status,
                     od.shipping_date,
                     od.supplier_note,
+                    od.remark,
                     o.order_number,
                     p.name as product_name
                 FROM order_details od
@@ -545,8 +546,9 @@ def update_order_status():
                 'order_status': result[3],
                 'shipping_date': result[4],
                 'supplier_note': result[5],
-                'order_number': result[6],
-                'product_name': result[7]
+                'remark': result[6],
+                'order_number': result[7],
+                'product_name': result[8]
             }
 
             # 構建更新查詢
@@ -569,20 +571,130 @@ def update_order_status():
 
             cursor.execute(update_query, params)
 
-            # 準備日誌記錄
-            old_message = f"訂單號:{original_order['order_number']}、產品:{original_order['product_name']}、數量:{original_order['product_quantity']}、狀態:{original_order['order_status']}、出貨日期:{original_order['shipping_date'] or '待確認'}、供應商備註:{original_order['supplier_note'] or '-'}"
-            new_message = f"訂單號:{original_order['order_number']}、產品:{original_order['product_name']}、數量:{quantity or original_order['product_quantity']}、狀態:{status}、出貨日期:{shipping_date or '待確認'}、供應商備註:{supplier_note or '-'}"
-
-            # 記錄操作日誌
-            log_operation(
-                table_name='orders',
-                operation_type='修改',
-                record_id=original_order['order_id'],
-                old_data={'message': old_message},
-                new_data={'message': new_message},
-                performed_by=admin_id,
-                user_type='管理員'
-            )
+            # 準備日誌記錄 - 使用結構化數據格式
+            # 檢查是否有變更
+            changes = {}
+            
+            # 檢查數量變更
+            if quantity is not None and original_order['product_quantity'] != quantity:
+                changes['quantity'] = {
+                    'before': str(original_order['product_quantity']),
+                    'after': str(quantity)
+                }
+            
+            # 檢查狀態變更
+            if original_order['order_status'] != status:
+                changes['status'] = {
+                    'before': original_order['order_status'],
+                    'after': status
+                }
+            
+            # 檢查出貨日期變更
+            original_shipping_date = original_order['shipping_date'].strftime('%Y-%m-%d') if original_order['shipping_date'] else '待確認'
+            new_shipping_date = shipping_date if shipping_date else '待確認'
+            
+            if original_shipping_date != new_shipping_date:
+                changes['shipping_date'] = {
+                    'before': original_shipping_date,
+                    'after': new_shipping_date
+                }
+            
+            # 檢查供應商備註變更
+            original_supplier_note = original_order['supplier_note'] if original_order['supplier_note'] else '-'
+            new_supplier_note = supplier_note if supplier_note else '-'
+            
+            if original_supplier_note != new_supplier_note:
+                changes['supplier_note'] = {
+                    'before': original_supplier_note,
+                    'after': new_supplier_note
+                }
+            
+            # 如果有變更，記錄日誌
+            if changes:
+                # 檢查是否有最近的日誌記錄可以合併
+                cursor.execute("""
+                    SELECT id, operation_detail 
+                    FROM logs 
+                    WHERE table_name = 'orders' 
+                    AND operation_type = '修改' 
+                    AND record_id = %s 
+                    AND performed_by = %s 
+                    AND created_at > NOW() - INTERVAL '5 seconds'
+                    ORDER BY created_at DESC
+                    LIMIT 1
+                """, (original_order['order_id'], admin_id))
+                
+                recent_log = cursor.fetchone()
+                
+                # 構建產品變更記錄
+                product_change = {
+                    'name': original_order['product_name'],
+                    'changes': changes
+                }
+                
+                if recent_log:
+                    # 嘗試合併變更
+                    log_id, operation_detail = recent_log
+                    
+                    try:
+                        # 解析現有日誌詳情
+                        if isinstance(operation_detail, str):
+                            operation_detail = json.loads(operation_detail)
+                        
+                        # 檢查是否有產品數組
+                        if 'message' in operation_detail and 'products' in operation_detail['message']:
+                            # 檢查是否已有此產品的變更記錄
+                            product_found = False
+                            for product in operation_detail['message']['products']:
+                                if product['name'] == original_order['product_name']:
+                                    # 合併變更
+                                    for change_type, change_value in changes.items():
+                                        product['changes'][change_type] = change_value
+                                    product_found = True
+                                    break
+                            
+                            # 如果沒有找到此產品，添加新的產品變更
+                            if not product_found:
+                                operation_detail['message']['products'].append(product_change)
+                            
+                            # 更新日誌記錄
+                            cursor.execute("""
+                                UPDATE logs 
+                                SET operation_detail = %s::jsonb,
+                                    created_at = NOW()
+                                WHERE id = %s
+                            """, (json.dumps(operation_detail, ensure_ascii=False), log_id))
+                        else:
+                            # 如果日誌格式不符合預期，創建新的日誌
+                            create_new_log = True
+                    except (json.JSONDecodeError, KeyError, TypeError) as e:
+                        print(f"Error parsing log detail: {e}")
+                        create_new_log = True
+                else:
+                    create_new_log = True
+                
+                # 如果需要創建新的日誌記錄
+                if not recent_log or locals().get('create_new_log', False):
+                    # 構建新的日誌記錄
+                    log_data = {
+                        'message': {
+                            'order_number': original_order['order_number'],
+                            'status': status,
+                            'products': [product_change]
+                        },
+                        'operation_type': '修改'
+                    }
+                    
+                    # 記錄操作日誌
+                    log_operation(
+                        table_name='orders',
+                        operation_type='修改',
+                        record_id=original_order['order_id'],
+                        old_data=None,
+                        new_data=log_data,
+                        performed_by=admin_id,
+                        user_type='管理員'
+                    )
 
             conn.commit()
             return success_response(message='訂單更新成功')

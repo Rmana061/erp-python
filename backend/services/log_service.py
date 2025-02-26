@@ -242,92 +242,159 @@ class LogService:
             
             # 檢查是否存在最近的日誌記錄
             cursor = self.conn.cursor()
-            cursor.execute("""
-                SELECT id 
-                FROM logs 
-                WHERE table_name = %s 
-                AND operation_type = %s 
-                AND record_id = %s 
-                AND performed_by = %s 
-                AND created_at > NOW() - INTERVAL '2 seconds'
-                LIMIT 1
-            """, (table_name, operation_type, record_id, performed_by))
             
-            if cursor.fetchone():
-                print(f"Duplicate log detected for {operation_type} on {table_name} with ID {record_id}")
-                return True  # 已存在相同记录，视为成功
-            
-            # 計算當前變更詳情
-            operation_detail = self._get_changes(old_data, new_data, operation_type)
-            
-            # 如果找到最近的記錄，嘗試合併變更
             if operation_type == '修改':
+                # 檢查是否有最近的修改記錄可以合併
+                cursor.execute("""
+                    SELECT id, operation_detail 
+                    FROM logs 
+                    WHERE table_name = %s 
+                    AND operation_type = %s 
+                    AND record_id = %s 
+                    AND performed_by = %s 
+                    AND created_at > NOW() - INTERVAL '5 seconds'
+                    ORDER BY created_at DESC
+                    LIMIT 1
+                """, (table_name, operation_type, record_id, performed_by))
+                
                 recent_log = cursor.fetchone()
                 
-                # 確保兩個記錄都有正確的格式
-                if isinstance(operation_detail.get('message'), dict) and \
-                   isinstance(recent_log, tuple):
+                # 如果找到最近的記錄，嘗試合併
+                if recent_log:
+                    log_id, recent_detail = recent_log
                     
-                    # 獲取當前和已存在的產品信息
-                    recent_products = recent_log[1]
-                    current_products = operation_detail['message'].get('products', [{}])[0]
+                    try:
+                        # 解析現有日誌詳情
+                        if isinstance(recent_detail, str):
+                            recent_detail = json.loads(recent_detail)
+                        
+                        # 確保新數據有正確的格式
+                        if isinstance(new_data, dict) and 'message' in new_data:
+                            # 獲取訂單號和狀態
+                            order_number = new_data['message'].get('order_number', '')
+                            status = new_data['message'].get('status', '待確認')
+                            
+                            # 如果沒有現有的操作詳情，創建一個基本結構
+                            if not recent_detail or 'message' not in recent_detail:
+                                recent_detail = {
+                                    'message': {
+                                        'order_number': order_number,
+                                        'status': status,
+                                        'products': []
+                                    },
+                                    'operation_type': '修改'
+                                }
+                            
+                            # 獲取當前產品信息
+                            current_product = None
+                            if 'products' in new_data['message']:
+                                current_product = new_data['message']['products'][0]
+                            
+                            if current_product and 'name' in current_product and 'changes' in current_product:
+                                # 檢查是否已有此產品的變更記錄
+                                product_found = False
+                                
+                                for product in recent_detail['message'].get('products', []):
+                                    if product.get('name') == current_product['name']:
+                                        # 合併變更
+                                        for change_type, change_value in current_product['changes'].items():
+                                            product['changes'][change_type] = change_value
+                                        product_found = True
+                                        break
+                                
+                                # 如果沒有找到此產品，添加新的產品變更
+                                if not product_found:
+                                    if 'products' not in recent_detail['message']:
+                                        recent_detail['message']['products'] = []
+                                    recent_detail['message']['products'].append(current_product)
+                                
+                                # 更新日誌記錄
+                                cursor.execute("""
+                                    UPDATE logs 
+                                    SET operation_detail = %s::jsonb,
+                                        created_at = NOW()
+                                    WHERE id = %s
+                                """, (json.dumps(recent_detail, ensure_ascii=False), log_id))
+                                
+                                self.conn.commit()
+                                print(f"Successfully merged log for {operation_type} operation")
+                                return True
+                    except (json.JSONDecodeError, KeyError, TypeError) as e:
+                        print(f"Error merging log details: {str(e)}")
+                
+                # 如果沒有找到最近的記錄或合併失敗，創建新記錄
+                if isinstance(new_data, dict) and 'message' in new_data and 'products' in new_data['message']:
+                    # 計算當前變更詳情
+                    operation_detail = {
+                        'message': {
+                            'order_number': new_data['message'].get('order_number', ''),
+                            'status': new_data['message'].get('status', '待確認'),
+                            'products': [new_data['message']['products'][0]]
+                        },
+                        'operation_type': '修改'
+                    }
                     
-                    # 合併 changes
-                    merged_changes = recent_products.get('changes', {}).copy()
-                    current_changes = current_products.get('changes', {})
-                    
-                    # 更新合併的變更
-                    for change_type in ['quantity', 'shipping_date', 'remark', 'supplier_note']:
-                        if change_type in current_changes:
-                            if change_type in merged_changes:
-                                # 如果已存在，只更新 after 值
-                                merged_changes[change_type]['after'] = current_changes[change_type]['after']
-                            else:
-                                # 如果不存在，添加新的變更
-                                merged_changes[change_type] = current_changes[change_type]
-                    
-                    # 更新現有記錄
                     cursor.execute("""
-                        UPDATE logs 
-                        SET operation_detail = %s::jsonb,
-                            created_at = NOW()
-                        WHERE id = %s
+                        INSERT INTO logs 
+                        (table_name, operation_type, record_id, operation_detail, 
+                         performed_by, user_type, created_at)
+                        VALUES (%s, %s, %s, %s::jsonb, %s, %s, NOW())
                     """, (
-                        json.dumps({
-                            'message': {
-                                'order_number': operation_detail['message']['order_number'],
-                                'status': operation_detail['message']['status'],
-                                'products': [{
-                                    'name': current_products['name'],
-                                    'changes': merged_changes
-                                }]
-                            },
-                            'operation_type': '修改'
-                        }, ensure_ascii=False),
-                        recent_log[0]
+                        table_name,
+                        operation_type,
+                        record_id,
+                        json.dumps(operation_detail, ensure_ascii=False),
+                        performed_by,
+                        user_type
                     ))
                     self.conn.commit()
+                    print(f"日志记录成功: {operation_type} - {table_name} - ID: {record_id}")
+                    return True
+                else:
+                    # 如果數據格式不正確，使用原始的變更計算方法
+                    operation_detail = self._get_changes(old_data, new_data, operation_type)
+                    
+                    if operation_detail and operation_detail.get('operation_type') is not None:
+                        cursor.execute("""
+                            INSERT INTO logs 
+                            (table_name, operation_type, record_id, operation_detail, 
+                             performed_by, user_type, created_at)
+                            VALUES (%s, %s, %s, %s::jsonb, %s, %s, NOW())
+                        """, (
+                            table_name,
+                            operation_type,
+                            record_id,
+                            json.dumps(operation_detail, ensure_ascii=False),
+                            performed_by,
+                            user_type
+                        ))
+                        self.conn.commit()
+                        print(f"日志记录成功: {operation_type} - {table_name} - ID: {record_id}")
+                        return True
+            else:
+                # 對於非修改操作，使用原始的變更計算方法
+                operation_detail = self._get_changes(old_data, new_data, operation_type)
+                
+                if operation_type in ['新增', '刪除', '審核'] or \
+                   (operation_detail and operation_detail.get('operation_type') is not None):
+                    cursor.execute("""
+                        INSERT INTO logs 
+                        (table_name, operation_type, record_id, operation_detail, 
+                         performed_by, user_type, created_at)
+                        VALUES (%s, %s, %s, %s::jsonb, %s, %s, NOW())
+                    """, (
+                        table_name,
+                        operation_type,
+                        record_id,
+                        json.dumps(operation_detail, ensure_ascii=False),
+                        performed_by,
+                        user_type
+                    ))
+                    self.conn.commit()
+                    print(f"日志记录成功: {operation_type} - {table_name} - ID: {record_id}")
                     return True
             
-            # 如果是新記錄或無法合併，則創建新記錄
-            if operation_type in ['新增', '刪除', '審核'] or \
-               (operation_detail.get('operation_type') is not None):
-                cursor.execute("""
-                    INSERT INTO logs 
-                    (table_name, operation_type, record_id, operation_detail, 
-                     performed_by, user_type, created_at)
-                    VALUES (%s, %s, %s, %s::jsonb, %s, %s, NOW())
-                """, (
-                    table_name,
-                    operation_type,
-                    record_id,
-                    json.dumps(operation_detail, ensure_ascii=False),
-                    performed_by,
-                    user_type
-                ))
-                self.conn.commit()
-                return True
-            
+            print(f"Failed to log {operation_type} operation")
             return False
             
         except Exception as e:
