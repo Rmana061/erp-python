@@ -94,6 +94,7 @@ class LogService:
                 # 获取订单号
                 order_number = ''
                 status_after = '已確認'  # 默认状态为已确认
+                status_before = '待確認'  # 默认之前的状态为待确认
                 
                 if isinstance(new_data, dict):
                     if isinstance(new_data.get('message'), str):
@@ -103,39 +104,46 @@ class LogService:
                             if '訂單號:' in part:
                                 order_number = part.split(':')[1]
                                 break
+                            elif '狀態:' in part:
+                                status_after = part.split(':')[1]
                     elif isinstance(new_data.get('message'), dict):
                         order_number = new_data['message'].get('order_number', '')
                         
-                        # 判断整张订单的状态
-                        all_cancelled = True
-                        has_confirmed = False
-                        
-                        # 检查所有产品的状态
-                        if 'products' in new_data['message']:
-                            for product in new_data['message'].get('products', []):
-                                product_status = product.get('status', '')
-                                if product_status == '已確認':
-                                    has_confirmed = True
-                                    all_cancelled = False
-                                    break
-                                elif product_status != '已取消':
-                                    all_cancelled = False
-                        
-                        # 根据产品状态确定整张订单的状态
-                        if has_confirmed:
-                            status_after = '已確認'
-                        elif all_cancelled:
-                            status_after = '已取消'
+                        # 检查是否有明确的状态变更信息
+                        if 'status' in new_data['message'] and isinstance(new_data['message']['status'], dict):
+                            status_before = new_data['message']['status'].get('before', '待確認')
+                            status_after = new_data['message']['status'].get('after', '已確認')
                         else:
-                            # 如果没有明确的产品状态信息，使用订单级别的状态
-                            status_after = new_data['message'].get('status', '已確認')
+                            # 判断整张订单的状态
+                            all_cancelled = True
+                            has_confirmed = False
+                            
+                            # 检查所有产品的状态
+                            if 'products' in new_data['message']:
+                                for product in new_data['message'].get('products', []):
+                                    product_status = product.get('status', '')
+                                    if product_status == '已確認':
+                                        has_confirmed = True
+                                        all_cancelled = False
+                                        break
+                                    elif product_status != '已取消':
+                                        all_cancelled = False
+                            
+                            # 根据产品状态确定整张订单的状态
+                            if has_confirmed:
+                                status_after = '已確認'
+                            elif all_cancelled:
+                                status_after = '已取消'
+                            else:
+                                # 如果没有明确的产品状态信息，使用订单级别的状态
+                                status_after = new_data['message'].get('status', '已確認')
                 
                 # 构建简化的审核变更记录
                 audit_changes = {
                     'message': {
                         'order_number': order_number,
                         'status': {
-                            'before': '待確認',
+                            'before': status_before,
                             'after': status_after
                         }
                     }
