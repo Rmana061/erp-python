@@ -555,12 +555,19 @@ def update_order_status():
             update_query = """
                 UPDATE order_details 
                 SET order_status = %s,
-                    shipping_date = %s,
                     supplier_note = %s,
                     updated_at = NOW()
             """
-            params = [status, shipping_date, supplier_note]
+            params = [status, supplier_note]
 
+            # 只有在状态为"已確認"且提供了出货日期时才更新出货日期
+            if status == '已確認' and shipping_date:
+                update_query += ", shipping_date = %s"
+                params.append(shipping_date)
+            elif status == '已取消':
+                # 如果状态是"已取消"，将出货日期设为NULL
+                update_query += ", shipping_date = NULL"
+            
             # 如果提供了數量，加入數量更新
             if quantity is not None:
                 update_query += ", product_quantity = %s"
@@ -575,31 +582,32 @@ def update_order_status():
             # 檢查是否有變更
             changes = {}
             
-            # 檢查數量變更
+            # 檢查數量變更 - 只有在实际修改时才记录
             if quantity is not None and original_order['product_quantity'] != quantity:
                 changes['quantity'] = {
                     'before': str(original_order['product_quantity']),
                     'after': str(quantity)
                 }
             
-            # 檢查狀態變更
+            # 记录状态变更 - 确保在修改操作中也正确记录状态变更
             if original_order['order_status'] != status:
                 changes['status'] = {
                     'before': original_order['order_status'],
                     'after': status
                 }
             
-            # 檢查出貨日期變更
-            original_shipping_date = original_order['shipping_date'].strftime('%Y-%m-%d') if original_order['shipping_date'] else '待確認'
-            new_shipping_date = shipping_date if shipping_date else '待確認'
+            # 只有在状态为"已確認"且有提供出货日期时才记录出货日期变更，且只有在实际修改时才记录
+            if status == '已確認' and shipping_date:
+                original_shipping_date = original_order['shipping_date'].strftime('%Y-%m-%d') if original_order['shipping_date'] else '待確認'
+                new_shipping_date = shipping_date if shipping_date else '待確認'
+                
+                if original_shipping_date != new_shipping_date:
+                    changes['shipping_date'] = {
+                        'before': original_shipping_date,
+                        'after': new_shipping_date
+                    }
             
-            if original_shipping_date != new_shipping_date:
-                changes['shipping_date'] = {
-                    'before': original_shipping_date,
-                    'after': new_shipping_date
-                }
-            
-            # 檢查供應商備註變更
+            # 檢查供應商備註變更 - 只有在实际修改时才记录
             original_supplier_note = original_order['supplier_note'] if original_order['supplier_note'] else '-'
             new_supplier_note = supplier_note if supplier_note else '-'
             
@@ -643,6 +651,9 @@ def update_order_status():
                         
                         # 檢查是否有產品數組
                         if 'message' in operation_detail and 'products' in operation_detail['message']:
+                            # 更新日志中的状态为当前状态
+                            operation_detail['message']['status'] = status
+                            
                             # 檢查是否已有此產品的變更記錄
                             product_found = False
                             for product in operation_detail['message']['products']:
@@ -679,7 +690,7 @@ def update_order_status():
                     log_data = {
                         'message': {
                             'order_number': original_order['order_number'],
-                            'status': status,
+                            'status': status,  # 使用当前状态，确保修改操作中记录正确的状态
                             'products': [product_change]
                         },
                         'operation_type': '修改'

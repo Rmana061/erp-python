@@ -93,6 +93,8 @@ class LogService:
             if operation_type == '審核':
                 # 获取订单号
                 order_number = ''
+                status_after = '已確認'  # 默认状态为已确认
+                
                 if isinstance(new_data, dict):
                     if isinstance(new_data.get('message'), str):
                         # 处理字符串格式
@@ -103,21 +105,19 @@ class LogService:
                                 break
                     elif isinstance(new_data.get('message'), dict):
                         order_number = new_data['message'].get('order_number', '')
+                        # 获取实际状态，可能是已确认或已取消
+                        status_after = new_data['message'].get('status', '已確認')
                 
-                # 构建审核变更记录
+                # 构建简化的审核变更记录
                 audit_changes = {
                     'message': {
                         'order_number': order_number,
                         'status': {
                             'before': '待確認',
-                            'after': '已確認'
+                            'after': status_after
                         }
                     }
                 }
-                
-                # 如果有出货日期信息，添加到记录中
-                if isinstance(new_data, dict) and 'shipping_dates' in new_data:
-                    audit_changes['shipping_dates'] = new_data['shipping_dates']
                 
                 return audit_changes
 
@@ -163,47 +163,54 @@ class LogService:
                 }
 
             try:
-                changes = {}
-                old_product = old_message.get('products', [{}])[0]
-                new_product = new_message.get('products', [{}])[0]
+                products_changes = []
                 
-                # 檢查數量變更
-                if old_product.get('quantity', '') != new_product.get('quantity', ''):
-                    changes['quantity'] = {
-                        'before': old_product.get('quantity', ''),
-                        'after': new_product.get('quantity', '')
-                    }
+                # 處理所有產品的變更
+                for i, new_product in enumerate(new_message.get('products', [])):
+                    changes = {}
+                    # 獲取對應的舊產品信息，如果索引超出範圍則使用空字典
+                    old_product = old_message.get('products', [])[i] if i < len(old_message.get('products', [])) else {}
+                    
+                    # 檢查數量變更
+                    if old_product.get('quantity', '') != new_product.get('quantity', ''):
+                        changes['quantity'] = {
+                            'before': old_product.get('quantity', ''),
+                            'after': new_product.get('quantity', '')
+                        }
+                    
+                    # 檢查出貨日期變更
+                    if old_product.get('shipping_date', '') != new_product.get('shipping_date', ''):
+                        changes['shipping_date'] = {
+                            'before': old_product.get('shipping_date', '待確認'),
+                            'after': new_product.get('shipping_date', '待確認')
+                        }
+                    
+                    # 檢查客戶備註變更
+                    if old_product.get('remark', '') != new_product.get('remark', ''):
+                        changes['remark'] = {
+                            'before': old_product.get('remark', '-'),
+                            'after': new_product.get('remark', '-')
+                        }
+                    
+                    # 檢查供應商備註變更
+                    if old_product.get('supplier_note', '') != new_product.get('supplier_note', ''):
+                        changes['supplier_note'] = {
+                            'before': old_product.get('supplier_note', '-'),
+                            'after': new_product.get('supplier_note', '-')
+                        }
+                    
+                    if changes:  # 如果有變更，添加到產品變更列表
+                        products_changes.append({
+                            'name': new_product.get('name', ''),
+                            'changes': changes
+                        })
                 
-                # 檢查出貨日期變更
-                if old_product.get('shipping_date', '') != new_product.get('shipping_date', ''):
-                    changes['shipping_date'] = {
-                        'before': old_product.get('shipping_date', '待確認'),
-                        'after': new_product.get('shipping_date', '待確認')
-                    }
-                
-                # 檢查客戶備註變更
-                if old_product.get('remark', '') != new_product.get('remark', ''):
-                    changes['remark'] = {
-                        'before': old_product.get('remark', '-'),
-                        'after': new_product.get('remark', '-')
-                    }
-                
-                # 檢查供應商備註變更
-                if old_product.get('supplier_note', '') != new_product.get('supplier_note', ''):
-                    changes['supplier_note'] = {
-                        'before': old_product.get('supplier_note', '-'),
-                        'after': new_product.get('supplier_note', '-')
-                    }
-                
-                if changes:  # 如果有變更，返回修改操作
+                if products_changes:  # 如果有產品變更，返回修改操作
                     return {
                         'message': {
                             'order_number': new_message.get('order_number', '') if isinstance(new_message, dict) else '',
                             'status': new_message.get('status', '待確認') if isinstance(new_message, dict) else '待確認',
-                            'products': [{
-                                'name': new_product.get('name', ''),
-                                'changes': changes
-                            }]
+                            'products': products_changes
                         },
                         'operation_type': '修改'
                     }
@@ -286,39 +293,41 @@ class LogService:
                                 }
                             
                             # 獲取當前產品信息
-                            current_product = None
+                            current_products = []
                             if 'products' in new_data['message']:
-                                current_product = new_data['message']['products'][0]
+                                current_products = new_data['message']['products']
+
+                            # 處理所有產品的變更
+                            for current_product in current_products:
+                                if current_product and 'name' in current_product and 'changes' in current_product:
+                                    # 檢查是否已有此產品的變更記錄
+                                    product_found = False
+                                    
+                                    for product in recent_detail['message'].get('products', []):
+                                        if product.get('name') == current_product['name']:
+                                            # 合併變更
+                                            for change_type, change_value in current_product['changes'].items():
+                                                product['changes'][change_type] = change_value
+                                            product_found = True
+                                            break
+                                    
+                                    # 如果沒有找到此產品，添加新的產品變更
+                                    if not product_found:
+                                        if 'products' not in recent_detail['message']:
+                                            recent_detail['message']['products'] = []
+                                        recent_detail['message']['products'].append(current_product)
+
+                            # 更新日誌記錄
+                            cursor.execute("""
+                                UPDATE logs 
+                                SET operation_detail = %s::jsonb,
+                                    created_at = NOW()
+                                WHERE id = %s
+                            """, (json.dumps(recent_detail, ensure_ascii=False), log_id))
                             
-                            if current_product and 'name' in current_product and 'changes' in current_product:
-                                # 檢查是否已有此產品的變更記錄
-                                product_found = False
-                                
-                                for product in recent_detail['message'].get('products', []):
-                                    if product.get('name') == current_product['name']:
-                                        # 合併變更
-                                        for change_type, change_value in current_product['changes'].items():
-                                            product['changes'][change_type] = change_value
-                                        product_found = True
-                                        break
-                                
-                                # 如果沒有找到此產品，添加新的產品變更
-                                if not product_found:
-                                    if 'products' not in recent_detail['message']:
-                                        recent_detail['message']['products'] = []
-                                    recent_detail['message']['products'].append(current_product)
-                                
-                                # 更新日誌記錄
-                                cursor.execute("""
-                                    UPDATE logs 
-                                    SET operation_detail = %s::jsonb,
-                                        created_at = NOW()
-                                    WHERE id = %s
-                                """, (json.dumps(recent_detail, ensure_ascii=False), log_id))
-                                
-                                self.conn.commit()
-                                print(f"Successfully merged log for {operation_type} operation")
-                                return True
+                            self.conn.commit()
+                            print(f"Successfully merged log for {operation_type} operation")
+                            return True
                     except (json.JSONDecodeError, KeyError, TypeError) as e:
                         print(f"Error merging log details: {str(e)}")
                 
@@ -329,7 +338,7 @@ class LogService:
                         'message': {
                             'order_number': new_data['message'].get('order_number', ''),
                             'status': new_data['message'].get('status', '待確認'),
-                            'products': [new_data['message']['products'][0]]
+                            'products': new_data['message']['products']  # 記錄所有產品，而不是只取第一個
                         },
                         'operation_type': '修改'
                     }
