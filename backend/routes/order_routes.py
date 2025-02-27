@@ -567,7 +567,7 @@ def update_order_status():
             elif status == '已取消':
                 # 如果状态是"已取消"，将出货日期设为NULL
                 update_query += ", shipping_date = NULL"
-            
+
             # 如果提供了數量，加入數量更新
             if quantity is not None:
                 update_query += ", product_quantity = %s"
@@ -696,17 +696,17 @@ def update_order_status():
                         },
                         'operation_type': '修改'
                     }
-                    
-                    # 記錄操作日誌
+
+            # 記錄操作日誌
                     log_operation(
-                        table_name='orders',
-                        operation_type='修改',
-                        record_id=original_order['order_id'],
+                table_name='orders',
+                operation_type='修改',
+                record_id=original_order['order_id'],
                         old_data=None,
                         new_data=log_data,
-                        performed_by=admin_id,
-                        user_type='管理員'
-                    )
+                performed_by=admin_id,
+                user_type='管理員'
+            )
 
             conn.commit()
             return success_response(message='訂單更新成功')
