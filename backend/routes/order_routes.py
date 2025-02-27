@@ -627,7 +627,7 @@ def update_order_status():
                     AND operation_type = '修改' 
                     AND record_id = %s 
                     AND performed_by = %s 
-                    AND created_at > NOW() - INTERVAL '5 seconds'
+                    AND created_at > NOW() - INTERVAL '10 seconds'
                     ORDER BY created_at DESC
                     LIMIT 1
                 """, (original_order['order_id'], admin_id))
@@ -637,6 +637,7 @@ def update_order_status():
                 # 構建產品變更記錄
                 product_change = {
                     'name': original_order['product_name'],
+                    'detail_id': original_order['id'],  # 添加detail_id作为唯一标识符
                     'changes': changes
                 }
                 
@@ -651,13 +652,11 @@ def update_order_status():
                         
                         # 檢查是否有產品數組
                         if 'message' in operation_detail and 'products' in operation_detail['message']:
-                            # 更新日志中的状态为当前状态
-                            operation_detail['message']['status'] = status
-                            
                             # 檢查是否已有此產品的變更記錄
                             product_found = False
                             for product in operation_detail['message']['products']:
-                                if product['name'] == original_order['product_name']:
+                                # 使用产品名称和detail_id共同判断是否为同一产品
+                                if product['name'] == original_order['product_name'] and product.get('detail_id') == original_order['id']:
                                     # 合併變更
                                     for change_type, change_value in changes.items():
                                         product['changes'][change_type] = change_value
@@ -666,6 +665,8 @@ def update_order_status():
                             
                             # 如果沒有找到此產品，添加新的產品變更
                             if not product_found:
+                                # 添加detail_id到产品变更记录中
+                                product_change['detail_id'] = original_order['id']
                                 operation_detail['message']['products'].append(product_change)
                             
                             # 更新日誌記錄
@@ -675,6 +676,7 @@ def update_order_status():
                                     created_at = NOW()
                                 WHERE id = %s
                             """, (json.dumps(operation_detail, ensure_ascii=False), log_id))
+                            conn.commit()  # 确保更新成功提交
                         else:
                             # 如果日誌格式不符合預期，創建新的日誌
                             create_new_log = True
@@ -690,7 +692,6 @@ def update_order_status():
                     log_data = {
                         'message': {
                             'order_number': original_order['order_number'],
-                            'status': status,  # 使用当前状态，确保修改操作中记录正确的状态
                             'products': [product_change]
                         },
                         'operation_type': '修改'

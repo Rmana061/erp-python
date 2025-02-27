@@ -105,8 +105,30 @@ class LogService:
                                 break
                     elif isinstance(new_data.get('message'), dict):
                         order_number = new_data['message'].get('order_number', '')
-                        # 获取实际状态，可能是已确认或已取消
-                        status_after = new_data['message'].get('status', '已確認')
+                        
+                        # 判断整张订单的状态
+                        all_cancelled = True
+                        has_confirmed = False
+                        
+                        # 检查所有产品的状态
+                        if 'products' in new_data['message']:
+                            for product in new_data['message'].get('products', []):
+                                product_status = product.get('status', '')
+                                if product_status == '已確認':
+                                    has_confirmed = True
+                                    all_cancelled = False
+                                    break
+                                elif product_status != '已取消':
+                                    all_cancelled = False
+                        
+                        # 根据产品状态确定整张订单的状态
+                        if has_confirmed:
+                            status_after = '已確認'
+                        elif all_cancelled:
+                            status_after = '已取消'
+                        else:
+                            # 如果没有明确的产品状态信息，使用订单级别的状态
+                            status_after = new_data['message'].get('status', '已確認')
                 
                 # 构建简化的审核变更记录
                 audit_changes = {
@@ -209,7 +231,6 @@ class LogService:
                     return {
                         'message': {
                             'order_number': new_message.get('order_number', '') if isinstance(new_message, dict) else '',
-                            'status': new_message.get('status', '待確認') if isinstance(new_message, dict) else '待確認',
                             'products': products_changes
                         },
                         'operation_type': '修改'
@@ -286,7 +307,6 @@ class LogService:
                                 recent_detail = {
                                     'message': {
                                         'order_number': order_number,
-                                        'status': status,
                                         'products': []
                                     },
                                     'operation_type': '修改'
@@ -337,7 +357,6 @@ class LogService:
                     operation_detail = {
                         'message': {
                             'order_number': new_data['message'].get('order_number', ''),
-                            'status': new_data['message'].get('status', '待確認'),
                             'products': new_data['message']['products']  # 記錄所有產品，而不是只取第一個
                         },
                         'operation_type': '修改'
