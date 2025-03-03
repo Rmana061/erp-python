@@ -1,11 +1,56 @@
 import json
 from datetime import datetime
 from typing import Dict, Any, Optional
+from .log_service_registry import LogServiceRegistry
 
 class LogService:
+    """日誌服務類，處理日誌記錄和查詢"""
+    
     def __init__(self, db_connection):
-        self.conn = db_connection
-        
+        """初始化日誌服務"""
+        self.db_connection = db_connection
+    
+    def log_operation(self, table_name, operation_type, record_id, old_data=None, new_data=None, performed_by=None, user_type=None):
+        """記錄操作日誌"""
+        try:
+            # 使用日誌服務註冊表獲取適當的日誌服務
+            log_service = LogServiceRegistry.get_service(self.db_connection, table_name)
+            
+            # 使用獲取的日誌服務記錄操作
+            return log_service.log_operation(
+                table_name=table_name,
+                operation_type=operation_type,
+                record_id=record_id,
+                old_data=old_data,
+                new_data=new_data,
+                performed_by=performed_by,
+                user_type=user_type
+            )
+        except Exception as e:
+            print(f"Error logging operation: {str(e)}")
+            raise
+    
+    def get_logs(self, table_name=None, operation_type=None, start_date=None, end_date=None, user_type=None, performed_by=None, limit=50, offset=0):
+        """獲取日誌記錄"""
+        try:
+            # 使用基礎日誌服務獲取日誌記錄
+            log_service = LogServiceRegistry.get_service(self.db_connection)
+            
+            # 使用獲取的日誌服務查詢日誌
+            return log_service.get_logs(
+                table_name=table_name,
+                operation_type=operation_type,
+                start_date=start_date,
+                end_date=end_date,
+                user_type=user_type,
+                performed_by=performed_by,
+                limit=limit,
+                offset=offset
+            )
+        except Exception as e:
+            print(f"Error getting logs: {str(e)}")
+            raise
+
     def _get_changes(self, old_data: Optional[Dict[str, Any]], new_data: Optional[Dict[str, Any]], operation_type: str = None) -> Dict[str, Any]:
         """計算數據變更"""
         print(f"Processing changes - operation_type: {operation_type}")
@@ -248,329 +293,4 @@ class LogService:
                 print(f"Error processing changes: {str(e)}")
                 return {'message': '處理變更時發生錯誤', 'operation_type': None}
         
-        return {'message': '無變更', 'operation_type': None}
-
-    def log_operation(self, table_name: str, operation_type: str, record_id: int, 
-                     old_data: Optional[Dict[str, Any]], new_data: Optional[Dict[str, Any]], 
-                     performed_by: int, user_type: str) -> bool:
-        """記錄操作日誌"""
-        try:
-            print(f"Received log operation request:")
-            print(f"Table: {table_name}")
-            print(f"Operation: {operation_type}")
-            print(f"Record ID: {record_id}")
-            
-            # 處理日期序列化
-            def serialize_datetime(obj):
-                if isinstance(obj, datetime):
-                    return obj.strftime('%Y-%m-%d %H:%M:%S')
-                return obj
-
-            # 序列化數據
-            if old_data:
-                old_data = json.loads(json.dumps(old_data, default=serialize_datetime, ensure_ascii=False))
-            if new_data:
-                new_data = json.loads(json.dumps(new_data, default=serialize_datetime, ensure_ascii=False))
-
-            print(f"New data: {json.dumps(new_data, ensure_ascii=False)}")
-            print(f"Performed by: {performed_by}")
-            print(f"User type: {user_type}")
-            
-            # 檢查是否存在最近的日誌記錄
-            cursor = self.conn.cursor()
-            
-            if operation_type == '修改':
-                # 檢查是否有最近的修改記錄可以合併
-                cursor.execute("""
-                    SELECT id, operation_detail 
-                    FROM logs 
-                    WHERE table_name = %s 
-                    AND operation_type = %s 
-                    AND record_id = %s 
-                    AND performed_by = %s 
-                    AND created_at > NOW() - INTERVAL '5 seconds'
-                    ORDER BY created_at DESC
-                    LIMIT 1
-                """, (table_name, operation_type, record_id, performed_by))
-                
-                recent_log = cursor.fetchone()
-                
-                # 如果找到最近的記錄，嘗試合併
-                if recent_log:
-                    log_id, recent_detail = recent_log
-                    
-                    try:
-                        # 解析現有日誌詳情
-                        if isinstance(recent_detail, str):
-                            recent_detail = json.loads(recent_detail)
-                        
-                        # 確保新數據有正確的格式
-                        if isinstance(new_data, dict) and 'message' in new_data:
-                            # 獲取訂單號和狀態
-                            order_number = new_data['message'].get('order_number', '')
-                            status = new_data['message'].get('status', '待確認')
-                            
-                            # 如果沒有現有的操作詳情，創建一個基本結構
-                            if not recent_detail or 'message' not in recent_detail:
-                                recent_detail = {
-                                    'message': {
-                                        'order_number': order_number,
-                                        'products': []
-                                    },
-                                    'operation_type': '修改'
-                                }
-                            
-                            # 獲取當前產品信息
-                            current_products = []
-                            if 'products' in new_data['message']:
-                                current_products = new_data['message']['products']
-
-                            # 處理所有產品的變更
-                            for current_product in current_products:
-                                if current_product and 'name' in current_product and 'changes' in current_product:
-                                    # 檢查是否已有此產品的變更記錄
-                                    product_found = False
-                                    
-                                    for product in recent_detail['message'].get('products', []):
-                                        if product.get('name') == current_product['name']:
-                                            # 合併變更
-                                            for change_type, change_value in current_product['changes'].items():
-                                                product['changes'][change_type] = change_value
-                                            product_found = True
-                                            break
-                                    
-                                    # 如果沒有找到此產品，添加新的產品變更
-                                    if not product_found:
-                                        if 'products' not in recent_detail['message']:
-                                            recent_detail['message']['products'] = []
-                                        recent_detail['message']['products'].append(current_product)
-
-                            # 更新日誌記錄
-                            cursor.execute("""
-                                UPDATE logs 
-                                SET operation_detail = %s::jsonb,
-                                    created_at = NOW()
-                                WHERE id = %s
-                            """, (json.dumps(recent_detail, ensure_ascii=False), log_id))
-                            
-                            self.conn.commit()
-                            print(f"Successfully merged log for {operation_type} operation")
-                            return True
-                    except (json.JSONDecodeError, KeyError, TypeError) as e:
-                        print(f"Error merging log details: {str(e)}")
-                
-                # 如果沒有找到最近的記錄或合併失敗，創建新記錄
-                if isinstance(new_data, dict) and 'message' in new_data and 'products' in new_data['message']:
-                    # 計算當前變更詳情
-                    operation_detail = {
-                        'message': {
-                            'order_number': new_data['message'].get('order_number', ''),
-                            'products': new_data['message']['products']  # 記錄所有產品，而不是只取第一個
-                        },
-                        'operation_type': '修改'
-                    }
-                    
-                    cursor.execute("""
-                        INSERT INTO logs 
-                        (table_name, operation_type, record_id, operation_detail, 
-                         performed_by, user_type, created_at)
-                        VALUES (%s, %s, %s, %s::jsonb, %s, %s, NOW())
-                    """, (
-                        table_name,
-                        operation_type,
-                        record_id,
-                        json.dumps(operation_detail, ensure_ascii=False),
-                        performed_by,
-                        user_type
-                    ))
-                    self.conn.commit()
-                    print(f"日志记录成功: {operation_type} - {table_name} - ID: {record_id}")
-                    return True
-                else:
-                    # 如果數據格式不正確，使用原始的變更計算方法
-                    operation_detail = self._get_changes(old_data, new_data, operation_type)
-                    
-                    if operation_detail and operation_detail.get('operation_type') is not None:
-                        cursor.execute("""
-                            INSERT INTO logs 
-                            (table_name, operation_type, record_id, operation_detail, 
-                             performed_by, user_type, created_at)
-                            VALUES (%s, %s, %s, %s::jsonb, %s, %s, NOW())
-                        """, (
-                            table_name,
-                            operation_type,
-                            record_id,
-                            json.dumps(operation_detail, ensure_ascii=False),
-                            performed_by,
-                            user_type
-                        ))
-                        self.conn.commit()
-                        print(f"日志记录成功: {operation_type} - {table_name} - ID: {record_id}")
-                        return True
-            else:
-                # 對於非修改操作，使用原始的變更計算方法
-                operation_detail = self._get_changes(old_data, new_data, operation_type)
-                
-                if operation_type in ['新增', '刪除', '審核'] or \
-                   (operation_detail and operation_detail.get('operation_type') is not None):
-                    cursor.execute("""
-                        INSERT INTO logs 
-                        (table_name, operation_type, record_id, operation_detail, 
-                         performed_by, user_type, created_at)
-                        VALUES (%s, %s, %s, %s::jsonb, %s, %s, NOW())
-                    """, (
-                        table_name,
-                        operation_type,
-                        record_id,
-                        json.dumps(operation_detail, ensure_ascii=False),
-                        performed_by,
-                        user_type
-                    ))
-                    self.conn.commit()
-                    print(f"日志记录成功: {operation_type} - {table_name} - ID: {record_id}")
-                    return True
-            
-            print(f"Failed to log {operation_type} operation")
-            return False
-            
-        except Exception as e:
-            print(f"Error logging operation: {str(e)}")
-            self.conn.rollback()
-            return False
-
-    def get_logs(self,
-                table_name: Optional[str] = None,
-                operation_type: Optional[str] = None,
-                start_date: Optional[str] = None,
-                end_date: Optional[str] = None,
-                user_type: Optional[str] = None,
-                performed_by: Optional[int] = None,
-                limit: int = 100,
-                offset: int = 0) -> tuple:
-        """
-        獲取日志記錄
-        
-        參數:
-            table_name: 表名篩選
-            operation_type: 操作類型篩選
-            start_date: 開始日期
-            end_date: 結束日期
-            user_type: 用戶類型篩選
-            performed_by: 操作者ID篩選
-            limit: 返回記錄數限制
-            offset: 分頁偏移量
-            
-        返回:
-            tuple: (日志記錄列表, 總記錄數)
-        """
-        try:
-            cursor = self.conn.cursor()
-            
-            # 构建基础查询
-            base_query = """
-                SELECT 
-                    l.created_at,
-                    l.user_type,
-                    COALESCE(a.admin_name, c.company_name) as performer_name,
-                    l.table_name,
-                    CASE 
-                        WHEN l.table_name = 'orders' THEN o.order_number
-                        WHEN l.table_name = 'products' THEN p.name
-                        WHEN l.table_name = 'customers' THEN cust.company_name
-                        WHEN l.table_name = 'administrators' THEN adm.admin_name
-                        ELSE l.record_id::text
-                    END as record_detail,
-                    l.operation_type,
-                    l.operation_detail,
-                    l.id,
-                    l.performed_by
-                FROM logs l
-                LEFT JOIN administrators a ON l.performed_by = a.id AND l.user_type = '管理員'
-                LEFT JOIN customers c ON l.performed_by = c.id AND l.user_type = '客戶'
-                LEFT JOIN orders o ON l.table_name = 'orders' AND l.record_id = o.id
-                LEFT JOIN products p ON l.table_name = 'products' AND l.record_id = p.id
-                LEFT JOIN customers cust ON l.table_name = 'customers' AND l.record_id = cust.id
-                LEFT JOIN administrators adm ON l.table_name = 'administrators' AND l.record_id = adm.id
-            """
-            
-            conditions = []
-            params = []
-            
-            if table_name:
-                conditions.append("l.table_name = %s")
-                params.append(table_name)
-            
-            if operation_type:
-                conditions.append("l.operation_type = %s")
-                params.append(operation_type)
-                
-            if start_date:
-                conditions.append("l.created_at >= %s")
-                params.append(start_date)
-                
-            if end_date:
-                conditions.append("l.created_at <= %s")
-                params.append(end_date)
-                
-            if user_type:
-                conditions.append("l.user_type = %s")
-                params.append(user_type)
-                
-            if performed_by:
-                conditions.append("l.performed_by = %s")
-                params.append(performed_by)
-            
-            where_clause = " AND ".join(conditions) if conditions else "1=1"
-            
-            # 获取总记录数
-            count_query = f"""
-                SELECT COUNT(*) 
-                FROM logs l 
-                WHERE {where_clause}
-            """
-            cursor.execute(count_query, params)
-            total_count = cursor.fetchone()[0]
-            
-            # 获取日志记录
-            query = f"""
-                {base_query}
-                WHERE {where_clause}
-                ORDER BY l.created_at DESC
-                LIMIT %s OFFSET %s
-            """
-            
-            cursor.execute(query, params + [limit, offset])
-            logs = cursor.fetchall()
-            
-            # 转换日志记录为字典列表
-            log_list = []
-            for log in logs:
-                try:
-                    operation_detail = log[6]
-                    if isinstance(operation_detail, str):
-                        try:
-                            operation_detail = json.loads(operation_detail)
-                        except json.JSONDecodeError:
-                            operation_detail = {'message': operation_detail}
-                except Exception as e:
-                    print(f"Error processing operation_detail: {e}")
-                    operation_detail = {'message': str(log[6])}
-
-                log_dict = {
-                    'created_at': log[0].strftime('%Y-%m-%d %H:%M:%S'),
-                    'user_type': log[1],
-                    'performer_name': log[2],
-                    'table_name': log[3],
-                    'record_detail': log[4],
-                    'operation_type': log[5],
-                    'operation_detail': operation_detail,
-                    'id': log[7],
-                    'performed_by': log[8]
-                }
-                log_list.append(log_dict)
-            
-            return logs, total_count
-            
-        except Exception as e:
-            print(f"Error getting logs: {str(e)}")
-            return [], 0 
+        return {'message': '無變更', 'operation_type': None} 

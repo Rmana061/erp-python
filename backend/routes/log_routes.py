@@ -2,9 +2,10 @@ from flask import Blueprint, request, jsonify, session
 from backend.config.database import get_db_connection
 from backend.services.log_service import LogService
 from functools import wraps
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import os
 import json
+from backend.services.log_service_registry import LogServiceRegistry
 
 log_bp = Blueprint('log', __name__)
 
@@ -34,73 +35,77 @@ def after_request(response):
 
 def get_admin_id():
     """获取管理员ID"""
+    print(f"當前 session: {dict(session)}")
+    print(f"Authorization 頭部: {request.headers.get('Authorization')}")
+    
     # 首先尝试从 Authorization header 获取
     auth_header = request.headers.get('Authorization')
-    if auth_header and auth_header.startswith('Bearer '):
-        try:
-            admin_id = int(auth_header.split(' ')[1])
-            # 将 admin_id 存入 session
-            session['admin_id'] = admin_id
-            return admin_id
-        except (IndexError, ValueError):
-            print("Invalid Authorization header format")
+    if auth_header:
+        print(f"找到 Authorization 頭部: {auth_header}")
+        # 支持 Bearer token 格式
+        if auth_header.startswith('Bearer '):
+            try:
+                admin_id = int(auth_header.split(' ')[1])
+                print(f"從 Bearer token 獲取到 admin_id: {admin_id}")
+                # 将 admin_id 存入 session
+                session['admin_id'] = admin_id
+                return admin_id
+            except (IndexError, ValueError) as e:
+                print(f"Bearer token 格式無效: {str(e)}")
+        # 直接支持纯数字格式
+        else:
+            try:
+                admin_id = int(auth_header)
+                print(f"從純數字 Authorization 獲取到 admin_id: {admin_id}")
+                session['admin_id'] = admin_id
+                return admin_id
+            except ValueError as e:
+                print(f"Authorization 頭部不是有效的數字: {str(e)}")
             
     # 如果没有 Authorization header，尝试从 session 获取
     admin_id = session.get('admin_id')
     if admin_id:
         try:
-            return int(admin_id)
-        except ValueError:
-            print("Invalid admin_id in session")
-            
+            admin_id = int(admin_id)
+            print(f"從 session 獲取到 admin_id: {admin_id}")
+            return admin_id
+        except ValueError as e:
+            print(f"Session 中的 admin_id 無效: {str(e)}")
+    
+    print("無法獲取 admin_id")        
     return None
 
 def check_view_log_permission():
-    """检查查看日志的权限"""
-    # 如果是 OPTIONS 请求，直接返回 True
-    if request.method == 'OPTIONS':
-        return True
-        
-    admin_id = get_admin_id()
-    print(f"Checking view log permission for admin_id: {admin_id}")
-    print(f"Current session: {dict(session)}")
-    print(f"Authorization header: {request.headers.get('Authorization')}")
-    
-    if not admin_id:
-        print("No admin_id found in Authorization header or session")
-        return False
-        
+    """檢查管理員是否有查看日誌的權限"""
     try:
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-                SELECT pl.can_view_system_logs, a.status, a.admin_name
-                FROM administrators a
-                JOIN permission_levels pl ON a.permission_level_id = pl.id
-                WHERE a.id = %s
-            """, (admin_id,))
-            
-            result = cursor.fetchone()
-            if not result:
-                print(f"No admin found with id: {admin_id}")
-                return False
-                
-            has_permission = result[0]
-            is_active = result[1] == 'active'
-            admin_name = result[2]
-            
-            print(f"Admin {admin_name} permission check:")
-            print(f"- Has view_system_logs permission: {has_permission}")
-            print(f"- Is active: {is_active}")
-            
-            return has_permission and is_active
+        admin_id = get_admin_id()
+        print(f"Checking view log permission for admin_id: {admin_id}")
+        
+        if not admin_id:
+            print("No admin_id found in session or header")
+            return False
+        
+        # 直接從會話中獲取權限信息
+        permissions = session.get('permissions', {})
+        is_active = True  # 假設管理員是活躍的，因為他們能夠登錄
+        
+        print(f"Admin {admin_id} permission check:")
+        print(f"- Has view_system_logs permission: {permissions.get('can_view_system_logs', False)}")
+        
+        # 檢查管理員是否有查看系統日誌的權限
+        return permissions.get('can_view_system_logs', False)
+    
     except Exception as e:
-        print(f"Error checking log permission: {str(e)}")
+        print(f"Permission check error: {str(e)}")
         return False
 
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        # 對於 OPTIONS 請求，直接返回成功，不進行權限檢查
+        if request.method == 'OPTIONS':
+            return '', 204
+            
         if not check_view_log_permission():
             return jsonify({"status": "error", "message": "需要管理員權限"}), 401
         return f(*args, **kwargs)
@@ -109,31 +114,34 @@ def admin_required(f):
 @log_bp.route("/logs", methods=['POST', 'OPTIONS'])
 @admin_required
 def get_logs():
-    if request.method == 'OPTIONS':
-        return '', 204
-        
-    print("Received request for logs")
-    print(f"Headers: {dict(request.headers)}")
-    print(f"Session: {dict(session)}")
-    
+    """獲取日誌記錄"""
     try:
+        # 獲取請求參數
         data = request.get_json()
+        print(f"接收到的請求數據: {data}")
         
-        # 获取查询参数
         table_name = data.get('table_name')
         operation_type = data.get('operation_type')
         start_date = data.get('start_date')
         end_date = data.get('end_date')
         user_type = data.get('user_type')
         performed_by = data.get('performed_by')
-        page = int(data.get('page', 1))
-        per_page = int(data.get('per_page', 50))
-        
-        # 计算偏移量
+        page = data.get('page', 1)
+        per_page = data.get('per_page', 10)
+
+        print(f"過濾條件: table_name={table_name}, operation_type={operation_type}, start_date={start_date}, end_date={end_date}, user_type={user_type}, performed_by={performed_by}")
+        print(f"分頁: page={page}, per_page={per_page}")
+
+        # 計算分頁偏移量
         offset = (page - 1) * per_page
-        
-        with get_db_connection() as conn:
-            log_service = LogService(conn)
+
+        # 獲取數據庫連接
+        with get_db_connection() as db_connection:
+            # 創建日誌服務實例
+            log_service = LogServiceRegistry.get_service(db_connection)
+            print(f"使用的日誌服務: {log_service.__class__.__name__}")
+            
+            # 獲取日誌記錄
             logs, total_count = log_service.get_logs(
                 table_name=table_name,
                 operation_type=operation_type,
@@ -145,125 +153,28 @@ def get_logs():
                 offset=offset
             )
             
-            # 构建基础查询
-            base_query = """
-                SELECT 
-                    l.created_at,
-                    l.user_type,
-                    COALESCE(a.admin_name, c.company_name) as performer_name,
-                    l.table_name,
-                    CASE 
-                        WHEN l.table_name = 'orders' THEN o.order_number
-                        WHEN l.table_name = 'products' THEN p.name
-                        WHEN l.table_name = 'customers' THEN cust.company_name
-                        WHEN l.table_name = 'administrators' THEN adm.admin_name
-                        ELSE l.record_id::text
-                    END as record_detail,
-                    l.operation_type,
-                    l.operation_detail::text as operation_detail,
-                    l.id,
-                    l.performed_by
-                FROM logs l
-                LEFT JOIN administrators a ON l.performed_by = a.id AND l.user_type = '管理員'
-                LEFT JOIN customers c ON l.performed_by = c.id AND l.user_type = '客戶'
-                LEFT JOIN orders o ON l.table_name = 'orders' AND l.record_id = o.id
-                LEFT JOIN products p ON l.table_name = 'products' AND l.record_id = p.id
-                LEFT JOIN customers cust ON l.table_name = 'customers' AND l.record_id = cust.id
-                LEFT JOIN administrators adm ON l.table_name = 'administrators' AND l.record_id = adm.id
-            """
+            print(f"獲取到的日誌記錄數量: {len(logs)}, 總記錄數: {total_count}")
             
-            conditions = []
-            params = []
-            
-            if table_name:
-                conditions.append("l.table_name = %s")
-                params.append(table_name)
-            
-            if operation_type:
-                conditions.append("l.operation_type = %s")
-                params.append(operation_type)
-                
-            if start_date:
-                conditions.append("l.created_at >= %s")
-                params.append(start_date)
-                
-            if end_date:
-                conditions.append("l.created_at <= %s")
-                params.append(end_date)
-                
-            if user_type:
-                conditions.append("l.user_type = %s")
-                params.append(user_type)
-                
-            if performed_by:
-                conditions.append("l.performed_by = %s")
-                params.append(performed_by)
-            
-            where_clause = " AND ".join(conditions) if conditions else "1=1"
-            
-            # 获取总记录数
-            count_query = f"""
-                SELECT COUNT(*) 
-                FROM logs l 
-                WHERE {where_clause}
-            """
-            cursor = conn.cursor()
-            cursor.execute(count_query, params)
-            total_count = cursor.fetchone()[0]
-            
-            # 获取日志记录
-            query = f"""
-                {base_query}
-                WHERE {where_clause}
-                ORDER BY l.created_at DESC
-                LIMIT %s OFFSET %s
-            """
-            
-            cursor.execute(query, params + [per_page, offset])
-            logs = cursor.fetchall()
-            
-            # 转换日志记录为字典列表
-            log_list = []
-            for log in logs:
-                try:
-                    operation_detail = log[6]
-                    if operation_detail and isinstance(operation_detail, str):
-                        try:
-                            operation_detail = json.loads(operation_detail)
-                        except json.JSONDecodeError:
-                            pass
-                except Exception as e:
-                    print(f"Error processing operation_detail: {e}")
-                    operation_detail = log[6]
+            # 計算總頁數
+            total_pages = (total_count + per_page - 1) // per_page if per_page > 0 else 1
 
-                log_dict = {
-                    'created_at': log[0].strftime('%Y-%m-%d %H:%M:%S'),
-                    'user_type': log[1],
-                    'performer_name': log[2],
-                    'table_name': log[3],
-                    'record_detail': log[4],
-                    'operation_type': log[5],
-                    'operation_detail': operation_detail,
-                    'id': log[7],
-                    'performed_by': log[8]
-                }
-                log_list.append(log_dict)
-            
-            return jsonify({
-                "status": "success",
-                "data": {
-                    "logs": log_list,
-                    "total": total_count,
-                    "page": page,
-                    "per_page": per_page,
-                    "total_pages": (total_count + per_page - 1) // per_page
-                }
-            })
-            
-    except Exception as e:
+        # 返回結果
         return jsonify({
-            "status": "error",
-            "message": str(e)
+            'status': 'success',
+            'data': logs,
+            'pagination': {
+                'total': total_count,
+                'per_page': per_page,
+                'current_page': page,
+                'last_page': total_pages
+            }
+        })
+
+    except Exception as e:
+        print(f"Error getting logs: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': f'獲取日誌記錄失敗: {str(e)}'
         }), 500
 
 @log_bp.route("/record", methods=['POST', 'OPTIONS'])
