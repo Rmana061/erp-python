@@ -422,11 +422,11 @@ class OrderLogService(BaseLogService):
             import traceback
             traceback.print_exc()
             return modify_log
-    
+        
     def _get_changes(self, old_data: Optional[Dict[str, Any]], new_data: Optional[Dict[str, Any]], operation_type: str = None) -> Dict[str, Any]:
         """處理訂單變更的方法"""
         print(f"處理訂單變更 - 操作類型: {operation_type}")
-        
+
         try:
             # 處理新增和刪除操作
             if operation_type in ['新增', '刪除']:
@@ -579,7 +579,7 @@ class OrderLogService(BaseLogService):
         try:
             old_message = old_data.get('message', '')
             new_message = new_data.get('message', '')
-            
+
             # 解析字符串格式的消息
             if isinstance(old_message, str):
                 old_parts = {}
@@ -598,7 +598,7 @@ class OrderLogService(BaseLogService):
                         'supplier_note': old_parts.get('供應商備註', '-')
                     }]
                 }
-            
+
             if isinstance(new_message, str):
                 new_parts = {}
                 for part in new_message.split('、'):
@@ -616,76 +616,76 @@ class OrderLogService(BaseLogService):
                         'supplier_note': new_parts.get('供應商備註', '-')
                     }]
                 }
-            
-            # 處理產品變更
-            products_changes = []
-            
-            # 處理所有產品的變更
-            for i, new_product in enumerate(new_message.get('products', [])):
-                changes = {}
-                # 獲取對應的舊產品信息，如果索引超出範圍則使用空字典
-                old_product = old_message.get('products', [])[i] if i < len(old_message.get('products', [])) else {}
-                
-                # 檢查數量變更
-                if old_product.get('quantity', '') != new_product.get('quantity', ''):
-                    changes['quantity'] = {
-                        'before': old_product.get('quantity', ''),
-                        'after': new_product.get('quantity', '')
+
+                # 處理產品變更
+                products_changes = []
+
+                # 處理所有產品的變更
+                for i, new_product in enumerate(new_message.get('products', [])):
+                    changes = {}
+                    # 獲取對應的舊產品信息，如果索引超出範圍則使用空字典
+                    old_product = old_message.get('products', [])[i] if i < len(old_message.get('products', [])) else {}
+
+                    # 檢查數量變更
+                    if old_product.get('quantity', '') != new_product.get('quantity', ''):
+                        changes['quantity'] = {
+                            'before': old_product.get('quantity', ''),
+                            'after': new_product.get('quantity', '')
+                        }
+
+                    # 檢查出貨日期變更
+                    old_shipping_date = old_product.get('shipping_date', '待確認')
+                    new_shipping_date = new_product.get('shipping_date', '待確認')
+                    if old_shipping_date != new_shipping_date:
+                        changes['shipping_date'] = {
+                            'before': old_shipping_date,
+                            'after': new_shipping_date
+                        }
+                    
+                    # 檢查備註變更
+                    old_remark = old_product.get('remark', '-')
+                    new_remark = new_product.get('remark', '-')
+                    if old_remark != new_remark:
+                        changes['remark'] = {
+                            'before': old_remark,
+                            'after': new_remark
+                        }
+                    
+                    # 檢查供應商備註變更
+                    old_supplier_note = old_product.get('supplier_note', '-')
+                    new_supplier_note = new_product.get('supplier_note', '-')
+                    if old_supplier_note != new_supplier_note:
+                        changes['supplier_note'] = {
+                            'before': old_supplier_note,
+                            'after': new_supplier_note
+                        }
+                    
+                    # 檢查狀態變更
+                    old_status = old_product.get('status', '待確認')
+                    new_status = new_product.get('status', '待確認')
+                    if old_status != new_status:
+                        changes['status'] = {
+                            'before': old_status,
+                            'after': new_status
+                        }
+
+                    # 如果有變更，添加到產品變更列表
+                    if changes:
+                        products_changes.append({
+                            'name': new_product.get('name', ''),
+                            'changes': changes
+                        })
+
+                # 如果有產品變更，返回變更記錄
+                if products_changes:
+                    return {
+                        'message': {
+                            'order_number': new_message.get('order_number', ''),
+                            'products': products_changes
+                        },
+                        'operation_type': '修改'
                     }
-                
-                # 檢查出貨日期變更
-                old_shipping_date = old_product.get('shipping_date', '待確認')
-                new_shipping_date = new_product.get('shipping_date', '待確認')
-                if old_shipping_date != new_shipping_date:
-                    changes['shipping_date'] = {
-                        'before': old_shipping_date,
-                        'after': new_shipping_date
-                    }
-                
-                # 檢查備註變更
-                old_remark = old_product.get('remark', '-')
-                new_remark = new_product.get('remark', '-')
-                if old_remark != new_remark:
-                    changes['remark'] = {
-                        'before': old_remark,
-                        'after': new_remark
-                    }
-                
-                # 檢查供應商備註變更
-                old_supplier_note = old_product.get('supplier_note', '-')
-                new_supplier_note = new_product.get('supplier_note', '-')
-                if old_supplier_note != new_supplier_note:
-                    changes['supplier_note'] = {
-                        'before': old_supplier_note,
-                        'after': new_supplier_note
-                    }
-                
-                # 檢查狀態變更
-                old_status = old_product.get('status', '待確認')
-                new_status = new_product.get('status', '待確認')
-                if old_status != new_status:
-                    changes['status'] = {
-                        'before': old_status,
-                        'after': new_status
-                    }
-                
-                # 如果有變更，添加到產品變更列表
-                if changes:
-                    products_changes.append({
-                        'name': new_product.get('name', ''),
-                        'changes': changes
-                    })
-            
-            # 如果有產品變更，返回變更記錄
-            if products_changes:
-                return {
-                    'message': {
-                        'order_number': new_message.get('order_number', ''),
-                        'products': products_changes
-                    },
-                    'operation_type': '修改'
-                }
-            
+
             return {'message': '無變更', 'operation_type': None}
             
         except Exception as e:

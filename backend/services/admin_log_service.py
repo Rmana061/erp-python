@@ -26,20 +26,14 @@ class AdminLogService(BaseLogService):
     def _process_create(self, new_data: Dict[str, Any]) -> Dict[str, Any]:
         """處理管理員新增操作"""
         try:
-            admin_info = {}
-            
             # 從新數據中提取管理員信息
             if isinstance(new_data, dict):
                 admin_info = {
-                    'id': new_data.get('id', ''),
-                    'username': new_data.get('username', ''),
-                    'email': new_data.get('email', ''),
-                    'role': new_data.get('role', '')
+                    'admin_account': new_data.get('admin_account', ''),
+                    'admin_name': new_data.get('admin_name', ''),
+                    'staff_no': new_data.get('staff_no', ''),
+                    'permission_level': new_data.get('permission_level', '')
                 }
-                
-                # 不記錄密碼信息
-                if 'password' in admin_info:
-                    del admin_info['password']
             
             return {
                 'message': {
@@ -54,20 +48,14 @@ class AdminLogService(BaseLogService):
     def _process_delete(self, old_data: Dict[str, Any]) -> Dict[str, Any]:
         """處理管理員刪除操作"""
         try:
-            admin_info = {}
-            
             # 從舊數據中提取管理員信息
             if isinstance(old_data, dict):
                 admin_info = {
-                    'id': old_data.get('id', ''),
-                    'username': old_data.get('username', ''),
-                    'email': old_data.get('email', ''),
-                    'role': old_data.get('role', '')
+                    'admin_account': old_data.get('admin_account', ''),
+                    'admin_name': old_data.get('admin_name', ''),
+                    'staff_no': old_data.get('staff_no', ''),
+                    'permission_level': old_data.get('permission_level', '')
                 }
-                
-                # 不記錄密碼信息
-                if 'password' in admin_info:
-                    del admin_info['password']
             
             return {
                 'message': {
@@ -85,30 +73,43 @@ class AdminLogService(BaseLogService):
             changes = {}
             
             # 比較並記錄變更
-            fields_to_check = ['username', 'email', 'role', 'status']
+            fields_to_check = ['admin_account', 'admin_name', 'staff_no', 'permission_level_id']
+            field_display_names = {
+                'admin_account': '人員帳號',
+                'admin_name': '人員姓名',
+                'staff_no': '人員工號',
+                'permission_level_id': '人員權限'
+            }
             
             for field in fields_to_check:
                 old_value = old_data.get(field, '')
                 new_value = new_data.get(field, '')
                 
                 if old_value != new_value:
-                    changes[field] = {
+                    display_field = field_display_names.get(field, field)
+                    changes[display_field] = {
                         'before': old_value,
                         'after': new_value
                     }
             
             # 特殊處理密碼變更
-            if 'password' in new_data and 'password' in old_data and old_data['password'] != new_data['password']:
-                changes['password'] = {
+            if 'admin_password' in new_data:
+                changes['人員密碼'] = {
                     'before': '******',
-                    'after': '******'  # 不顯示實際密碼，只標記有變更
+                    'after': '已更新密碼'  # 只提示密碼已更新，不顯示實際密碼
                 }
             
             if changes:
+                admin_info = {
+                    'admin_account': new_data.get('admin_account', ''),
+                    'admin_name': new_data.get('admin_name', ''),
+                    'staff_no': new_data.get('staff_no', ''),
+                    'permission_level': new_data.get('permission_level', '')
+                }
+                
                 return {
                     'message': {
-                        'admin_id': new_data.get('id', ''),
-                        'admin_username': new_data.get('username', ''),
+                        'admin': admin_info,
                         'changes': changes
                     },
                     'operation_type': '修改'

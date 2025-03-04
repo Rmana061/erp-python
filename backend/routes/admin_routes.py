@@ -118,6 +118,39 @@ def add_admin():
             new_id = cursor.fetchone()[0]
             conn.commit()
             
+            # 获取权限级别名称
+            cursor.execute("""
+                SELECT level_name FROM permission_levels
+                WHERE id = %s
+            """, (data['permission_level_id'],))
+            permission_level_result = cursor.fetchone()
+            permission_level = permission_level_result[0] if permission_level_result else "未知權限"
+            
+            # 添加日志记录
+            from backend.services.log_service import LogService
+            log_service = LogService(conn)
+            
+            # 准备日志数据，不包含密码
+            new_admin_data = {
+                'id': new_id,
+                'admin_account': data['admin_account'],
+                'admin_name': data['admin_name'],
+                'staff_no': data['staff_no'],
+                'permission_level_id': data['permission_level_id'],
+                'permission_level': permission_level,
+                'status': 'active'
+            }
+            
+            log_service.log_operation(
+                table_name='administrators',
+                operation_type='新增',
+                record_id=new_id,
+                old_data=None,
+                new_data=new_admin_data,
+                performed_by=int(admin_id),
+                user_type='管理員'
+            )
+            
             cursor.close()
             
             return jsonify({
@@ -130,7 +163,7 @@ def add_admin():
         print(f"Error in add_admin: {str(e)}")
         return jsonify({
             "status": "error",
-            "message": str(e)
+            "message": f"新增管理員失敗: {str(e)}"
         }), 500
 
 @admin_bp.route('/admin/update', methods=['POST'])
@@ -153,6 +186,44 @@ def update_admin():
 
         with get_db_connection() as conn:
             cursor = conn.cursor()
+            
+            # 获取当前管理员ID（操作者）
+            current_admin_id = session.get('admin_id')
+            if not current_admin_id:
+                auth_header = request.headers.get('Authorization')
+                if auth_header and auth_header.startswith('Bearer '):
+                    current_admin_id = auth_header.split(' ')[1]
+            
+            if not current_admin_id:
+                return jsonify({
+                    "status": "error",
+                    "message": "未登入或登入已過期"
+                }), 401
+                
+            # 先获取更新前的管理员数据（用于日志记录）
+            cursor.execute("""
+                SELECT a.id, a.admin_account, a.admin_name, a.staff_no, 
+                       a.permission_level_id, p.level_name
+                FROM administrators a
+                LEFT JOIN permission_levels p ON a.permission_level_id = p.id
+                WHERE a.id = %s AND a.status = 'active'
+            """, (admin_id,))
+            
+            old_admin_result = cursor.fetchone()
+            if not old_admin_result:
+                return jsonify({
+                    "status": "error",
+                    "message": "找不到要更新的管理員"
+                }), 404
+                
+            old_admin_data = {
+                'id': old_admin_result[0],
+                'admin_account': old_admin_result[1],
+                'admin_name': old_admin_result[2],
+                'staff_no': old_admin_result[3],
+                'permission_level_id': old_admin_result[4],
+                'permission_level': old_admin_result[5] if old_admin_result[5] else "未知權限"
+            }
 
             # 检查账号是否与其他管理员重复
             cursor.execute("""
@@ -200,6 +271,43 @@ def update_admin():
 
             cursor.execute(query, params)
             updated = cursor.fetchone()
+            
+            # 获取更新后的权限级别名称
+            cursor.execute("""
+                SELECT level_name FROM permission_levels
+                WHERE id = %s
+            """, (permission_level_id,))
+            permission_level_result = cursor.fetchone()
+            permission_level = permission_level_result[0] if permission_level_result else "未知權限"
+            
+            # 准备新的管理员数据（用于日志记录）
+            new_admin_data = {
+                'id': admin_id,
+                'admin_account': admin_account,
+                'admin_name': admin_name,
+                'staff_no': staff_no,
+                'permission_level_id': permission_level_id,
+                'permission_level': permission_level
+            }
+            
+            # 如果更新了密码，在日志数据中添加标记
+            if admin_password:
+                new_admin_data['admin_password'] = 'updated'
+            
+            # 记录更新操作日志
+            from backend.services.log_service import LogService
+            log_service = LogService(conn)
+            
+            log_service.log_operation(
+                table_name='administrators',
+                operation_type='修改',
+                record_id=int(admin_id),
+                old_data=old_admin_data,
+                new_data=new_admin_data,
+                performed_by=int(current_admin_id),
+                user_type='管理員'
+            )
+            
             conn.commit()
             cursor.close()
             
@@ -216,7 +324,7 @@ def update_admin():
         }), 500
 
 @admin_bp.route('/admin/delete', methods=['POST'])
-@require_permission('can_delete_personnel')
+@require_permission('can_add_personnel')
 def delete_admin():
     try:
         data = request.json
@@ -226,19 +334,66 @@ def delete_admin():
                 "message": "缺少管理員ID"
             }), 400
 
+        # 检查用户权限（即使已有装饰器，再次显式检查）
+        print("手动检查权限...")
+        # 获取当前管理员ID
+        current_admin_id = session.get('admin_id')
+        if not current_admin_id:
+            auth_header = request.headers.get('Authorization')
+            if auth_header and auth_header.startswith('Bearer '):
+                current_admin_id = auth_header.split(' ')[1]
+        
+        if not current_admin_id:
+            return jsonify({
+                "status": "error",
+                "message": "未登入或登入已過期"
+            }), 401
+        
+        # 获取管理员权限
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # 檢查管理員是否存在
             cursor.execute("""
-                SELECT id FROM administrators 
-                WHERE id = %s AND status = 'active'
+                SELECT p.can_add_personnel
+                FROM administrators a
+                JOIN permission_levels p ON a.permission_level_id = p.id
+                WHERE a.id = %s AND a.status = 'active'
+            """, (current_admin_id,))
+            
+            permission_result = cursor.fetchone()
+            if not permission_result or not permission_result[0]:
+                print(f"权限检查失败: admin_id={current_admin_id}, 权限查询结果:", permission_result)
+                return jsonify({
+                    "status": "error",
+                    "message": "您沒有足夠的權限執行此操作"
+                }), 403
+            
+            print(f"权限检查成功: admin_id={current_admin_id}, can_add_personnel=True")
+            
+            # 先获取要删除的管理员数据（用于日志记录）
+            cursor.execute("""
+                SELECT a.id, a.admin_account, a.admin_name, a.staff_no, 
+                       a.permission_level_id, p.level_name
+                FROM administrators a
+                LEFT JOIN permission_levels p ON a.permission_level_id = p.id
+                WHERE a.id = %s AND a.status = 'active'
             """, (data['id'],))
-            if not cursor.fetchone():
+            
+            admin_result = cursor.fetchone()
+            if not admin_result:
                 return jsonify({
                     "status": "error",
                     "message": "管理員不存在"
                 }), 404
+                
+            admin_data = {
+                'id': admin_result[0],
+                'admin_account': admin_result[1],
+                'admin_name': admin_result[2],
+                'staff_no': admin_result[3],
+                'permission_level_id': admin_result[4],
+                'permission_level': admin_result[5] if admin_result[5] else "未知權限"
+            }
 
             # 軟刪除管理員
             cursor.execute("""
@@ -246,6 +401,20 @@ def delete_admin():
                 SET status = 'inactive', updated_at = NOW()
                 WHERE id = %s
             """, (data['id'],))
+            
+            # 记录删除操作日志
+            from backend.services.log_service import LogService
+            log_service = LogService(conn)
+            
+            log_service.log_operation(
+                table_name='administrators',
+                operation_type='刪除',
+                record_id=int(data['id']),
+                old_data=admin_data,
+                new_data=None,
+                performed_by=int(current_admin_id),
+                user_type='管理員'
+            )
             
             conn.commit()
             cursor.close()
@@ -259,7 +428,7 @@ def delete_admin():
         print(f"Error in delete_admin: {str(e)}")
         return jsonify({
             "status": "error",
-            "message": str(e)
+            "message": f"刪除管理員失敗: {str(e)}"
         }), 500
 
 @admin_bp.route('/admin/info', methods=['POST'])
