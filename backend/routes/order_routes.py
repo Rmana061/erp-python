@@ -1259,4 +1259,186 @@ def delete_order(order_id):
             
     except Exception as e:
         print(f"Error deleting order: {str(e)}")
-        return jsonify({"status": "error", "message": str(e)}), 500 
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@order_bp.route('/orders/batch-update-status', methods=['POST'])
+def batch_update_order_status():
+    """批量更新多个订单产品的状态"""
+    try:
+        data = request.get_json()
+        print(f"Received batch update data: {json.dumps(data, ensure_ascii=False)}")
+        
+        # 验证管理员身份
+        admin_id = session.get('admin_id')
+        if not admin_id:
+            auth_header = request.headers.get('Authorization')
+            if auth_header and auth_header.startswith('Bearer '):
+                try:
+                    admin_id = int(auth_header.split(' ')[1])
+                except (IndexError, ValueError):
+                    return error_response('未授權的訪問', 401)
+            else:
+                return error_response('未授權的訪問', 401)
+
+        order_number = data.get('order_number')
+        products = data.get('products', [])
+        
+        if not order_number or not products:
+            return error_response('缺少必要參數')
+
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            
+            # 获取订单ID
+            cursor.execute("SELECT id FROM orders WHERE order_number = %s", (order_number,))
+            order_result = cursor.fetchone()
+            if not order_result:
+                return error_response('訂單不存在')
+            
+            order_id = order_result[0]
+            
+            # 收集所有产品变更信息用于日志记录
+            all_product_changes = []
+            
+            # 处理每个产品的状态更新
+            for product in products:
+                detail_id = product.get('detail_id')
+                status = product.get('status')
+                shipping_date = product.get('shipping_date')
+                supplier_note = product.get('supplier_note', '')
+                quantity = product.get('quantity')
+                
+                if not detail_id or not status:
+                    continue  # 跳过无效的产品数据
+                    
+                # 获取原始订单产品信息用于日志记录
+                cursor.execute("""
+                    SELECT 
+                        od.id,
+                        od.product_quantity,
+                        od.order_status,
+                        od.shipping_date,
+                        od.supplier_note,
+                        od.remark,
+                        p.name as product_name
+                    FROM order_details od
+                    JOIN products p ON od.product_id = p.id
+                    WHERE od.id = %s
+                """, (detail_id,))
+                
+                result = cursor.fetchone()
+                if not result:
+                    continue  # 跳过不存在的产品
+                    
+                # 将查询结果转换为字典
+                original_product = {
+                    'id': result[0],
+                    'product_quantity': result[1],
+                    'order_status': result[2],
+                    'shipping_date': result[3],
+                    'supplier_note': result[4],
+                    'remark': result[5],
+                    'product_name': result[6]
+                }
+                
+                # 构建更新查询
+                update_query = """
+                    UPDATE order_details 
+                    SET order_status = %s,
+                        supplier_note = %s,
+                        updated_at = NOW()
+                """
+                params = [status, supplier_note]
+                
+                # 只有在状态为"已確認"且提供了出货日期时才更新出货日期
+                if status == '已確認' and shipping_date:
+                    update_query += ", shipping_date = %s"
+                    params.append(shipping_date)
+                elif status == '已取消':
+                    # 如果状态是"已取消"，将出货日期设为NULL
+                    update_query += ", shipping_date = NULL"
+                
+                # 如果提供了数量，加入数量更新
+                if quantity is not None:
+                    update_query += ", product_quantity = %s"
+                    params.append(quantity)
+                
+                update_query += " WHERE id = %s"
+                params.append(detail_id)
+                
+                cursor.execute(update_query, params)
+                
+                # 检查变更并收集信息
+                changes = {}
+                
+                # 检查数量变更
+                if quantity is not None and original_product['product_quantity'] != quantity:
+                    changes['quantity'] = {
+                        'before': str(original_product['product_quantity']),
+                        'after': str(quantity)
+                    }
+                
+                # 记录状态变更
+                if original_product['order_status'] != status:
+                    changes['status'] = {
+                        'before': original_product['order_status'],
+                        'after': status
+                    }
+                
+                # 检查出货日期变更
+                if status == '已確認' and shipping_date:
+                    original_shipping_date = original_product['shipping_date'].strftime('%Y-%m-%d') if original_product['shipping_date'] else '待確認'
+                    new_shipping_date = shipping_date if shipping_date else '待確認'
+                    
+                    if original_shipping_date != new_shipping_date:
+                        changes['shipping_date'] = {
+                            'before': original_shipping_date,
+                            'after': new_shipping_date
+                        }
+                
+                # 检查供应商备注变更
+                original_supplier_note = original_product['supplier_note'] if original_product['supplier_note'] else '-'
+                new_supplier_note = supplier_note if supplier_note else '-'
+                
+                if original_supplier_note != new_supplier_note:
+                    changes['supplier_note'] = {
+                        'before': original_supplier_note,
+                        'after': new_supplier_note
+                    }
+                
+                # 如果有变更，添加到产品变更列表
+                if changes:
+                    all_product_changes.append({
+                        'name': original_product['product_name'],
+                        'detail_id': detail_id,
+                        'changes': changes
+                    })
+            
+            # 如果有产品变更，记录日志
+            if all_product_changes:
+                log_data = {
+                    'message': {
+                        'order_number': order_number,
+                        'products': all_product_changes
+                    },
+                    'operation_type': '修改'
+                }
+                
+                log_operation(
+                    table_name='orders',
+                    operation_type='修改',
+                    record_id=order_id,
+                    old_data=None,
+                    new_data=log_data,
+                    performed_by=admin_id,
+                    user_type='管理員'
+                )
+            
+            conn.commit()
+            return success_response(message='批量更新訂單成功')
+            
+    except Exception as e:
+        print(f"Error in batch_update_order_status: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return error_response(str(e), 500) 
