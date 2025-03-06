@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify, session
 from backend.config.database import get_db_connection
 from hash_password import verify_password, hash_password
 import datetime
+from typing import Dict, Any
+import psycopg2.extras
 
 customer_bp = Blueprint('customer', __name__)
 
@@ -109,6 +111,42 @@ def add_customer():
             new_id = cursor.fetchone()[0]
             conn.commit()
             
+            # 記錄操作日誌
+            try:
+                from backend.services.log_service_registry import LogServiceRegistry
+                
+                # 獲取當前登入管理員ID
+                admin_id = session.get('admin_id')
+                if admin_id:
+                    # 準備客戶資料用於日誌 - 完整記錄所有客戶欄位
+                    customer_data = {
+                        'id': new_id,
+                        'username': data['username'],
+                        'company_name': data['company_name'],
+                        'contact_person': data['contact_person'], 
+                        'phone': data['phone'],
+                        'email': data['email'],
+                        'address': data['address'],
+                        'line_account': data.get('line_account', ''),
+                        'viewable_products': data.get('viewable_products', ''),
+                        'remark': data.get('remark', '')
+                    }
+                    
+                    # 初始化日誌服務並記錄操作
+                    log_service = LogServiceRegistry.get_service(conn, 'customers')
+                    log_service.log_operation(
+                        table_name='customers',
+                        operation_type='新增',
+                        record_id=new_id,
+                        old_data=None,
+                        new_data=customer_data,
+                        performed_by=admin_id,
+                        user_type='管理員'
+                    )
+            except Exception as log_error:
+                # 日誌記錄失敗不影響主要功能
+                print(f"Error logging customer add operation: {str(log_error)}")
+            
             return jsonify({
                 "status": "success",
                 "message": "客戶新增成功",
@@ -125,13 +163,26 @@ def add_customer():
 @customer_bp.route('/customer/update', methods=['PUT'])
 def update_customer():
     try:
-        data = request.json
-        if 'id' not in data:
-            return jsonify({
-                "status": "error",
-                "message": "缺少客戶ID"
-            }), 400
-
+        # 使用 session 来获取当前管理员 ID
+        current_admin_id = session.get('admin_id')
+        if not current_admin_id:
+            return jsonify({"status": "error", "message": "未登录或会话已过期"}), 401
+        
+        # 获取数据
+        data = request.get_json()
+        
+        # 获取旧数据
+        with get_db_connection() as conn:
+            cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            cursor.execute("SELECT * FROM customers WHERE id = %s", (data['id'],))
+            old_data = dict(cursor.fetchone())
+        
+        # 检查是否是密码修改操作
+        password_changed = False
+        if 'password' in data and data['password'] != old_data.get('password'):
+            password_changed = True
+        
+        # 更新客户信息
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
@@ -145,6 +196,28 @@ def update_customer():
                     "status": "error",
                     "message": "客戶不存在"
                 }), 404
+            
+            # 在更新之前獲取舊的客戶資料用於日誌記錄
+            cursor.execute("""
+                SELECT id, username, company_name, contact_name, phone, email, address,
+                       line_account, viewable_products, remark
+                FROM customers WHERE id = %s AND status = 'active'
+            """, (data['id'],))
+            old_customer = cursor.fetchone()
+            old_customer_data = None
+            if old_customer:
+                old_customer_data = {
+                    'id': old_customer[0],
+                    'username': old_customer[1],
+                    'company_name': old_customer[2],
+                    'contact_person': old_customer[3],
+                    'phone': old_customer[4],
+                    'email': old_customer[5],
+                    'address': old_customer[6],
+                    'line_account': old_customer[7],
+                    'viewable_products': old_customer[8],
+                    'remark': old_customer[9]
+                }
             
             # 檢查用戶名是否重複
             if 'username' in data:
@@ -216,6 +289,43 @@ def update_customer():
             cursor.execute(update_query, tuple(update_values))
             conn.commit()
             
+            # 准备新客户数据用于日志记录
+            new_customer_data = {
+                'id': data['id'],
+                'username': data['username'],
+                'company_name': data['company_name'],
+                'contact_person': data['contact_person'],
+                'phone': data['phone'],
+                'email': data['email'],
+                'address': data['address'],
+                'line_account': data.get('line_account', ''),
+                'viewable_products': data.get('viewable_products', ''),
+                'remark': data.get('remark', '')
+            }
+            
+            # 如果是密码修改，直接添加标记到new_data中
+            if password_changed:
+                new_customer_data['password_changed'] = True
+            
+            try:
+                # 记录日志
+                from backend.services.log_service_registry import LogServiceRegistry
+                
+                # 初始化日志服务并记录操作
+                log_service = LogServiceRegistry.get_service(conn, 'customers')
+                log_service.log_operation(
+                    table_name='customers',
+                    operation_type='修改',
+                    record_id=data['id'],
+                    old_data=old_customer_data,
+                    new_data=new_customer_data,
+                    performed_by=current_admin_id,
+                    user_type='管理員'
+                )
+            except Exception as log_error:
+                # 日志记录失败不影响主要功能
+                print(f"Error logging customer update operation: {str(log_error)}")
+            
             return jsonify({
                 "status": "success",
                 "message": "客戶資料更新成功"
@@ -241,16 +351,33 @@ def delete_customer():
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # 檢查客戶是否存在
+            # 檢查客戶是否存在並獲取資料用於日誌記錄
             cursor.execute("""
-                SELECT id FROM customers 
-                WHERE id = %s AND status = 'active'
+                SELECT id, username, company_name, contact_name, phone, email, address,
+                       line_account, viewable_products, remark
+                FROM customers WHERE id = %s AND status = 'active'
             """, (data['id'],))
-            if not cursor.fetchone():
+            customer = cursor.fetchone()
+            
+            if not customer:
                 return jsonify({
                     "status": "error",
                     "message": "客戶不存在"
                 }), 404
+            
+            # 準備客戶資料用於日誌 - 完整記錄所有客戶欄位
+            customer_data = {
+                'id': customer[0],
+                'username': customer[1],
+                'company_name': customer[2],
+                'contact_person': customer[3],
+                'phone': customer[4],
+                'email': customer[5],
+                'address': customer[6],
+                'line_account': customer[7],
+                'viewable_products': customer[8],
+                'remark': customer[9]
+            }
             
             # 軟刪除客戶
             cursor.execute("""
@@ -260,6 +387,28 @@ def delete_customer():
             """, (data['id'],))
             
             conn.commit()
+            
+            # 記錄刪除操作的日誌
+            try:
+                from backend.services.log_service_registry import LogServiceRegistry
+                
+                # 獲取當前登入管理員ID
+                admin_id = session.get('admin_id')
+                if admin_id:
+                    # 初始化日誌服務並記錄操作
+                    log_service = LogServiceRegistry.get_service(conn, 'customers')
+                    log_service.log_operation(
+                        table_name='customers',
+                        operation_type='刪除',
+                        record_id=data['id'],
+                        old_data=customer_data,
+                        new_data=None,
+                        performed_by=admin_id,
+                        user_type='管理員'
+                    )
+            except Exception as log_error:
+                # 日誌記錄失敗不影響主要功能
+                print(f"Error logging customer delete operation: {str(log_error)}")
             
             return jsonify({
                 "status": "success",
@@ -428,4 +577,88 @@ def unbind_line():
         return jsonify({
             "status": "error",
             "message": str(e)
-        }), 500 
+        }), 500
+
+def _process_create(self, new_data: Dict[str, Any]) -> Dict[str, Any]:
+    """處理客戶新增操作"""
+    try:
+        customer_info = {}
+        
+        # 從新數據中提取客戶信息 - 完整記錄所有客戶欄位
+        if isinstance(new_data, dict):
+            customer_info = {
+                'id': new_data.get('id', ''),
+                'username': new_data.get('username', ''),
+                'company_name': new_data.get('company_name', ''),
+                'contact_person': new_data.get('contact_person', ''),
+                'phone': new_data.get('phone', ''),
+                'email': new_data.get('email', ''),
+                'address': new_data.get('address', ''),
+                'line_account': new_data.get('line_account', ''),
+                'viewable_products': new_data.get('viewable_products', ''),
+                'remark': new_data.get('remark', '')
+            }
+        
+        return {
+            'message': {
+                'customer': customer_info
+            },
+            'operation_type': '新增'
+        }
+    except Exception as e:
+        print(f"Error processing customer create: {str(e)}")
+        return {'message': '處理客戶新增時發生錯誤', 'operation_type': None}
+
+def _process_update(self, old_data, new_data):
+    try:
+        changes = {}
+        
+        # 检查是否有密码变更标记
+        if new_data.get('password_changed', False):
+            return {
+                'message': {
+                    'customer_id': new_data.get('id', ''),
+                    'password_changed': True
+                },
+                'operation_type': '密碼修改'
+            }
+        
+        # 比較並記錄變更 - 檢查所有客戶欄位
+        fields_to_check = [
+            'username', 
+            'company_name', 
+            'contact_person', 
+            'phone', 
+            'email', 
+            'address', 
+            'line_account', 
+            'viewable_products', 
+            'remark'
+        ]
+        
+        for field in fields_to_check:
+            old_value = old_data.get(field, '')
+            new_value = new_data.get(field, '')
+            
+            if old_value != new_value:
+                changes[field] = {
+                    'before': old_value,
+                    'after': new_value
+                }
+        
+        if changes:
+            # 保存新舊數據以供參考
+            return {
+                'message': {
+                    'customer_id': new_data.get('id', ''),
+                    'old_data': old_data,
+                    'new_data': new_data,
+                    'changes': changes
+                },
+                'operation_type': '修改'
+            }
+        
+        return {'message': '無變更', 'operation_type': None}
+    except Exception as e:
+        print(f"Error processing customer update: {str(e)}")
+        return {'message': '處理客戶修改時發生錯誤', 'operation_type': None} 
