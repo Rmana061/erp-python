@@ -129,7 +129,7 @@ class BaseLogService:
                 SELECT l.id, l.table_name, l.operation_type, l.record_id,
                        l.operation_detail, l.performed_by, l.user_type, l.created_at,
                        CASE
-                           WHEN l.user_type = '管理員' THEN a.admin_name
+                           WHEN l.user_type = '管理員' THEN a.staff_no
                            WHEN l.user_type = '客戶' THEN c.company_name
                            ELSE '未知'
                        END as performer_name,

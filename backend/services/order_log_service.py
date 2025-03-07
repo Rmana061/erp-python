@@ -341,13 +341,41 @@ class OrderLogService(BaseLogService):
             print(traceback.format_exc())
             return False
     
-    def _extract_products_from_log(self, log_data):
+    def _extract_products_from_log(self, log_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """從日誌數據中提取產品信息"""
         products = []
-        if isinstance(log_data, dict) and 'message' in log_data:
-            message = log_data['message']
-            if isinstance(message, dict) and 'products' in message:
-                products = message['products']
+        
+        # 如果log_data有message字段
+        message = log_data.get('message', {})
+        
+        # 如果message是字典且包含products字段
+        if isinstance(message, dict) and 'products' in message:
+            products = message.get('products', [])
+        
+        # 如果message是字符串，嘗試解析
+        elif isinstance(message, str) and message:
+            try:
+                # 嘗試將字符串解析為產品信息
+                parts = {}
+                for part in message.split('、'):
+                    if ':' in part:
+                        key, value = part.split(':', 1)
+                        parts[key.strip()] = value.strip()
+                
+                # 如果解析出產品名稱，構建產品對象
+                if '產品' in parts:
+                    product = {
+                        'name': parts.get('產品', ''),
+                        'quantity': parts.get('數量', ''),
+                        'shipping_date': parts.get('出貨日期', '待確認'),
+                        'remark': parts.get('備註', '-'),
+                        'supplier_note': parts.get('供應商備註', '-'),
+                        'status': parts.get('狀態', '待確認')
+                    }
+                    products.append(product)
+            except Exception as e:
+                print(f"解析產品信息失敗: {str(e)}")
+        
         return products
     
     def _process_modify_logs(self, buffer_key, order_logs, modify_log):
@@ -575,121 +603,98 @@ class OrderLogService(BaseLogService):
             return {'message': '無變更', 'operation_type': None}
 
     def _process_update(self, old_data: Dict[str, Any], new_data: Dict[str, Any]) -> Dict[str, Any]:
-        """處理修改操作"""
+        """處理修改操作的變更记录"""
+        old_message = old_data.get('message', '')
+        new_message = new_data.get('message', '')
+
+        # 从消息中提取产品信息
         try:
-            old_message = old_data.get('message', '')
-            new_message = new_data.get('message', '')
-
-            # 解析字符串格式的消息
-            if isinstance(old_message, str):
-                old_parts = {}
-                for part in old_message.split('、'):
-                    if ':' in part:
-                        key, value = part.split(':', 1)
-                        old_parts[key.strip()] = value.strip()
-                old_message = {
-                    'order_number': old_parts.get('訂單號', ''),
-                    'status': old_parts.get('狀態', '待確認'),
-                    'products': [{
-                        'name': old_parts.get('產品', ''),
-                        'quantity': old_parts.get('數量', ''),
-                        'shipping_date': old_parts.get('出貨日期', '待確認'),
-                        'remark': old_parts.get('備註', '-'),
-                        'supplier_note': old_parts.get('供應商備註', '-')
-                    }]
-                }
-
-            if isinstance(new_message, str):
-                new_parts = {}
-                for part in new_message.split('、'):
-                    if ':' in part:
-                        key, value = part.split(':', 1)
-                        new_parts[key.strip()] = value.strip()
-                new_message = {
-                    'order_number': new_parts.get('訂單號', ''),
-                    'status': new_parts.get('狀態', '待確認'),
-                    'products': [{
-                        'name': new_parts.get('產品', ''),
-                        'quantity': new_parts.get('數量', ''),
-                        'shipping_date': new_parts.get('出貨日期', '待確認'),
-                        'remark': new_parts.get('備註', '-'),
-                        'supplier_note': new_parts.get('供應商備註', '-')
-                    }]
-                }
-
-                # 處理產品變更
-                products_changes = []
-
-                # 處理所有產品的變更
-                for i, new_product in enumerate(new_message.get('products', [])):
-                    changes = {}
-                    # 獲取對應的舊產品信息，如果索引超出範圍則使用空字典
-                    old_product = old_message.get('products', [])[i] if i < len(old_message.get('products', [])) else {}
-
-                    # 檢查數量變更
-                    if old_product.get('quantity', '') != new_product.get('quantity', ''):
-                        changes['quantity'] = {
-                            'before': old_product.get('quantity', ''),
-                            'after': new_product.get('quantity', '')
-                        }
-
-                    # 檢查出貨日期變更
-                    old_shipping_date = old_product.get('shipping_date', '待確認')
-                    new_shipping_date = new_product.get('shipping_date', '待確認')
-                    if old_shipping_date != new_shipping_date:
-                        changes['shipping_date'] = {
-                            'before': old_shipping_date,
-                            'after': new_shipping_date
-                        }
-                    
-                    # 檢查備註變更
-                    old_remark = old_product.get('remark', '-')
-                    new_remark = new_product.get('remark', '-')
-                    if old_remark != new_remark:
-                        changes['remark'] = {
-                            'before': old_remark,
-                            'after': new_remark
-                        }
-                    
-                    # 檢查供應商備註變更
-                    old_supplier_note = old_product.get('supplier_note', '-')
-                    new_supplier_note = new_product.get('supplier_note', '-')
-                    if old_supplier_note != new_supplier_note:
-                        changes['supplier_note'] = {
-                            'before': old_supplier_note,
-                            'after': new_supplier_note
-                        }
-                    
-                    # 檢查狀態變更
-                    old_status = old_product.get('status', '待確認')
-                    new_status = new_product.get('status', '待確認')
-                    if old_status != new_status:
-                        changes['status'] = {
-                            'before': old_status,
-                            'after': new_status
-                        }
-
-                    # 如果有變更，添加到產品變更列表
-                    if changes:
-                        products_changes.append({
-                            'name': new_product.get('name', ''),
-                            'changes': changes
-                        })
-
-                # 如果有產品變更，返回變更記錄
-                if products_changes:
-                    return {
-                        'message': {
-                            'order_number': new_message.get('order_number', ''),
-                            'products': products_changes
-                        },
-                        'operation_type': '修改'
-                    }
-
-            return {'message': '無變更', 'operation_type': None}
+            # 尝试解析和比较产品列表
+            old_products = self._extract_products_from_log(old_data)
+            new_products = self._extract_products_from_log(new_data)
             
+            # 生成变更详情
+            changes = {}
+            products_with_changes = []
+            
+            # 对比产品变更
+            if old_products and new_products:
+                # 创建产品ID到产品映射
+                old_products_map = {p.get('id'): p for p in old_products if p.get('id')}
+                new_products_map = {p.get('id'): p for p in new_products if p.get('id')}
+                
+                # 找出所有产品ID
+                all_product_ids = set(list(old_products_map.keys()) + list(new_products_map.keys()))
+                
+                for product_id in all_product_ids:
+                    old_product = old_products_map.get(product_id, {})
+                    new_product = new_products_map.get(product_id, {})
+                    
+                    # 如果产品在两个列表中都存在，比较变更
+                    if old_product and new_product:
+                        product_changes = self._compare_products(old_product, new_product)
+                        if product_changes:
+                            products_with_changes.append({
+                                'id': product_id,
+                                'name': new_product.get('name', old_product.get('name', '')),
+                                'changes': product_changes,
+                                'quantity': new_product.get('quantity'),
+                                'shipping_date': new_product.get('shipping_date'),
+                                'remark': new_product.get('remark'),
+                                'supplier_note': new_product.get('supplier_note')
+                            })
+            
+            # 如果有状态变更，添加到变更列表
+            if old_data.get('status') != new_data.get('status'):
+                changes['status'] = {
+                    'before': old_data.get('status', ''),
+                    'after': new_data.get('status', '')
+                }
+            
+            # 构建返回结果
+            result = {
+                    'message': {
+                    'order_number': new_data.get('order_number', old_data.get('order_number', '')),
+                    'products': products_with_changes
+                    },
+                    'operation_type': '修改'
+                }
+
+            # 添加状态变更
+            if changes.get('status'):
+                result['message']['status'] = changes['status']
+            
+            return result
         except Exception as e:
-            print(f"處理修改操作錯誤: {str(e)}")
-            import traceback
-            traceback.print_exc()
-            return {'message': '無變更', 'operation_type': None}
+            print(f"Error processing update: {str(e)}")
+            return {
+                'message': '无法处理修改记录',
+                'operation_type': '修改'
+            }
+
+    def _compare_products(self, old_product: Dict[str, Any], new_product: Dict[str, Any]) -> Dict[str, Any]:
+        """比较两个产品对象之间的差异"""
+        changes = {}
+        
+        # 需要比较的字段
+        fields_to_compare = [
+            ('quantity', '數量'),
+            ('shipping_date', '出貨日期'),
+            ('remark', '備註'),
+            ('supplier_note', '供應商備註'),
+            ('status', '狀態')
+        ]
+        
+        # 对每个字段进行比较
+        for field, _ in fields_to_compare:
+            old_value = old_product.get(field, '')
+            new_value = new_product.get(field, '')
+            
+            # 只有在值不同时才记录变更
+            if old_value != new_value:
+                changes[field] = {
+                    'before': old_value,
+                    'after': new_value
+                }
+        
+        return changes
