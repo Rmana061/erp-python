@@ -239,7 +239,10 @@ def add_product():
                     max_order_qty=filtered_data['max_order_qty'],
                     product_unit=filtered_data['product_unit'],
                     shipping_time=filtered_data['shipping_time'],
-                    special_date=filtered_data['special_date']
+                    special_date=filtered_data['special_date'],
+                    # 添加原始文件名参数
+                    image_original_filename=filtered_data['image_original_filename'],
+                    dm_original_filename=filtered_data['dm_original_filename']
                 )
                 print(f"產品添加結果ID: {product_id}")
                 
@@ -255,7 +258,10 @@ def add_product():
                         'max_order_qty': filtered_data['max_order_qty'],
                         'product_unit': filtered_data['product_unit'],
                         'shipping_time': filtered_data['shipping_time'],
-                        'special_date': filtered_data['special_date']
+                        'special_date': filtered_data['special_date'],
+                        # 添加原始文件名到日志数据中
+                        'image_original_filename': filtered_data['image_original_filename'],
+                        'dm_original_filename': filtered_data['dm_original_filename']
                     }
                     
                     log_service = LogServiceRegistry.get_service(conn, 'products')

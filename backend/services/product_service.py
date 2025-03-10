@@ -20,7 +20,8 @@ class ProductService:
                 SELECT 
                     id, name, description, image_url, dm_url, 
                     min_order_qty, max_order_qty, product_unit, 
-                    shipping_time, special_date, status, created_at, updated_at
+                    shipping_time, special_date, status, created_at, updated_at,
+                    image_original_filename, dm_original_filename
                 FROM products
                 WHERE id = %s
             """
