@@ -45,137 +45,96 @@ class ProductService:
     
     def add_product(self, name, description, image_url='', dm_url='', 
                    min_order_qty=0, max_order_qty=0, product_unit='', 
-                   shipping_time=0, special_date=False, status='active'):
+                   shipping_time=0, special_date=False, status='active',
+                   image_original_filename='', dm_original_filename=''):
         """添加新產品"""
         try:
-            # 插入產品
             cursor = self.db_connection.cursor()
             
-            insert_sql = """
+            # 插入新產品
+            sql = """
                 INSERT INTO products (
-                    name, description, image_url, dm_url, 
-                    min_order_qty, max_order_qty, product_unit, 
-                    shipping_time, special_date, status
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                RETURNING id
+                    name, description, image_url, dm_url,
+                    min_order_qty, max_order_qty, product_unit,
+                    shipping_time, special_date, status, 
+                    image_original_filename, dm_original_filename,
+                    created_at, updated_at
+                ) VALUES (
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW()
+                )
             """
             
             params = (
-                name, description, image_url, dm_url, 
-                min_order_qty, max_order_qty, product_unit, 
-                shipping_time, special_date, status
+                name, description, image_url, dm_url,
+                min_order_qty, max_order_qty, product_unit,
+                shipping_time, special_date, status,
+                image_original_filename, dm_original_filename
             )
             
-            print(f"SQL插入參數: {params}")
-            cursor.execute(insert_sql, params)
-            
-            # 獲取產品ID (PostgreSQL方式)
-            result = cursor.fetchone()
-            product_id = result[0] if result else None
-            print(f"SQL返回結果: {result}")
-            
-            # 提交事務
+            cursor.execute(sql, params)
             self.db_connection.commit()
             
-            # 提取產品ID
-            if product_id:
-                print(f"提取的產品ID: {product_id}")
-                return product_id
-            
-            # 如果沒有ID，返回None
-            return None
-            
+            # 返回新插入的產品ID
+            return cursor.lastrowid
         except Exception as e:
-            print(f"添加產品錯誤: {str(e)}")
+            print(f"添加产品错误: {str(e)}")
             self.db_connection.rollback()
-            raise e
+            return 0
     
-    def update_product(self, product_id: int, product_data: Dict[str, Any]) -> bool:
-        """更新产品信息"""
+    def update_product(self, product_id, data):
+        """更新產品信息"""
+        try:
+            # 构建更新查询
+            query = """
+                UPDATE products
+                SET name = %s, description = %s, image_url = %s, dm_url = %s,
+                    min_order_qty = %s, max_order_qty = %s, product_unit = %s,
+                    shipping_time = %s, special_date = %s, status = %s,
+                    image_original_filename = %s, dm_original_filename = %s,
+                    updated_at = NOW()
+                WHERE id = %s
+            """
+            
+            params = (
+                data['name'], data['description'], data['image_url'], data['dm_url'],
+                data['min_order_qty'], data['max_order_qty'], data['product_unit'],
+                data['shipping_time'], data['special_date'], data['status'],
+                data.get('image_original_filename'), data.get('dm_original_filename'),
+                product_id
+            )
+            
+            cursor = self.db_connection.cursor()
+            cursor.execute(query, params)
+            self.db_connection.commit()
+            return True
+        except Exception as e:
+            print(f"更新产品失败: {str(e)}")
+            self.db_connection.rollback()
+            return False
+    
+    def delete_product(self, product_id: int, soft_delete: bool = True) -> bool:
+        """删除或软删除产品
+        
+        Args:
+            product_id: 产品ID
+            soft_delete: 是否启用软删除，默认为True
+            
+        Returns:
+            bool: 操作是否成功
+        """
         try:
             cursor = self.db_connection.cursor()
             
-            # 构建更新语句
-            update_fields = []
-            params = []
+            if soft_delete:
+                # 执行软删除（更新状态）
+                update_sql = "UPDATE products SET status = 'inactive' WHERE id = %s"
+                cursor.execute(update_sql, (product_id,))
+            else:
+                # 执行硬删除
+                delete_sql = "DELETE FROM products WHERE id = %s"
+                cursor.execute(delete_sql, (product_id,))
             
-            # 添加需要更新的字段
-            if 'name' in product_data:
-                update_fields.append("name = %s")
-                params.append(product_data['name'])
-                
-            if 'description' in product_data:
-                update_fields.append("description = %s")
-                params.append(product_data['description'])
-                
-            if 'image_url' in product_data:
-                update_fields.append("image_url = %s")
-                params.append(product_data['image_url'])
-                
-            if 'dm_url' in product_data:
-                update_fields.append("dm_url = %s")
-                params.append(product_data['dm_url'])
-                
-            if 'min_order_qty' in product_data:
-                update_fields.append("min_order_qty = %s")
-                params.append(product_data['min_order_qty'])
-                
-            if 'max_order_qty' in product_data:
-                update_fields.append("max_order_qty = %s")
-                params.append(product_data['max_order_qty'])
-                
-            if 'product_unit' in product_data:
-                update_fields.append("product_unit = %s")
-                params.append(product_data['product_unit'])
-                
-            if 'shipping_time' in product_data:
-                update_fields.append("shipping_time = %s")
-                params.append(product_data['shipping_time'])
-                
-            if 'special_date' in product_data:
-                update_fields.append("special_date = %s")
-                params.append(product_data['special_date'])
-                
-            if 'status' in product_data:
-                update_fields.append("status = %s")
-                params.append(product_data['status'])
-            
-            # 添加更新时间
-            update_fields.append("updated_at = NOW()")
-            
-            # 没有字段需要更新时返回成功
-            if not update_fields:
-                return True
-                
-            # 构建最终SQL语句
-            set_clause = ", ".join(update_fields)
-            update_sql = f"UPDATE products SET {set_clause} WHERE id = %s"
-            
-            # 添加产品ID作为最后一个参数
-            params.append(product_id)
-            
-            # 执行SQL
-            cursor.execute(update_sql, params)
-            
-            # 检查更新是否成功
-            self.db_connection.commit()
-            return cursor.rowcount > 0
-            
-        except Exception as e:
-            print(f"更新产品错误: {str(e)}")
-            self.db_connection.rollback()
-            raise e
-    
-    def delete_product(self, product_id: int) -> bool:
-        """删除产品"""
-        try:
-            cursor = self.db_connection.cursor()
-            
-            # 执行删除SQL
-            delete_sql = "DELETE FROM products WHERE id = %s"
-            cursor.execute(delete_sql, (product_id,))
-            
-            # 检查删除是否成功
+            # 检查操作是否成功
             self.db_connection.commit()
             return cursor.rowcount > 0
             
