@@ -15,14 +15,19 @@ def get_customer_list():
             cursor.execute("""
                 SELECT id, username, company_name, contact_name, phone, 
                        email, address, line_account, viewable_products, remark,
-                       created_at, updated_at 
+                       created_at, updated_at, reorder_limit_days
                 FROM customers 
                 WHERE status = 'active'
                 ORDER BY created_at DESC
             """)
             
             columns = [desc[0] for desc in cursor.description]
+            print("数据库列名:", columns)  # 打印列名
             customers = [dict(zip(columns, row)) for row in cursor.fetchall()]
+            
+            # 打印每个客户的reorder_limit_days值
+            for i, customer in enumerate(customers):
+                print(f"客户[{i+1}] {customer.get('company_name')} 的reorder_limit_days值:", customer.get('reorder_limit_days'))
             
             # 格式化日期並調整欄位名稱
             for customer in customers:
@@ -34,6 +39,18 @@ def get_customer_list():
                 if 'contact_name' in customer:
                     customer['contact_person'] = customer['contact_name']
                     del customer['contact_name']
+                
+                # 确保reorder_limit_days是数字类型
+                if 'reorder_limit_days' in customer:
+                    try:
+                        if customer['reorder_limit_days'] is None:
+                            customer['reorder_limit_days'] = 0
+                        else:
+                            customer['reorder_limit_days'] = int(customer['reorder_limit_days'])
+                    except (ValueError, TypeError):
+                        customer['reorder_limit_days'] = 0
+                else:
+                    customer['reorder_limit_days'] = 0
             
             cursor.close()
             
@@ -96,16 +113,17 @@ def add_customer():
                 INSERT INTO customers (
                     username, password, company_name, contact_name, 
                     phone, email, address, line_account, viewable_products, remark,
-                    status, created_at, updated_at
+                    reorder_limit_days, status, created_at, updated_at
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                    'active', NOW(), NOW()
+                    %s, 'active', NOW(), NOW()
                 ) RETURNING id
             """, (
                 data['username'], hashed_password, data['company_name'],
                 data['contact_person'], data['phone'], data['email'],
                 data['address'], data.get('line_account', ''),
-                data.get('viewable_products', ''), data.get('remark', '')
+                data.get('viewable_products', ''), data.get('remark', ''),
+                data.get('reorder_limit_days', 2)
             ))
             
             new_id = cursor.fetchone()[0]
@@ -129,7 +147,8 @@ def add_customer():
                         'address': data['address'],
                         'line_account': data.get('line_account', ''),
                         'viewable_products': data.get('viewable_products', ''),
-                        'remark': data.get('remark', '')
+                        'remark': data.get('remark', ''),
+                        'reorder_limit_days': data.get('reorder_limit_days', 0)
                     }
                     
                     # 初始化日誌服務並記錄操作
@@ -200,7 +219,7 @@ def update_customer():
             # 在更新之前獲取舊的客戶資料用於日誌記錄
             cursor.execute("""
                 SELECT id, username, company_name, contact_name, phone, email, address,
-                       line_account, viewable_products, remark
+                       line_account, viewable_products, remark, reorder_limit_days
                 FROM customers WHERE id = %s AND status = 'active'
             """, (data['id'],))
             old_customer = cursor.fetchone()
@@ -216,7 +235,8 @@ def update_customer():
                     'address': old_customer[6],
                     'line_account': old_customer[7],
                     'viewable_products': old_customer[8],
-                    'remark': old_customer[9]
+                    'remark': old_customer[9],
+                    'reorder_limit_days': old_customer[10] if len(old_customer) > 10 else 0
                 }
             
             # 檢查用戶名是否重複
@@ -256,7 +276,8 @@ def update_customer():
                 'address': 'address',
                 'line_account': 'line_account',
                 'viewable_products': 'viewable_products',
-                'remark': 'remark'
+                'remark': 'remark',
+                'reorder_limit_days': 'reorder_limit_days'
             }
             
             for key, field in field_mapping.items():
@@ -300,7 +321,8 @@ def update_customer():
                 'address': data['address'],
                 'line_account': data.get('line_account', ''),
                 'viewable_products': data.get('viewable_products', ''),
-                'remark': data.get('remark', '')
+                'remark': data.get('remark', ''),
+                'reorder_limit_days': data.get('reorder_limit_days', 0)
             }
             
             # 如果是密码修改，直接添加标记到new_data中
@@ -354,7 +376,7 @@ def delete_customer():
             # 檢查客戶是否存在並獲取資料用於日誌記錄
             cursor.execute("""
                 SELECT id, username, company_name, contact_name, phone, email, address,
-                       line_account, viewable_products, remark
+                       line_account, viewable_products, remark, reorder_limit_days
                 FROM customers WHERE id = %s AND status = 'active'
             """, (data['id'],))
             customer = cursor.fetchone()
@@ -376,7 +398,8 @@ def delete_customer():
                 'address': customer[6],
                 'line_account': customer[7],
                 'viewable_products': customer[8],
-                'remark': customer[9]
+                'remark': customer[9],
+                'reorder_limit_days': customer[10] if len(customer) > 10 else 0
             }
             
             # 軟刪除客戶
@@ -440,7 +463,7 @@ def get_customer_info():
             # 查询客户信息
             cursor.execute("""
                 SELECT id, username, company_name, contact_name, 
-                       phone, email, address, line_account, viewable_products
+                       phone, email, address, line_account, viewable_products, reorder_limit_days
                 FROM customers 
                 WHERE id = %s AND status = 'active'
             """, (customer_id,))
@@ -454,7 +477,7 @@ def get_customer_info():
                 
             # 构建返回数据
             columns = ['id', 'username', 'company_name', 'contact_name', 
-                      'phone', 'email', 'address', 'line_account', 'viewable_products']
+                      'phone', 'email', 'address', 'line_account', 'viewable_products', 'reorder_limit_days']
             customer_data = dict(zip(columns, result))
             
             # 将 contact_name 映射为 contact_person
@@ -484,7 +507,7 @@ def get_customer_detail(customer_id):
             cursor.execute("""
                 SELECT id, username, company_name, contact_name, 
                        phone, email, address, line_account, viewable_products, 
-                       remark, created_at, updated_at, status
+                       remark, created_at, updated_at, status, reorder_limit_days
                 FROM customers 
                 WHERE id = %s AND status = 'active'
             """, (customer_id,))
@@ -500,7 +523,7 @@ def get_customer_detail(customer_id):
             columns = ['id', 'username', 'company_name', 'contact_name', 
                       'phone', 'email', 'address', 'line_account', 
                       'viewable_products', 'remark', 'created_at', 
-                      'updated_at', 'status']
+                      'updated_at', 'status', 'reorder_limit_days']
             customer_data = dict(zip(columns, result))
             
             # 格式化日期
@@ -596,7 +619,8 @@ def _process_create(self, new_data: Dict[str, Any]) -> Dict[str, Any]:
                 'address': new_data.get('address', ''),
                 'line_account': new_data.get('line_account', ''),
                 'viewable_products': new_data.get('viewable_products', ''),
-                'remark': new_data.get('remark', '')
+                'remark': new_data.get('remark', ''),
+                'reorder_limit_days': new_data.get('reorder_limit_days', 0)
             }
         
         return {

@@ -19,6 +19,7 @@ from backend.routes.admin_routes import admin_bp
 from backend.routes.order_routes import order_bp
 from backend.routes.line_bot_routes import line_bot_bp
 from backend.routes.log_routes import log_bp
+from backend.routes.order_check_routes import order_check_bp
 from backend.config.database import get_db_connection
 
 # 定义从双轨文件名中提取原始文件名的函数
@@ -50,7 +51,7 @@ app.config.update(
 )
 
 # CORS 配置
-ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS').split(',')
+ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv('ALLOWED_ORIGINS').split(',')]
 CORS(app, 
      supports_credentials=True,
      origins=ALLOWED_ORIGINS,
@@ -94,6 +95,9 @@ def before_request():
 @app.after_request
 def after_request(response):
     origin = request.headers.get('Origin')
+    print(f"请求Origin: '{origin}'")
+    print(f"允许的Origins: {ALLOWED_ORIGINS}")
+    
     if origin in ALLOWED_ORIGINS:
         response.headers.update({
             'Access-Control-Allow-Origin': origin,
@@ -103,6 +107,8 @@ def after_request(response):
             'Access-Control-Max-Age': '3600',
             'Vary': 'Origin'
         })
+    else:
+        print(f"Origin不匹配: '{origin}' 不在允许列表中")
     return response
 
 # 添加静态文件路由，用于访问上传的文件
@@ -172,6 +178,7 @@ app.register_blueprint(admin_bp, url_prefix='/api')
 app.register_blueprint(order_bp, url_prefix='/api')
 app.register_blueprint(line_bot_bp, url_prefix='/api/line')
 app.register_blueprint(log_bp, url_prefix='/api/log')
+app.register_blueprint(order_check_bp, url_prefix='/api')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

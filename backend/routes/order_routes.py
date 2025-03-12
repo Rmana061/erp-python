@@ -20,7 +20,10 @@ def send_email_async(email_func, recipient_email, order_data):
         )
         thread.start()
     except Exception as e:
-        print(f"發送郵件時出錯: {str(e)}")
+        print(f"郵件線程啟動錯誤: {str(e)}")
+        print("系統將繼續正常運行，但不會發送郵件通知")
+        import traceback
+        traceback.print_exc()
 
 # 常量定義
 ORDER_DETAIL_SQL = """
@@ -71,14 +74,53 @@ def format_date(dt):
 
 def send_order_email(customer_email, order_data):
     try:
+        # 確保order_data中的所有資料都是字符串
+        for key, value in order_data.items():
+            if not isinstance(value, (str, list, dict)):
+                order_data[key] = str(value)
+        
+        # 確保items中的數據格式正確
+        if 'items' in order_data:
+            for item in order_data['items']:
+                for k, v in item.items():
+                    if not isinstance(v, (str, int, float, bool, type(None))):
+                        item[k] = str(v)
+
         email_sender = EmailSender()
-        email_sender.send_order_confirmation(customer_email, order_data)
+        result, message = email_sender.send_order_confirmation(customer_email, order_data)
+        if not result:
+            print(f"訂單確認郵件發送失敗: {message}")
+            print("此錯誤不會影響訂單處理")
     except Exception as e:
         print(f"發送郵件時出錯: {str(e)}")
+        print("錯誤不會影響訂單處理")
+        import traceback
+        traceback.print_exc()
 
 def send_cancel_email(customer_email, order_data):
-    email_sender = EmailSender()
-    email_sender.send_order_cancellation(customer_email, order_data)
+    try:
+        # 確保order_data中的所有資料都是字符串
+        for key, value in order_data.items():
+            if not isinstance(value, (str, list, dict)):
+                order_data[key] = str(value)
+        
+        # 確保items中的數據格式正確
+        if 'items' in order_data:
+            for item in order_data['items']:
+                for k, v in item.items():
+                    if not isinstance(v, (str, int, float, bool, type(None))):
+                        item[k] = str(v)
+
+        email_sender = EmailSender()
+        result, message = email_sender.send_order_cancellation(customer_email, order_data)
+        if not result:
+            print(f"訂單取消郵件發送失敗: {message}")
+            print("此錯誤不會影響訂單取消處理")
+    except Exception as e:
+        print(f"發送取消郵件時出錯: {str(e)}")
+        print("錯誤不會影響訂單取消處理")
+        import traceback
+        traceback.print_exc()
 
 def admin_required(f):
     @wraps(f)
@@ -379,8 +421,31 @@ def cancel_order():
             email_data = {
                 'order_number': order_info[1],
                 'cancel_date': format_datetime(datetime.now()),
-                'items': order_info[4]
+                'items': []
             }
+            
+            # 確保items資料格式正確
+            if isinstance(order_info[4], list):
+                email_data['items'] = order_info[4]
+            else:
+                # 如果數據不是列表，嘗試轉換
+                try:
+                    items = []
+                    for item in order_info[4]:
+                        if isinstance(item, dict):
+                            # 確保每個項目的所有值都是字符串
+                            cleaned_item = {}
+                            for k, v in item.items():
+                                if v is not None:
+                                    cleaned_item[k] = str(v) if not isinstance(v, (str, int, float, bool)) else v
+                                else:
+                                    cleaned_item[k] = ""
+                            items.append(cleaned_item)
+                    email_data['items'] = items
+                except Exception as e:
+                    print(f"處理訂單項目時出錯: {str(e)}")
+                    # 如果處理失敗，使用空列表
+                    email_data['items'] = []
             
             customer_email = order_info[3]
             customer_id = order_info[2]  # 获取客户ID
@@ -848,6 +913,7 @@ def update_order_confirmed():
             statuses = [item['order_status'] for item in order_info[4]]
             all_confirmed_or_cancelled = all(status in ['已確認', '已取消'] for status in statuses)
             has_confirmed = any(status == '已確認' for status in statuses)
+            all_cancelled = all(status == '已取消' for status in statuses)
             
             if not all_confirmed_or_cancelled:
                 return error_response('尚有產品未完成審核', 400)
@@ -866,17 +932,25 @@ def update_order_confirmed():
 
             conn.commit()
 
-            # 只有當訂單中有已確認的產品時才發送確認郵件
-            if has_confirmed:
-                email_data = {
-                    'order_number': order_info[0],
-                    'confirm_date': format_datetime(order_info[2]),
-                    'items': order_info[4]
-                }
-                
+            # 準備郵件數據
+            email_data = {
+                'order_number': order_info[0],
+                'confirm_date': format_datetime(order_info[2]),
+                'items': order_info[4]
+            }
+
+            # 根據訂單狀態發送不同的郵件
+            if all_cancelled:
+                # 如果所有產品都被取消，發送駁回通知
+                threading.Thread(
+                    target=lambda: EmailSender().send_order_rejected(order_info[3], email_data)
+                ).start()
+            elif has_confirmed:
+                # 如果有已確認的產品，發送確認通知
                 threading.Thread(
                     target=lambda: EmailSender().send_order_approved(order_info[3], email_data)
                 ).start()
+            # 注意：如果產品混合了確認和取消狀態，則只發送確認郵件，狀態會在郵件內容中顯示
 
             return success_response(message='訂單確認狀態已更新')
 

@@ -88,45 +88,87 @@ class CustomerLogService(BaseLogService):
         return {'message': '無變更', 'operation_type': None}
     
     def _compare_changes(self, old_data: Dict[str, Any], new_data: Dict[str, Any]) -> Dict[str, Any]:
-        """比较并记录字段变更"""
+        """比较新旧数据的变更"""
         changes = {}
         
-        if not old_data or not new_data:
-            return changes
-            
-        # 比較並記錄變更 - 檢查所有客戶欄位
-        fields_to_check = [
-            'username', 
-            'company_name', 
-            'contact_person', 
-            'phone', 
-            'email', 
-            'address', 
-            'line_account', 
-            'viewable_products', 
-            'remark'
-        ]
+        # 用户名变更
+        if old_data.get('username') != new_data.get('username'):
+            changes['username'] = {
+                'before': old_data.get('username', '-'),
+                'after': new_data.get('username', '-')
+            }
         
-        for field in fields_to_check:
-            old_value = old_data.get(field, '')
-            new_value = new_data.get(field, '')
+        # 公司名变更
+        if old_data.get('company_name') != new_data.get('company_name'):
+            changes['company_name'] = {
+                'before': old_data.get('company_name', '-'),
+                'after': new_data.get('company_name', '-')
+            }
+        
+        # 联系人变更
+        if old_data.get('contact_name') != new_data.get('contact_person') and old_data.get('contact_person') != new_data.get('contact_person'):
+            old_contact = old_data.get('contact_name') or old_data.get('contact_person', '-')
+            changes['contact_person'] = {
+                'before': old_contact,
+                'after': new_data.get('contact_person', '-')
+            }
+        
+        # 电话变更
+        if old_data.get('phone') != new_data.get('phone'):
+            changes['phone'] = {
+                'before': old_data.get('phone', '-'),
+                'after': new_data.get('phone', '-')
+            }
+        
+        # 邮箱变更
+        if old_data.get('email') != new_data.get('email'):
+            changes['email'] = {
+                'before': old_data.get('email', '-'),
+                'after': new_data.get('email', '-')
+            }
+        
+        # 地址变更
+        if old_data.get('address') != new_data.get('address'):
+            changes['address'] = {
+                'before': old_data.get('address', '-'),
+                'after': new_data.get('address', '-')
+            }
+        
+        # LINE账号变更
+        if old_data.get('line_account') != new_data.get('line_account'):
+            changes['line_account'] = {
+                'before': old_data.get('line_account', '-'),
+                'after': new_data.get('line_account', '-')
+            }
+        
+        # 可见产品变更
+        if old_data.get('viewable_products') != new_data.get('viewable_products'):
+            old_products = self._get_product_names(old_data.get('viewable_products', ''))
+            new_products = self._get_product_names(new_data.get('viewable_products', ''))
             
-            if old_value != new_value:
-                # 對於可購產品欄位，轉換為產品名稱
-                if field == 'viewable_products':
-                    old_product_names = self._get_product_names(old_value)
-                    new_product_names = self._get_product_names(new_value)
-                    changes[field] = {
-                        'before': old_product_names,
-                        'after': new_product_names,
-                        'before_ids': old_value,
-                        'after_ids': new_value
-                    }
-                else:
-                    changes[field] = {
-                        'before': old_value,
-                        'after': new_value
-                    }
+            changes['viewable_products'] = {
+                'before': old_products or '-',
+                'after': new_products or '-'
+            }
+            
+        # 备注变更
+        if old_data.get('remark') != new_data.get('remark'):
+            changes['remark'] = {
+                'before': old_data.get('remark', '-'),
+                'after': new_data.get('remark', '-')
+            }
+            
+        # 重复下单限制天数变更
+        if old_data.get('reorder_limit_days') != new_data.get('reorder_limit_days'):
+            old_limit = old_data.get('reorder_limit_days')
+            new_limit = new_data.get('reorder_limit_days')
+            old_display = f"{old_limit}天" if old_limit and old_limit > 0 else "無限制"
+            new_display = f"{new_limit}天" if new_limit and new_limit > 0 else "無限制"
+            
+            changes['reorder_limit_days'] = {
+                'before': old_display,
+                'after': new_display
+            }
         
         return changes
     
@@ -152,7 +194,8 @@ class CustomerLogService(BaseLogService):
                     'line_account': new_data.get('line_account', ''),
                     'viewable_products': viewable_products_names,  # 使用產品名稱
                     'viewable_products_ids': viewable_products_ids,  # 保留原始ID以供參考
-                    'remark': new_data.get('remark', '')
+                    'remark': new_data.get('remark', ''),
+                    'reorder_limit_days': new_data.get('reorder_limit_days', 0)
                 }
             
             return {
@@ -187,7 +230,8 @@ class CustomerLogService(BaseLogService):
                     'line_account': old_data.get('line_account', ''),
                     'viewable_products': viewable_products_names,  # 使用產品名稱
                     'viewable_products_ids': viewable_products_ids,  # 保留原始ID以供參考
-                    'remark': old_data.get('remark', '')
+                    'remark': old_data.get('remark', ''),
+                    'reorder_limit_days': old_data.get('reorder_limit_days', 0)
                 }
             
             return {
@@ -240,7 +284,8 @@ class CustomerLogService(BaseLogService):
                     'line_account': old_data.get('line_account', ''),
                     'viewable_products': old_products_names,
                     'viewable_products_ids': old_products_ids,
-                    'remark': old_data.get('remark', '')
+                    'remark': old_data.get('remark', ''),
+                    'reorder_limit_days': old_data.get('reorder_limit_days', 0)
                 },
                 'new_data': {
                     'id': new_data.get('id', ''),
@@ -253,7 +298,8 @@ class CustomerLogService(BaseLogService):
                     'line_account': new_data.get('line_account', ''),
                     'viewable_products': new_products_names,
                     'viewable_products_ids': new_products_ids,
-                    'remark': new_data.get('remark', '')
+                    'remark': new_data.get('remark', ''),
+                    'reorder_limit_days': new_data.get('reorder_limit_days', 0)
                 },
                 'changes': changes
             }
