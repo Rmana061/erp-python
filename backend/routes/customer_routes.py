@@ -483,7 +483,8 @@ def get_customer_info():
             # 将 contact_name 映射为 contact_person
             if 'contact_name' in customer_data:
                 customer_data['contact_person'] = customer_data['contact_name']
-                del customer_data['contact_name']
+                # 保留 contact_name 字段，确保两种命名方式都可用
+                # del customer_data['contact_name']
             
             return jsonify({
                 "status": "success",
@@ -570,7 +571,30 @@ def unbind_line():
             }), 401
 
         with get_db_connection() as conn:
-            cursor = conn.cursor()
+            cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            
+            # 查询客户当前信息（用于记录变更前状态）
+            cursor.execute("""
+                SELECT id, username, company_name, contact_name, phone, email, address,
+                       line_account, viewable_products, remark, reorder_limit_days, status
+                FROM customers 
+                WHERE id = %s AND status = 'active'
+            """, (customer_id,))
+            
+            old_data_row = cursor.fetchone()
+            if not old_data_row:
+                return jsonify({
+                    "status": "error",
+                    "message": "找不到客戶資料"
+                }), 404
+                
+            old_customer_data = dict(old_data_row)
+            # 轉換contact_name為contact_person以保持一致性
+            if 'contact_name' in old_customer_data:
+                old_customer_data['contact_person'] = old_customer_data['contact_name']
+                
+            # 保存原LINE账号用于日志
+            old_line_account = old_customer_data.get('line_account')
             
             # 更新客户的 line_account 为 NULL
             cursor.execute("""
@@ -585,10 +609,33 @@ def unbind_line():
             if not result:
                 return jsonify({
                     "status": "error",
-                    "message": "找不到客戶資料"
+                    "message": "更新失敗，找不到客戶資料"
                 }), 404
 
             conn.commit()
+            
+            # 准备新客户数据用于日志记录
+            new_customer_data = old_customer_data.copy()
+            new_customer_data['line_account'] = None  # 设置为NULL
+            
+            try:
+                # 记录日志
+                from backend.services.log_service_registry import LogServiceRegistry
+                
+                # 初始化日志服务并记录操作
+                log_service = LogServiceRegistry.get_service(conn, 'customers')
+                log_service.log_operation(
+                    table_name='customers',
+                    operation_type='修改',
+                    record_id=customer_id,
+                    old_data=old_customer_data,
+                    new_data=new_customer_data,
+                    performed_by=customer_id,
+                    user_type='客戶'
+                )
+            except Exception as log_error:
+                # 日志记录失败不影响主要功能
+                print(f"Error logging LINE unbind operation: {str(log_error)}")
             
             return jsonify({
                 "status": "success",
@@ -597,6 +644,134 @@ def unbind_line():
 
     except Exception as e:
         print(f"Error in unbind_line: {str(e)}")
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+@customer_bp.route('/customer/update-self', methods=['POST'])
+def update_customer_self():
+    try:
+        data = request.get_json()
+        customer_id = data.get('customer_id')
+        
+        if not customer_id:
+            return jsonify({
+                "status": "error",
+                "message": "未登入或登入已過期"
+            }), 401
+        
+        # 在更新之前獲取舊的客戶資料用於日誌記錄
+        with get_db_connection() as conn:
+            cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            cursor.execute("""
+                SELECT id, username, company_name, contact_name, phone, email, address,
+                       line_account, viewable_products, remark, reorder_limit_days
+                FROM customers 
+                WHERE id = %s AND status = 'active'
+            """, (customer_id,))
+            
+            old_data_row = cursor.fetchone()
+            if not old_data_row:
+                return jsonify({
+                    "status": "error",
+                    "message": "客戶不存在或已停用"
+                }), 404
+            
+            old_customer_data = dict(old_data_row)
+            # 轉換contact_name為contact_person以保持一致性
+            if 'contact_name' in old_customer_data:
+                old_customer_data['contact_person'] = old_customer_data['contact_name']
+            
+            # 構建更新語句
+            update_fields = []
+            update_values = []
+            
+            field_mapping = {
+                'company_name': 'company_name',
+                'contact_name': 'contact_name',
+                'phone': 'phone',
+                'email': 'email',
+                'address': 'address'
+            }
+            
+            for key, field in field_mapping.items():
+                if key in data and data[key] is not None:
+                    update_fields.append(f"{field} = %s")
+                    update_values.append(data[key])
+            
+            # 檢查是否有密碼更新
+            password_changed = False
+            if 'password' in data and data['password']:
+                update_fields.append("password = %s")
+                update_values.append(hash_password(data['password']))
+                password_changed = True
+            
+            if not update_fields:
+                return jsonify({
+                    "status": "error",
+                    "message": "沒有提供要更新的欄位"
+                }), 400
+            
+            # 添加更新時間
+            update_fields.append("updated_at = NOW()")
+            
+            # 執行更新
+            update_values.append(customer_id)
+            update_query = f"""
+                UPDATE customers 
+                SET {', '.join(update_fields)}
+                WHERE id = %s AND status = 'active'
+            """
+            
+            cursor.execute(update_query, tuple(update_values))
+            conn.commit()
+            
+            # 准备新客户数据用于日志记录
+            new_customer_data = {
+                'id': customer_id,
+                'username': old_customer_data['username'],
+                'company_name': data.get('company_name', old_customer_data['company_name']),
+                'contact_person': data.get('contact_name', old_customer_data.get('contact_person', '')),
+                'phone': data.get('phone', old_customer_data['phone']),
+                'email': data.get('email', old_customer_data['email']),
+                'address': data.get('address', old_customer_data['address']),
+                'line_account': old_customer_data.get('line_account', ''),
+                'viewable_products': old_customer_data.get('viewable_products', ''),
+                'remark': old_customer_data.get('remark', ''),
+                'reorder_limit_days': old_customer_data.get('reorder_limit_days', 0)
+            }
+            
+            # 如果是密码修改，添加标记到new_data中
+            if password_changed:
+                new_customer_data['password_changed'] = True
+            
+            try:
+                # 记录日志
+                from backend.services.log_service_registry import LogServiceRegistry
+                
+                # 初始化日志服务并记录操作
+                log_service = LogServiceRegistry.get_service(conn, 'customers')
+                log_service.log_operation(
+                    table_name='customers',
+                    operation_type='修改',
+                    record_id=customer_id,
+                    old_data=old_customer_data,
+                    new_data=new_customer_data,
+                    performed_by=customer_id,  # 客户自己修改，使用客户ID
+                    user_type='客戶'  # 修改用户类型为客户
+                )
+            except Exception as log_error:
+                # 日志记录失败不影响主要功能
+                print(f"Error logging customer self-update operation: {str(log_error)}")
+            
+            return jsonify({
+                "status": "success",
+                "message": "客戶資料更新成功"
+            })
+            
+    except Exception as e:
+        print(f"Error in update_customer_self: {str(e)}")
         return jsonify({
             "status": "error",
             "message": str(e)

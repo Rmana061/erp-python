@@ -12,6 +12,7 @@ from backend.config.database import get_db_connection
 from urllib.parse import quote
 import requests
 from flask_cors import CORS
+import psycopg2.extras
 
 # 載入環境變數
 load_dotenv()
@@ -179,7 +180,31 @@ def line_login_callback():
         # 綁定 LINE 帳號
         try:
             with get_db_connection() as conn:
-                cursor = conn.cursor()
+                cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+                
+                # 获取客户旧数据用于记录日志
+                cursor.execute("""
+                    SELECT id, username, company_name, contact_name, phone, email, address,
+                           line_account, viewable_products, remark, reorder_limit_days, status
+                    FROM customers 
+                    WHERE id = %s AND status = 'active'
+                """, (customer_id,))
+                
+                old_data_row = cursor.fetchone()
+                if not old_data_row:
+                    return jsonify({
+                        "status": "error",
+                        "message": "客戶不存在或狀態不正確"
+                    }), 400
+                    
+                old_customer_data = dict(old_data_row)
+                # 轉換contact_name為contact_person以保持一致性
+                if 'contact_name' in old_customer_data:
+                    old_customer_data['contact_person'] = old_customer_data['contact_name']
+                
+                # 保存原LINE账号值，可能为NULL或已有值
+                old_line_account = old_customer_data.get('line_account')
+                
                 cursor.execute("""
                     UPDATE customers 
                     SET line_account = %s,
@@ -196,6 +221,29 @@ def line_login_callback():
                     }), 400
                     
                 conn.commit()
+                
+                # 准备新客户数据用于日志记录
+                new_customer_data = old_customer_data.copy()
+                new_customer_data['line_account'] = profile_json['userId']
+                
+                try:
+                    # 记录日志
+                    from backend.services.log_service_registry import LogServiceRegistry
+                    
+                    # 初始化日志服务并记录操作
+                    log_service = LogServiceRegistry.get_service(conn, 'customers')
+                    log_service.log_operation(
+                        table_name='customers',
+                        operation_type='修改',
+                        record_id=customer_id,
+                        old_data=old_customer_data,
+                        new_data=new_customer_data,
+                        performed_by=customer_id,
+                        user_type='客戶'
+                    )
+                except Exception as log_error:
+                    # 日志记录失败不影响主要功能
+                    print(f"Error logging LINE bind operation: {str(log_error)}")
                 
                 return jsonify({
                     "status": "success",
@@ -237,7 +285,7 @@ def bind():
             
         try:
             with get_db_connection() as conn:
-                cursor = conn.cursor()
+                cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
                 
                 # 检查是否已经绑定
                 cursor.execute("""
@@ -251,6 +299,29 @@ def bind():
                         "status": "error",
                         "message": f"此LINE帳號已被其他客戶綁定"
                     }), 400
+                
+                # 获取客户旧数据用于记录日志
+                cursor.execute("""
+                    SELECT id, username, company_name, contact_name, phone, email, address,
+                           line_account, viewable_products, remark, reorder_limit_days, status
+                    FROM customers 
+                    WHERE id = %s AND status = 'active'
+                """, (customer_id,))
+                
+                old_data_row = cursor.fetchone()
+                if not old_data_row:
+                    return jsonify({
+                        "status": "error",
+                        "message": "客戶不存在或狀態不正確"
+                    }), 400
+                    
+                old_customer_data = dict(old_data_row)
+                # 轉換contact_name為contact_person以保持一致性
+                if 'contact_name' in old_customer_data:
+                    old_customer_data['contact_person'] = old_customer_data['contact_name']
+                
+                # 保存原LINE账号值，可能为NULL或已有值
+                old_line_account = old_customer_data.get('line_account')
                 
                 # 更新绑定
                 cursor.execute("""
@@ -269,6 +340,29 @@ def bind():
                     }), 400
                     
                 conn.commit()
+                
+                # 准备新客户数据用于日志记录
+                new_customer_data = old_customer_data.copy()
+                new_customer_data['line_account'] = line_user_id
+                
+                try:
+                    # 记录日志
+                    from backend.services.log_service_registry import LogServiceRegistry
+                    
+                    # 初始化日志服务并记录操作
+                    log_service = LogServiceRegistry.get_service(conn, 'customers')
+                    log_service.log_operation(
+                        table_name='customers',
+                        operation_type='修改',
+                        record_id=customer_id,
+                        old_data=old_customer_data,
+                        new_data=new_customer_data,
+                        performed_by=customer_id,
+                        user_type='客戶'
+                    )
+                except Exception as log_error:
+                    # 日志记录失败不影响主要功能
+                    print(f"Error logging LINE bind operation: {str(log_error)}")
                 
                 # 发送欢迎消息
                 try:
