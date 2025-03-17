@@ -220,3 +220,769 @@
 2025-03-17 00:05:00,216 - date_cleaner - INFO - 任務 clean_expired_dates_job 執行成功，清理了 1 個過期日期
 2025-03-17 09:12:44,717 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:12:44] "OPTIONS /api/products/list HTTP/1.1" 200 -
 2025-03-17 09:12:44,930 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:12:44] "[31m[1mPOST /api/products/list HTTP/1.1[0m" 401 -
+2025-03-17 09:21:54,090 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\config\\database.py', reloading
+2025-03-17 09:21:54,092 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-17 09:21:54,092 - date_cleaner - INFO - 調度器已關閉
+2025-03-17 09:21:57,451 - date_cleaner - INFO - 初始化調度器
+2025-03-17 09:21:57,827 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-17T09:21:57.827955+08:00
+2025-03-17 09:21:57,837 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 09:21:57,840 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 09:21:57,844 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-17 09:21:57,847 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-17 09:21:57,848 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-17 09:21:57,849 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-17 09:21:57,850 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-17 09:22:07
+2025-03-17 09:21:57,850 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-18 00:05:00
+2025-03-17 09:21:57,884 - werkzeug - WARNING -  * Debugger is active!
+2025-03-17 09:21:57,904 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-17 09:22:02,380 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-17 09:22:02,381 - date_cleaner - INFO - 調度器已關閉
+2025-03-17 09:22:06,550 - date_cleaner - INFO - 初始化調度器
+2025-03-17 09:22:06,759 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-17T09:22:06.759746+08:00
+2025-03-17 09:22:06,766 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 09:22:06,768 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 09:22:06,772 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-17 09:22:06,772 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-17 09:22:06,773 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-17 09:22:06,775 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-17 09:22:06,776 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-17 09:22:16
+2025-03-17 09:22:06,776 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-18 00:05:00
+2025-03-17 09:22:06,811 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-17 09:22:06,812 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-17 09:22:06,814 - werkzeug - INFO -  * Restarting with stat
+2025-03-17 09:22:09,180 - date_cleaner - INFO - 初始化調度器
+2025-03-17 09:22:09,397 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-17T09:22:09.397225+08:00
+2025-03-17 09:22:09,402 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 09:22:09,404 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 09:22:09,407 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-17 09:22:09,408 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-17 09:22:09,409 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-17 09:22:09,411 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-17 09:22:09,411 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-17 09:22:19
+2025-03-17 09:22:09,412 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-18 00:05:00
+2025-03-17 09:22:09,431 - werkzeug - WARNING -  * Debugger is active!
+2025-03-17 09:22:09,450 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-17 09:22:10,900 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:10] "OPTIONS /api/admin-login HTTP/1.1" 200 -
+2025-03-17 09:22:11,478 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:11] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-17 09:22:11,583 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:11] "OPTIONS /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 09:22:11,691 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:11] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 09:22:12,596 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:12] "OPTIONS /api/orders/all HTTP/1.1" 200 -
+2025-03-17 09:22:12,760 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:12] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 09:22:16,015 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:16] "OPTIONS /api/customer-login HTTP/1.1" 200 -
+2025-03-17 09:22:16,443 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:16] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-17 09:22:16,559 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:16] "OPTIONS /api/orders/list HTTP/1.1" 200 -
+2025-03-17 09:22:16,702 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:16] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 09:22:16,864 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 09:22:16 CST], next run at: 2025-03-17 09:22:16 CST)" (scheduled at 2025-03-17 09:22:16.766728+08:00)
+2025-03-17 09:22:16,865 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-17 09:22:16,911 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-17 09:22:16,985 - date_cleaner - INFO - 當前日期: 2025-03-17
+2025-03-17 09:22:17,036 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-14', '2025-03-15', '2025-03-16']
+2025-03-17 09:22:17,043 - date_cleaner - INFO - 已提交事務
+2025-03-17 09:22:17,113 - date_cleaner - INFO - 已刪除 3 個過期鎖定日期
+2025-03-17 09:22:17,178 - date_cleaner - INFO - 已刪除的日期: 2025-03-14, 2025-03-15, 2025-03-16
+2025-03-17 09:22:17,217 - date_cleaner - INFO - 已刪除的ID: 6, 7, 8
+2025-03-17 09:22:17,276 - date_cleaner - INFO - 清理後資料庫中的日期: []
+2025-03-17 09:22:17,331 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-17 09:22:17,383 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 09:22:16 CST], next run at: 2025-03-17 09:22:16 CST)" executed successfully
+2025-03-17 09:22:17,412 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 3 個過期日期
+2025-03-17 09:22:19,419 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 09:22:19 CST], next run at: 2025-03-17 09:22:19 CST)" (scheduled at 2025-03-17 09:22:19.403209+08:00)
+2025-03-17 09:22:19,420 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-17 09:22:19,422 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-17 09:22:19,426 - date_cleaner - INFO - 當前日期: 2025-03-17
+2025-03-17 09:22:19,433 - date_cleaner - INFO - 資料庫中的所有日期: []
+2025-03-17 09:22:19,439 - date_cleaner - INFO - 已提交事務
+2025-03-17 09:22:19,440 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-17 09:22:19,441 - date_cleaner - INFO - 清理後資料庫中的日期: []
+2025-03-17 09:22:19,443 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-17 09:22:19,444 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 09:22:19 CST], next run at: 2025-03-17 09:22:19 CST)" executed successfully
+2025-03-17 09:22:19,446 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-17 09:22:22,226 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:22] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 09:22:24,863 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:24] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-17 09:22:27,074 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:22:27] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-17 09:48:11,853 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:48:11] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-17 09:48:12,011 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:48:12] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 09:48:14,738 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 09:48:14] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-17 10:00:28,266 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:00:28] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-17 10:00:28,414 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:00:28] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 10:00:34,381 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:00:34] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-17 10:00:34,501 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:00:34] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:00:36,855 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:00:36] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-17 10:01:22,558 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:01:22] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-17 10:06:18,795 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:18] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-17 10:06:18,977 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:18] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 10:06:21,214 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:21] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 10:06:21,973 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:21] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:06:22,153 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,239 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,262 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,274 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,288 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,290 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,290 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,294 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,298 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,308 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,310 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,321 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:22,324 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:22] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:23,189 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:23] "OPTIONS /api/customer/info HTTP/1.1" 200 -
+2025-03-17 10:06:23,284 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-17 10:06:24,769 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:24] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 10:06:25,296 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:25] "OPTIONS /api/products/locked-dates HTTP/1.1" 200 -
+2025-03-17 10:06:25,309 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:25] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:06:25,332 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:25] "OPTIONS /api/customer/info HTTP/1.1" 200 -
+2025-03-17 10:06:25,387 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:25] "POST /api/products/locked-dates HTTP/1.1" 200 -
+2025-03-17 10:06:25,422 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-17 10:06:25,529 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:25] "POST /api/products/locked-dates HTTP/1.1" 200 -
+2025-03-17 10:06:25,540 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:25] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:06:29,186 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:29] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 10:06:32,272 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:32] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-17 10:06:32,452 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:32] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:06:33,083 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:33] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:06:33,853 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:33] "OPTIONS /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:06:33,955 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:33] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:06:34,542 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:06:34,792 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,800 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,849 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,882 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,885 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,889 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,894 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,901 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,908 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,915 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,917 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,926 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:06:34,927 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:34] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:06:36,950 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:36] "POST /api/products/locked-dates HTTP/1.1" 200 -
+2025-03-17 10:06:40,534 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:40] "POST /api/products/locked-dates HTTP/1.1" 200 -
+2025-03-17 10:06:53,308 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:53] "OPTIONS /api/products/lock-date HTTP/1.1" 200 -
+2025-03-17 10:06:53,402 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:53] "POST /api/products/lock-date HTTP/1.1" 200 -
+2025-03-17 10:06:54,849 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:54] "POST /api/products/locked-dates HTTP/1.1" 200 -
+2025-03-17 10:06:57,463 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:57] "POST /api/products/lock-date HTTP/1.1" 200 -
+2025-03-17 10:06:58,555 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:06:58] "POST /api/products/locked-dates HTTP/1.1" 200 -
+2025-03-17 10:07:23,362 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:07:23] "OPTIONS /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:07:23,451 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:07:23] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:07:24,195 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:07:24] "[35m[1mOPTIONS /api/log/logs HTTP/1.1[0m" 204 -
+2025-03-17 10:07:24,327 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:07:24] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:07:26,567 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:07:26] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:07:29,018 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:07:29] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:08:04,599 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:08:04] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:08:05,209 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:08:05] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:09:40,394 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:09:40] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:09:41,725 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:09:41] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:09:46,091 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:09:46] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:09:47,342 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:09:47] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:09:49,769 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:09:49] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:09:50,272 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:09:50] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:09:55,301 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:09:55] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:09:55,671 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:09:55] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:10:47,643 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:10:47] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:10:49,196 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:10:49] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:10:49,936 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:10:49] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:10:50,894 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:10:50] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:10:51,721 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:10:51] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:14:20,739 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:20] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:14:22,002 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "OPTIONS /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:14:22,119 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:14:22,672 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,855 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,867 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,877 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,884 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,895 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,906 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,924 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,925 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,931 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,938 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,989 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:14:22,990 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:22] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:14:37,602 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:37] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:14:39,368 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:39] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:14:39,369 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:39] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:14:48,600 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:48] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:14:50,244 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:14:50] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:17:16,759 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:17:16] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:17:17,845 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:17:17] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:17:54,622 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:17:54] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:18:11,518 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:18:11] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:19:50,310 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:19:50] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:20:05,500 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:20:05] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:20:15,800 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:20:15] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:25:49,259 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:49] "OPTIONS /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:25:49,474 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:49] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:25:50,724 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:50] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:25:51,369 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:25:51,484 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,520 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,521 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,582 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,592 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,624 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,686 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,702 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,739 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,757 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,874 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,958 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:25:51,970 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:51] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:25:53,037 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:53] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:25:53,636 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:25:53] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:32:45,933 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:45] "OPTIONS /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:32:46,203 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:46] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:32:48,945 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:48] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:32:50,757 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:50] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:32:51,767 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:51] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:32:51,804 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:51] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:32:51,935 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:51] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:32:51,977 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:51] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:32:51,978 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:51] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:32:52,239 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:52] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:32:52,249 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:52] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:32:52,256 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:52] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:32:52,271 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:52] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:32:52,339 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:52] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:32:52,368 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:52] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:32:52,407 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:52] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:32:52,483 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:52] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:32:52,484 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:52] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:32:54,114 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:32:54] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:33:21,643 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:33:21] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:33:31,122 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:33:31] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:33:35,289 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:33:35] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:33:35,736 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:33:35] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:34:18,008 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:34:18] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:34:47,403 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:34:47] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:34:51,519 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:34:51] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:34:51,883 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:34:51] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:35:44,529 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:35:44] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:35:48,727 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:35:48] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:38:24,118 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:38:24] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:38:25,288 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:38:25] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:38:26,280 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:38:26] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:38:28,946 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:38:28] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:38:28,971 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:38:28] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:38:28,973 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:38:28] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:38:55,164 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:38:55] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:38:55,960 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:38:55] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:40:56,345 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:56] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:40:57,448 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:57] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:40:58,546 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:58] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:40:58,803 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:58] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:40:58,867 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:58] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:40:58,874 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:58] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:40:58,887 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:58] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:40:58,953 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:58] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:40:59,000 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:59] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:40:59,001 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:59] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:40:59,002 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:59] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:40:59,013 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:59] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:40:59,027 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:59] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:40:59,033 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:59] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:40:59,086 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:59] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:40:59,136 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:40:59] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:41:00,918 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:41:00] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:41:01,298 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:41:01] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:43:42,528 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:42] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:43:42,833 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:42] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:43:42,842 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:42] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:43:42,976 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:42] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:43:43,060 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:43] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:43:43,063 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:43] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:43:43,307 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:43] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:43:43,322 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:43] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:43:43,323 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:43] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:43:43,376 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:43] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:43:43,379 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:43] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:43:43,421 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:43] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:43:43,543 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:43] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:43:43,563 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:43] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:43:48,187 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:48] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:43:50,102 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:43:50] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:44:06,487 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:44:06] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:44:07,208 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:44:07] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:44:50,331 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:44:50] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:46:09,185 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:46:09] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:46:10,224 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:46:10] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:48:11,693 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:48:11] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:48:13,325 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:48:13] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:48:15,535 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:48:15] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:49:14,530 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:14] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:49:15,375 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:15] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:49:16,690 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:16] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:49:16,728 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:16] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:49:16,731 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:16] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:49:16,733 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:16] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:49:16,740 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:16] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:49:16,801 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:16] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:49:16,900 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:16] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:49:16,902 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:16] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:49:17,205 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:17] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:49:17,224 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:17] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:49:17,224 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:17] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:49:17,287 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:17] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:49:17,311 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:17] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:49:17,326 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:17] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:49:18,554 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:18] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:49:20,587 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:20] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:49:22,419 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:22] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:49:24,011 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:24] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:49:25,413 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:25] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:49:30,875 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:30] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:49:34,256 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:34] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:49:37,913 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:37] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:49:40,135 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:40] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:49:43,649 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:43] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:49:45,251 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:45] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:49:46,456 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:46] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:49:49,632 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:49] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:49:52,608 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:52] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:49:54,359 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:54] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:49:57,378 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:49:57] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:50:01,794 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:50:01] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:50:10,866 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:50:10] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:50:13,628 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:50:13] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:50:19,461 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:50:19] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:50:20,841 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:50:20] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:52:44,639 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:44] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:52:45,929 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:45] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:52:48,708 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:48] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:52:49,612 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,642 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,660 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,708 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,708 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,709 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,709 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,712 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,720 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,720 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,720 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,722 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:52:49,725 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:49] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:52:51,073 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:51] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:52:54,546 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:54] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:52:55,950 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:52:55] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:53:01,147 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:01] "OPTIONS /api/orders/list HTTP/1.1" 200 -
+2025-03-17 10:53:01,266 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:01] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 10:53:03,112 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:53:03,413 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,431 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,437 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,439 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,446 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,453 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,467 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,468 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,545 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,622 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,636 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,641 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:53:03,647 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:03] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:53:04,561 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:04] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-17 10:53:10,876 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:10] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 10:53:15,872 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:15] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 10:53:17,553 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:17] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:53:21,794 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:21] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:53:23,428 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:23] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:53:26,874 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:26] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:53:27,768 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:27] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:53:45,029 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:45] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:53:46,469 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:46] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:53:49,788 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:49] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:53:54,203 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:54] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:53:56,148 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:56] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:53:57,844 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:57] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:53:59,310 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:53:59] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:54:02,594 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:54:02] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:54:03,955 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:54:03] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:54:09,732 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:54:09] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:54:15,246 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:54:15] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:54:17,439 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:54:17] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:54:29,090 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:54:29] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:54:39,045 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:54:39] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:55:09,633 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:55:09] "OPTIONS /api/products/11/detail HTTP/1.1" 200 -
+2025-03-17 10:55:09,747 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:55:09] "POST /api/products/11/detail HTTP/1.1" 200 -
+2025-03-17 10:55:15,250 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:55:15] "OPTIONS /api/products/update/11 HTTP/1.1" 200 -
+2025-03-17 10:55:15,360 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:55:15] "POST /api/products/update/11 HTTP/1.1" 200 -
+2025-03-17 10:55:16,583 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:55:16] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:55:55,982 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:55:55] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:56:00,812 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:00] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:56:02,777 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:02] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:56:04,619 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:04] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:56:06,047 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:06] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:56:08,540 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:08] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:56:08,711 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:08] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:08,722 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:08] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:08,788 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:08] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:08,799 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:08] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:08,863 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:08] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:08,950 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:08] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:08,958 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:08] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:08,960 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:08] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:08,985 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:08] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:08,988 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:08] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:09,009 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:09] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:09,021 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:09] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:09,057 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:09] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:45,987 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:45] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:56:46,772 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:46] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:56:47,465 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:47] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:56:48,855 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:48] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:56:49,000 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,004 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,010 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,216 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,264 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,286 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,295 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,338 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,350 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,380 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,382 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,422 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,427 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:56:49,466 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:49] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:56:50,710 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:50] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:56:52,085 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:52] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:56:52,959 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:52] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:56:55,210 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:55] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:56:56,319 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:56] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:56:58,099 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:58] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:56:59,041 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:56:59] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:57:02,497 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:02] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 10:57:03,559 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:03] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:57:04,387 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:04] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:57:05,817 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:05] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:57:11,341 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:11] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:57:20,609 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:20] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:57:22,611 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:57:22,750 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,754 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,759 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,817 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,824 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,833 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,839 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,847 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,848 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,848 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,890 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,892 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:57:22,899 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:22] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:57:27,318 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:27] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:57:42,721 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:42] "OPTIONS /api/customer/9/info HTTP/1.1" 200 -
+2025-03-17 10:57:42,732 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:42] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:57:42,811 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:42] "POST /api/customer/9/info HTTP/1.1" 200 -
+2025-03-17 10:57:42,952 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:42] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:57:44,768 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:44] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:57:47,826 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:47] "OPTIONS /api/customer/25/info HTTP/1.1" 200 -
+2025-03-17 10:57:47,837 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:47] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:57:47,919 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:47] "POST /api/customer/25/info HTTP/1.1" 200 -
+2025-03-17 10:57:48,034 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:48] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:57:50,249 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:50] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:57:58,047 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:57:58] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:58:00,666 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:00] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:58:02,288 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:02] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:58:04,340 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:04] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:58:05,350 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:05] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:58:07,346 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:07] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:58:25,022 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:25] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 10:58:26,916 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:26] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 10:58:36,358 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:36] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:58:37,693 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:37] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:58:38,354 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:38] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:58:39,362 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:39] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 10:58:40,785 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:58:40] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 10:59:02,871 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:02] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:59:04,454 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:04] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:59:06,546 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:06] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:59:07,105 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:07] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:59:08,188 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:59:08,332 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,333 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,334 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,346 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,400 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,434 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,440 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,458 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,459 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,472 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,479 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,489 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,491 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:08,847 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:08] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:59:11,103 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:11] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:59:12,499 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:12] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:59:13,293 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:13] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:59:22,472 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:22] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:59:24,410 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:59:24,520 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,529 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,599 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,600 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,609 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,631 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,661 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,662 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,666 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,666 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,667 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,668 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:24,676 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:24] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 10:59:26,435 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:26] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:59:36,389 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:36] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 10:59:39,645 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:39] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 10:59:41,336 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:41] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 10:59:59,022 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 10:59:59] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:00:01,177 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:00:01,602 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,603 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,605 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,607 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,615 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,620 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,621 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,626 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,636 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,642 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,644 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,646 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:01,650 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:01] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:02,620 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:02] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:00:04,872 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:04] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:00:05,002 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,003 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,011 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,070 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,084 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,105 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,110 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,129 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,133 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,139 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,139 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,145 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:05,152 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:05] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:00:06,370 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:06] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:00:07,613 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:07] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:00:18,543 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:18] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 11:00:21,858 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:21] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:00:23,057 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:23] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 11:00:23,726 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:23] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:00:24,333 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:24] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:00:25,634 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:25] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:00:27,457 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:27] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:00:33,814 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:33] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:00:34,794 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:34] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 11:00:39,858 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:39] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:00:40,589 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:40] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 11:00:41,053 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:41] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:00:47,670 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:47] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 11:00:48,443 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:00:48] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 11:02:22,123 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 11:02:22,613 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:02:22,749 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:02:22,850 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 11:02:22,870 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 11:02:22,873 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 11:02:22,885 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 11:02:22,893 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:02:22,897 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:02:22,898 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 11:02:22,902 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:02:22,903 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:02:22,941 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:02:22,990 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:22] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:02:23,001 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:23] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 11:02:24,854 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:24] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:02:25,678 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:02:25] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:08:53,910 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\routes\\log_routes.py', reloading
+2025-03-17 11:08:53,917 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-17 11:08:53,919 - date_cleaner - INFO - 調度器已關閉
+2025-03-17 11:08:54,095 - werkzeug - INFO -  * Restarting with stat
+2025-03-17 11:08:56,969 - date_cleaner - INFO - 初始化調度器
+2025-03-17 11:08:57,257 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-17T11:08:57.257068+08:00
+2025-03-17 11:08:57,264 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 11:08:57,266 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 11:08:57,269 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-17 11:08:57,270 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-17 11:08:57,270 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-17 11:08:57,271 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-17 11:08:57,272 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-17 11:09:07
+2025-03-17 11:08:57,272 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-18 00:05:00
+2025-03-17 11:08:57,295 - werkzeug - WARNING -  * Debugger is active!
+2025-03-17 11:08:57,315 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-17 11:09:07,267 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 11:09:07 CST], next run at: 2025-03-17 11:09:07 CST)" (scheduled at 2025-03-17 11:09:07.264050+08:00)
+2025-03-17 11:09:07,267 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-17 11:09:07,268 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-17 11:09:07,268 - date_cleaner - INFO - 當前日期: 2025-03-17
+2025-03-17 11:09:07,272 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-17', '2025-03-18']
+2025-03-17 11:09:07,274 - date_cleaner - INFO - 已提交事務
+2025-03-17 11:09:07,274 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-17 11:09:07,275 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-17', '2025-03-18']
+2025-03-17 11:09:07,276 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-17 11:09:07,276 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 11:09:07 CST], next run at: 2025-03-17 11:09:07 CST)" executed successfully
+2025-03-17 11:09:07,277 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-17 11:09:23,058 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\services\\base_log_service.py', reloading
+2025-03-17 11:09:23,059 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-17 11:09:23,059 - date_cleaner - INFO - 調度器已關閉
+2025-03-17 11:09:23,214 - werkzeug - INFO -  * Restarting with stat
+2025-03-17 11:09:25,885 - date_cleaner - INFO - 初始化調度器
+2025-03-17 11:09:26,132 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-17T11:09:26.132236+08:00
+2025-03-17 11:09:26,137 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 11:09:26,140 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 11:09:26,142 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-17 11:09:26,143 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-17 11:09:26,143 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-17 11:09:26,144 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-17 11:09:26,145 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-17 11:09:36
+2025-03-17 11:09:26,145 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-18 00:05:00
+2025-03-17 11:09:26,163 - werkzeug - WARNING -  * Debugger is active!
+2025-03-17 11:09:26,181 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-17 11:09:36,154 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 11:09:36 CST], next run at: 2025-03-17 11:09:36 CST)" (scheduled at 2025-03-17 11:09:36.138221+08:00)
+2025-03-17 11:09:36,154 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-17 11:09:36,155 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-17 11:09:36,156 - date_cleaner - INFO - 當前日期: 2025-03-17
+2025-03-17 11:09:36,160 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-17', '2025-03-18']
+2025-03-17 11:09:36,162 - date_cleaner - INFO - 已提交事務
+2025-03-17 11:09:36,163 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-17 11:09:36,164 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-17', '2025-03-18']
+2025-03-17 11:09:36,165 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-17 11:09:36,165 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 11:09:36 CST], next run at: 2025-03-17 11:09:36 CST)" executed successfully
+2025-03-17 11:09:36,166 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-17 11:09:44,866 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\services\\base_log_service.py', reloading
+2025-03-17 11:09:44,870 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-17 11:09:44,871 - date_cleaner - INFO - 調度器已關閉
+2025-03-17 11:09:44,968 - werkzeug - INFO -  * Restarting with stat
+2025-03-17 11:09:47,431 - date_cleaner - INFO - 初始化調度器
+2025-03-17 11:09:47,685 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-17T11:09:47.685465+08:00
+2025-03-17 11:09:47,690 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 11:09:47,692 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 11:09:47,694 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-17 11:09:47,694 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-17 11:09:47,695 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-17 11:09:47,696 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-17 11:09:47,696 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-17 11:09:57
+2025-03-17 11:09:47,697 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-18 00:05:00
+2025-03-17 11:09:47,716 - werkzeug - WARNING -  * Debugger is active!
+2025-03-17 11:09:47,736 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-17 11:09:57,704 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 11:09:57 CST], next run at: 2025-03-17 11:09:57 CST)" (scheduled at 2025-03-17 11:09:57.691449+08:00)
+2025-03-17 11:09:57,704 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-17 11:09:57,706 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-17 11:09:57,707 - date_cleaner - INFO - 當前日期: 2025-03-17
+2025-03-17 11:09:57,713 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-17', '2025-03-18']
+2025-03-17 11:09:57,715 - date_cleaner - INFO - 已提交事務
+2025-03-17 11:09:57,716 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-17 11:09:57,718 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-17', '2025-03-18']
+2025-03-17 11:09:57,718 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-17 11:09:57,720 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 11:09:57 CST], next run at: 2025-03-17 11:09:57 CST)" executed successfully
+2025-03-17 11:09:57,721 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-17 11:35:28,796 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:35:28] "[35m[1mOPTIONS /api/log/logs HTTP/1.1[0m" 204 -
+2025-03-17 11:35:28,973 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:35:28] "[31m[1mPOST /api/log/logs HTTP/1.1[0m" 401 -
+2025-03-17 11:35:34,950 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:35:34] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-17 11:35:38,742 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:35:38] "OPTIONS /api/admin-login HTTP/1.1" 200 -
+2025-03-17 11:35:39,281 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:35:39] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-17 11:35:39,391 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:35:39] "OPTIONS /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:35:39,484 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:35:39] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:35:40,650 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:35:40] "OPTIONS /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:35:40,745 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:35:40] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:35:41,272 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:35:41] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:35:48,576 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:35:48] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:36:02,604 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:36:02] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:36:40,761 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:36:40] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-17 11:46:48,615 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:46:48] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-17 11:46:48,729 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:46:48] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:46:55,850 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:46:55] "OPTIONS /api/customer-login HTTP/1.1" 200 -
+2025-03-17 11:46:56,340 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:46:56] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-17 11:46:56,476 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:46:56] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 11:47:29,835 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:29] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:47:30,553 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:30] "[31m[1mPOST /api/log/logs HTTP/1.1[0m" 401 -
+2025-03-17 11:47:34,686 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:34] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-17 11:47:34,847 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:34] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:47:35,530 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:35] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:47:36,207 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:36] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:47:46,482 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:46] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-17 11:47:50,396 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:50] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-17 11:47:50,699 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:50] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:47:53,447 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:53] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-17 11:47:57,867 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:57] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-17 11:47:58,003 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:47:58] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-17 11:48:05,712 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:05] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:48:06,624 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:06] "[31m[1mPOST /api/log/logs HTTP/1.1[0m" 401 -
+2025-03-17 11:48:11,404 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:11] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-17 11:48:11,522 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:11] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:48:12,332 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:12] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:48:13,102 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:13] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:48:14,767 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:14] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:48:16,859 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:16] "OPTIONS /api/orders/all HTTP/1.1" 200 -
+2025-03-17 11:48:16,972 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:16] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 11:48:17,985 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:17] "OPTIONS /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:48:18,078 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:18] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:48:18,770 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:18] "OPTIONS /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:48:18,884 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:18] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:48:19,076 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,103 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,106 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,113 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,146 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,146 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,152 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,179 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,179 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,189 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,189 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,190 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,192 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 11:48:19,752 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:19] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:48:20,433 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:20] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:48:22,377 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:22] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:48:23,722 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:23] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:48:24,363 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:24] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:48:25,340 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:25] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:48:32,759 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:32] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:48:33,443 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:33] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:48:34,739 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:48:34] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:49:55,192 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:49:55] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:49:56,447 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:49:56] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:50:19,136 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:50:19] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 11:54:12,502 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:54:12] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:54:13,419 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:54:13] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:54:15,659 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:54:15] "OPTIONS /api/products/locked-dates HTTP/1.1" 200 -
+2025-03-17 11:54:16,131 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:54:16] "POST /api/products/locked-dates HTTP/1.1" 200 -
+2025-03-17 11:54:18,036 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:54:18] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:54:19,672 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:54:19] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:54:39,587 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:54:39] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:54:41,609 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:54:41] "POST /api/customer/25/info HTTP/1.1" 200 -
+2025-03-17 11:54:41,658 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:54:41] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:54:41,725 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:54:41] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:55:14,332 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:14] "OPTIONS /api/customer/update HTTP/1.1" 200 -
+2025-03-17 11:55:14,441 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:14] "PUT /api/customer/update HTTP/1.1" 200 -
+2025-03-17 11:55:15,455 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:15] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:55:15,932 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:15] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:55:16,487 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:16] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:55:31,069 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:31] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 11:55:31,849 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:31] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:55:33,167 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:33] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:55:34,054 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:34] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:55:35,078 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:35] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 11:55:35,935 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:35] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:55:38,537 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:38] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:55:40,309 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:40] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:55:41,246 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:41] "OPTIONS /api/admin/info HTTP/1.1" 200 -
+2025-03-17 11:55:41,344 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:41] "POST /api/admin/info HTTP/1.1" 200 -
+2025-03-17 11:55:42,210 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:42] "OPTIONS /api/admin/update HTTP/1.1" 200 -
+2025-03-17 11:55:42,317 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:42] "POST /api/admin/update HTTP/1.1" 200 -
+2025-03-17 11:55:43,129 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:43] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:55:44,110 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:55:44] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 11:56:05,497 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:56:05] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:56:06,638 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:56:06] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:56:07,700 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:56:07] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 11:56:10,334 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:56:10] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-17 11:56:12,997 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:56:12] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 11:56:13,797 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:56:13] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 11:56:15,088 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:56:15] "POST /api/log/logs HTTP/1.1" 200 -

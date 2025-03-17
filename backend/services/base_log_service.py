@@ -82,6 +82,7 @@ class BaseLogService:
                 end_date: Optional[str] = None,
                 user_type: Optional[str] = None,
                 performed_by: Optional[int] = None,
+                record_detail: Optional[str] = None,
                 limit: int = 100,
                 offset: int = 0) -> tuple:
         """獲取並分頁日誌記錄"""
@@ -115,12 +116,37 @@ class BaseLogService:
             if performed_by:
                 conditions.append("l.performed_by = %s")
                 params.append(performed_by)
+                
+            if record_detail:
+                conditions.append("""
+                    (
+                        CASE
+                            WHEN l.table_name = 'orders' THEN COALESCE(o.order_number, CAST(l.record_id AS TEXT))
+                            WHEN l.table_name = 'products' THEN COALESCE(p.name, CAST(l.record_id AS TEXT))
+                            WHEN l.table_name = 'customers' THEN COALESCE(c.company_name, CAST(l.record_id AS TEXT))
+                            WHEN l.table_name = 'administrators' THEN COALESCE(a.staff_no, CAST(l.record_id AS TEXT))
+                            ELSE CAST(l.record_id AS TEXT)
+                        END ILIKE %s
+                        OR (l.operation_detail)::text ILIKE %s
+                    )
+                """)
+                like_pattern = f'%{record_detail}%'
+                params.append(like_pattern)
+                params.append(like_pattern)
 
             # 構建 WHERE 子句
             where_clause = " AND ".join(conditions) if conditions else "1=1"
 
             # 計算總數量
-            count_query = f"SELECT COUNT(*) FROM logs l WHERE {where_clause}"
+            count_query = f"""
+                SELECT COUNT(*) 
+                FROM logs l
+                LEFT JOIN administrators a ON l.performed_by = a.id AND l.user_type = '管理員'
+                LEFT JOIN customers c ON l.performed_by = c.id AND l.user_type = '客戶'
+                LEFT JOIN orders o ON l.record_id = o.id AND l.table_name = 'orders'
+                LEFT JOIN products p ON l.record_id = p.id AND l.table_name = 'products'
+                WHERE {where_clause}
+            """
             cursor.execute(count_query, params)
             total_count = cursor.fetchone()[0]
 
@@ -135,12 +161,16 @@ class BaseLogService:
                        END as performer_name,
                        CASE
                            WHEN l.table_name = 'orders' THEN COALESCE(o.order_number, CAST(l.record_id AS TEXT))
+                           WHEN l.table_name = 'products' THEN COALESCE(p.name, CAST(l.record_id AS TEXT))
+                           WHEN l.table_name = 'customers' THEN COALESCE(c.company_name, CAST(l.record_id AS TEXT))
+                           WHEN l.table_name = 'administrators' THEN COALESCE(a.staff_no, CAST(l.record_id AS TEXT))
                            ELSE CAST(l.record_id AS TEXT)
                        END as record_detail
                 FROM logs l
                 LEFT JOIN administrators a ON l.performed_by = a.id AND l.user_type = '管理員'
                 LEFT JOIN customers c ON l.performed_by = c.id AND l.user_type = '客戶'
                 LEFT JOIN orders o ON l.record_id = o.id AND l.table_name = 'orders'
+                LEFT JOIN products p ON l.record_id = p.id AND l.table_name = 'products'
                 WHERE {where_clause}
                 ORDER BY l.created_at DESC
                 LIMIT %s OFFSET %s

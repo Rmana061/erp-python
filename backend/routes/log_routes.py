@@ -126,10 +126,11 @@ def get_logs():
         end_date = data.get('end_date')
         user_type = data.get('user_type')
         performed_by = data.get('performed_by')
+        record_detail = data.get('record_detail')  # 新增：獲取操作對象搜索參數
         page = data.get('page', 1)
         per_page = data.get('per_page', 10)
 
-        print(f"過濾條件: table_name={table_name}, operation_type={operation_type}, start_date={start_date}, end_date={end_date}, user_type={user_type}, performed_by={performed_by}")
+        print(f"過濾條件: table_name={table_name}, operation_type={operation_type}, start_date={start_date}, end_date={end_date}, user_type={user_type}, performed_by={performed_by}, record_detail={record_detail}")
         print(f"分頁: page={page}, per_page={per_page}")
 
         # 計算分頁偏移量
@@ -149,6 +150,7 @@ def get_logs():
                 end_date=end_date,
                 user_type=user_type,
                 performed_by=performed_by,
+                record_detail=record_detail,  # 新增：傳入操作對象搜索參數
                 limit=per_page,
                 offset=offset
             )

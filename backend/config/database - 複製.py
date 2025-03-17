@@ -6,10 +6,10 @@ from contextlib import contextmanager
 connection_pool = pool.SimpleConnectionPool(
     minconn=5,      # 最小連接數
     maxconn=50,     # 增加最大連接數
-    host="127.0.0.1",
+    host="uat-rd-grandholy-postgre-server.postgres.database.azure.com",
     port="5432",
-    user="postgres",
-    password="1qaz2wsx",
+    user="raindeer",
+    password="!@#QWEasdzxc",
     database="postgres"
 )
 
