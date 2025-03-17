@@ -259,10 +259,8 @@ class CustomerLogService(BaseLogService):
                 changes['__password_changed__'] = True
             
             if not changes and not password_changed:
-                return {
-                    'message': '無變更',
-                    'operation_type': None
-                }
+                print(f"Customer update - No changes detected for customer_id: {new_data.get('id')}")
+                return None
                 
             # 獲取產品名稱用於顯示
             old_products_ids = old_data.get('viewable_products', '')
@@ -270,54 +268,21 @@ class CustomerLogService(BaseLogService):
             old_products_names = self._get_product_names(old_products_ids)
             new_products_names = self._get_product_names(new_products_ids)
             
-            # 构建返回信息
-            message = {
-                'customer_id': new_data.get('id', ''),
-                'old_data': {
-                    'id': old_data.get('id', ''),
-                    'username': old_data.get('username', ''),
-                    'company_name': old_data.get('company_name', ''),
-                    'contact_person': old_data.get('contact_person', ''),
-                    'phone': old_data.get('phone', ''),
-                    'email': old_data.get('email', ''),
-                    'address': old_data.get('address', ''),
-                    'line_account': old_data.get('line_account', ''),
-                    'viewable_products': old_products_names,
-                    'viewable_products_ids': old_products_ids,
-                    'remark': old_data.get('remark', ''),
-                    'reorder_limit_days': old_data.get('reorder_limit_days', 0)
-                },
-                'new_data': {
-                    'id': new_data.get('id', ''),
-                    'username': new_data.get('username', ''),
-                    'company_name': new_data.get('company_name', ''),
-                    'contact_person': new_data.get('contact_person', ''),
-                    'phone': new_data.get('phone', ''),
-                    'email': new_data.get('email', ''),
-                    'address': new_data.get('address', ''),
-                    'line_account': new_data.get('line_account', ''),
-                    'viewable_products': new_products_names,
-                    'viewable_products_ids': new_products_ids,
-                    'remark': new_data.get('remark', ''),
-                    'reorder_limit_days': new_data.get('reorder_limit_days', 0)
-                },
+            customer_info = {
+                'id': new_data.get('id', ''),
+                'username': new_data.get('username', ''),
+                'company_name': new_data.get('company_name', ''),
+                'old_viewable_products': old_products_names,
+                'new_viewable_products': new_products_names,
                 'changes': changes
             }
             
-            # 如果有密码变更，添加明确标记
-            if password_changed:
-                message['password_changed'] = True
-                
-            # 确定操作类型 - 同时修改多个字段但包含密码时，也标记为同时包含密码修改
-            operation_type = '修改(含密碼)' if password_changed else '修改'
-            
             return {
-                'message': message,
-                'operation_type': operation_type
+                'message': {
+                    'customer': customer_info
+                },
+                'operation_type': '修改'
             }
         except Exception as e:
-            print(f"Error processing customer update: {str(e)}")
-            return {
-                'message': '處理客戶修改時發生錯誤',
-                'operation_type': None
-            } 
+            print(f"客户更新日志处理错误: {str(e)}")
+            return None 

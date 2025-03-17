@@ -43,33 +43,40 @@ class BaseLogService:
             # 計算變更詳情
             operation_detail = self._get_changes(old_data, new_data, operation_type)
             
+            # 檢查是否有變更
+            if not operation_detail:
+                print(f"No changes detected, skipping log entry")
+                return False
+                
+            # 檢查是否是無變更的消息
+            if isinstance(operation_detail, dict):
+                message = operation_detail.get('message', '')
+                if message == '無變更' or operation_detail.get('operation_type') is None:
+                    print(f"No significant changes detected, skipping log entry")
+                    return False
+            
             # 如果operation_detail中沒有operation_type，使用傳入的operation_type
             if operation_detail and 'operation_type' not in operation_detail:
                 operation_detail['operation_type'] = operation_type
             
             # 插入日誌記錄
-            if operation_detail:
-                # 確保有operation_type，即使是None也要插入記錄
-                cursor.execute("""
-                    INSERT INTO logs 
-                    (table_name, operation_type, record_id, operation_detail, 
-                     performed_by, user_type, created_at)
-                    VALUES (%s, %s, %s, %s::jsonb, %s, %s, NOW())
-                """, (
-                    table_name,
-                    operation_type,
-                    record_id,
-                    json.dumps(operation_detail, ensure_ascii=False),
-                    performed_by,
-                    user_type
-                ))
-                self.conn.commit()
-                print(f"日志记录成功: {operation_type} - {table_name} - ID: {record_id}")
-                return True
+            cursor.execute("""
+                INSERT INTO logs 
+                (table_name, operation_type, record_id, operation_detail, 
+                 performed_by, user_type, created_at)
+                VALUES (%s, %s, %s, %s::jsonb, %s, %s, NOW())
+            """, (
+                table_name,
+                operation_type,
+                record_id,
+                json.dumps(operation_detail, ensure_ascii=False),
+                performed_by,
+                user_type
+            ))
+            self.conn.commit()
+            print(f"日志记录成功: {operation_type} - {table_name} - ID: {record_id}")
+            return True
             
-            print(f"Failed to log {operation_type} operation")
-            return False
-
         except Exception as e:
             print(f"Error logging operation: {str(e)}")
             self.conn.rollback()

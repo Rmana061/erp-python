@@ -93,29 +93,34 @@ class AdminLogService(BaseLogService):
                     }
             
             # 特殊處理密碼變更
-            if 'admin_password' in new_data:
-                changes['人員密碼'] = {
-                    'before': '******',
-                    'after': '已更新密碼'  # 只提示密碼已更新，不顯示實際密碼
-                }
+            password_changed = False
+            if 'admin_password' in new_data and new_data['admin_password']:
+                # 检查密码是否确实发生了变化（不是提交空密码）
+                if new_data['admin_password'].strip():
+                    password_changed = True
+                    changes['人員密碼'] = {
+                        'before': '******',
+                        'after': '已更新密碼'  # 只提示密碼已更新，不顯示實際密碼
+                    }
             
-            if changes:
-                admin_info = {
-                    'admin_account': new_data.get('admin_account', ''),
-                    'admin_name': new_data.get('admin_name', ''),
-                    'staff_no': new_data.get('staff_no', ''),
-                    'permission_level': new_data.get('permission_level', '')
-                }
+            if not changes and not password_changed:
+                print(f"Admin update - No changes detected for admin_id: {new_data.get('id')}")
+                return None
                 
-                return {
-                    'message': {
-                        'admin': admin_info,
-                        'changes': changes
-                    },
-                    'operation_type': '修改'
-                }
+            admin_info = {
+                'admin_account': new_data.get('admin_account', ''),
+                'admin_name': new_data.get('admin_name', ''),
+                'staff_no': new_data.get('staff_no', ''),
+                'permission_level': new_data.get('permission_level', '')
+            }
             
-            return {'message': '無變更', 'operation_type': None}
+            return {
+                'message': {
+                    'admin': admin_info,
+                    'changes': changes
+                },
+                'operation_type': '修改'
+            }
         except Exception as e:
             print(f"Error processing admin update: {str(e)}")
-            return {'message': '處理管理員修改時發生錯誤', 'operation_type': None} 
+            return None 

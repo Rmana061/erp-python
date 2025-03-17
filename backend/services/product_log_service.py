@@ -159,6 +159,11 @@ class ProductLogService(BaseLogService):
                     'after': self._get_friendly_filename(new_dm_url, new_data.get('dm_original_filename', ''))
                 }
             
+            # 检查是否有任何实际变更
+            if not changes:
+                print(f"Product update - No changes detected for product_id: {new_data.get('id')}")
+                return None
+            
             # 构建产品信息
             product_info = {
                 'id': new_data.get('id', old_data.get('id', '')),
@@ -175,12 +180,7 @@ class ProductLogService(BaseLogService):
             }
         except Exception as e:
             print(f"处理产品更新日志错误: {str(e)}")
-            return {
-                'message': {
-                    'product': {}
-                },
-                'operation_type': '修改'
-            }
+            return None
     
     def _get_friendly_filename(self, file_url, original_filename):
         """获取友好的文件名显示"""

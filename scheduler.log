@@ -986,3 +986,172 @@
 2025-03-17 11:56:12,997 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:56:12] "POST /api/products/list HTTP/1.1" 200 -
 2025-03-17 11:56:13,797 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:56:13] "POST /api/admin/list HTTP/1.1" 200 -
 2025-03-17 11:56:15,088 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 11:56:15] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 12:04:59,317 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\services\\base_log_service.py', reloading
+2025-03-17 12:04:59,347 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-17 12:04:59,348 - date_cleaner - INFO - 調度器已關閉
+2025-03-17 12:04:59,449 - werkzeug - INFO -  * Restarting with stat
+2025-03-17 12:05:02,191 - date_cleaner - INFO - 初始化調度器
+2025-03-17 12:05:02,453 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-17T12:05:02.453676+08:00
+2025-03-17 12:05:02,459 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 12:05:02,462 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 12:05:02,465 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-17 12:05:02,465 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-17 12:05:02,466 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-17 12:05:02,467 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-17 12:05:02,467 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-17 12:05:12
+2025-03-17 12:05:02,468 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-18 00:05:00
+2025-03-17 12:05:02,492 - werkzeug - WARNING -  * Debugger is active!
+2025-03-17 12:05:02,510 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-17 12:05:12,466 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 12:05:12 CST], next run at: 2025-03-17 12:05:12 CST)" (scheduled at 2025-03-17 12:05:12.460649+08:00)
+2025-03-17 12:05:12,466 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-17 12:05:12,467 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-17 12:05:12,468 - date_cleaner - INFO - 當前日期: 2025-03-17
+2025-03-17 12:05:12,472 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-17', '2025-03-18']
+2025-03-17 12:05:12,473 - date_cleaner - INFO - 已提交事務
+2025-03-17 12:05:12,474 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-17 12:05:12,475 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-17', '2025-03-18']
+2025-03-17 12:05:12,475 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-17 12:05:12,476 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 12:05:12 CST], next run at: 2025-03-17 12:05:12 CST)" executed successfully
+2025-03-17 12:05:12,477 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-17 12:05:21,061 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\services\\admin_log_service.py', reloading
+2025-03-17 12:05:21,062 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-17 12:05:21,063 - date_cleaner - INFO - 調度器已關閉
+2025-03-17 12:05:21,129 - werkzeug - INFO -  * Restarting with stat
+2025-03-17 12:05:23,838 - date_cleaner - INFO - 初始化調度器
+2025-03-17 12:05:24,117 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-17T12:05:24.117517+08:00
+2025-03-17 12:05:24,123 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 12:05:24,125 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 12:05:24,127 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-17 12:05:24,127 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-17 12:05:24,128 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-17 12:05:24,129 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-17 12:05:24,130 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-17 12:05:34
+2025-03-17 12:05:24,130 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-18 00:05:00
+2025-03-17 12:05:24,148 - werkzeug - WARNING -  * Debugger is active!
+2025-03-17 12:05:24,167 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-17 12:05:34,136 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 12:05:34 CST], next run at: 2025-03-17 12:05:34 CST)" (scheduled at 2025-03-17 12:05:34.123514+08:00)
+2025-03-17 12:05:34,136 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-17 12:05:34,137 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-17 12:05:34,138 - date_cleaner - INFO - 當前日期: 2025-03-17
+2025-03-17 12:05:34,141 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-17', '2025-03-18']
+2025-03-17 12:05:34,143 - date_cleaner - INFO - 已提交事務
+2025-03-17 12:05:34,143 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-17 12:05:34,144 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-17', '2025-03-18']
+2025-03-17 12:05:34,145 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-17 12:05:34,145 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 12:05:34 CST], next run at: 2025-03-17 12:05:34 CST)" executed successfully
+2025-03-17 12:05:34,147 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-17 12:05:51,095 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\services\\product_log_service.py', reloading
+2025-03-17 12:05:51,096 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-17 12:05:51,097 - date_cleaner - INFO - 調度器已關閉
+2025-03-17 12:05:51,201 - werkzeug - INFO -  * Restarting with stat
+2025-03-17 12:05:53,929 - date_cleaner - INFO - 初始化調度器
+2025-03-17 12:05:54,188 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-17T12:05:54.188940+08:00
+2025-03-17 12:05:54,194 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 12:05:54,196 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 12:05:54,199 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-17 12:05:54,199 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-17 12:05:54,200 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-17 12:05:54,201 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-17 12:05:54,201 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-17 12:06:04
+2025-03-17 12:05:54,202 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-18 00:05:00
+2025-03-17 12:05:54,222 - werkzeug - WARNING -  * Debugger is active!
+2025-03-17 12:05:54,239 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-17 12:06:04,199 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 12:06:04 CST], next run at: 2025-03-17 12:06:04 CST)" (scheduled at 2025-03-17 12:06:04.195902+08:00)
+2025-03-17 12:06:04,199 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-17 12:06:04,200 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-17 12:06:04,202 - date_cleaner - INFO - 當前日期: 2025-03-17
+2025-03-17 12:06:04,209 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-17', '2025-03-18']
+2025-03-17 12:06:04,211 - date_cleaner - INFO - 已提交事務
+2025-03-17 12:06:04,212 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-17 12:06:04,214 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-17', '2025-03-18']
+2025-03-17 12:06:04,214 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-17 12:06:04,215 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 12:06:04 CST], next run at: 2025-03-17 12:06:04 CST)" executed successfully
+2025-03-17 12:06:04,216 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-17 12:06:14,905 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\services\\customer_log_service.py', reloading
+2025-03-17 12:06:14,906 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-17 12:06:14,907 - date_cleaner - INFO - 調度器已關閉
+2025-03-17 12:06:14,981 - werkzeug - INFO -  * Restarting with stat
+2025-03-17 12:06:17,578 - date_cleaner - INFO - 初始化調度器
+2025-03-17 12:06:17,857 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-17T12:06:17.857709+08:00
+2025-03-17 12:06:17,866 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 12:06:17,868 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-17 12:06:17,871 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-17 12:06:17,872 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-17 12:06:17,873 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-17 12:06:17,874 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-17 12:06:17,874 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-17 12:06:27
+2025-03-17 12:06:17,875 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-18 00:05:00
+2025-03-17 12:06:17,895 - werkzeug - WARNING -  * Debugger is active!
+2025-03-17 12:06:17,913 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-17 12:06:27,873 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 12:06:27 CST], next run at: 2025-03-17 12:06:27 CST)" (scheduled at 2025-03-17 12:06:27.866416+08:00)
+2025-03-17 12:06:27,873 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-17 12:06:27,874 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-17 12:06:27,875 - date_cleaner - INFO - 當前日期: 2025-03-17
+2025-03-17 12:06:27,878 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-17', '2025-03-18']
+2025-03-17 12:06:27,878 - date_cleaner - INFO - 已提交事務
+2025-03-17 12:06:27,879 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-17 12:06:27,880 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-17', '2025-03-18']
+2025-03-17 12:06:27,880 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-17 12:06:27,881 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-17 12:06:27 CST], next run at: 2025-03-17 12:06:27 CST)" executed successfully
+2025-03-17 12:06:27,881 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-17 12:34:37,545 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:37] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 12:34:41,147 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:41] "OPTIONS /api/customer/25/info HTTP/1.1" 200 -
+2025-03-17 12:34:41,171 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:41] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 12:34:41,412 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:41] "POST /api/customer/25/info HTTP/1.1" 200 -
+2025-03-17 12:34:41,527 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:41] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 12:34:43,140 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:43] "PUT /api/customer/update HTTP/1.1" 200 -
+2025-03-17 12:34:44,212 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:44] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 12:34:45,277 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:45] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 12:34:45,824 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:45] "[31m[1mPOST /api/log/logs HTTP/1.1[0m" 401 -
+2025-03-17 12:34:50,015 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:50] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-17 12:34:50,136 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:50] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 12:34:51,197 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:51] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 12:34:52,022 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:52] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 12:34:57,106 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:57] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 12:34:59,340 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:34:59] "POST /api/admin/info HTTP/1.1" 200 -
+2025-03-17 12:35:00,249 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:00] "POST /api/admin/update HTTP/1.1" 200 -
+2025-03-17 12:35:01,201 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:01] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 12:35:02,633 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:02] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 12:35:04,170 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 12:35:04,471 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,490 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,492 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,499 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/ff/30381767-d4e1-4939-8ddc-a9975cccdb13___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,503 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,503 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/ll/2331d5de-bb02-44d8-943d-3c1dc55087a2___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,516 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/eee/de450593-a4a2-42ce-beb5-d0753df7aa4a___5ZCI6Zm95ZyW5paH6YG45Zau.png HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,518 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,532 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/h/586891eb-bc79-452a-b987-2d209a401c07___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,540 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,556 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,574 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-17 12:35:04,590 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:04] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-17 12:35:05,733 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:05] "OPTIONS /api/products/31/detail HTTP/1.1" 200 -
+2025-03-17 12:35:05,960 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:05] "POST /api/products/31/detail HTTP/1.1" 200 -
+2025-03-17 12:35:07,342 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:07] "OPTIONS /api/products/update/31 HTTP/1.1" 200 -
+2025-03-17 12:35:07,447 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:07] "POST /api/products/update/31 HTTP/1.1" 200 -
+2025-03-17 12:35:08,403 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:08] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 12:35:09,328 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:09] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 12:35:10,635 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:10] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 12:35:12,199 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:12] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 12:35:15,506 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:15] "POST /api/products/31/detail HTTP/1.1" 200 -
+2025-03-17 12:35:24,004 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:24] "POST /api/products/update/31 HTTP/1.1" 200 -
+2025-03-17 12:35:24,774 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:24] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 12:35:25,480 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:25] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 12:35:26,057 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 12:35:26] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 13:18:50,949 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:18:50] "OPTIONS /api/products/list HTTP/1.1" 200 -
+2025-03-17 13:18:51,137 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:18:51] "[31m[1mPOST /api/products/list HTTP/1.1[0m" 401 -
+2025-03-17 13:18:54,888 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:18:54] "OPTIONS /api/admin-login HTTP/1.1" 200 -
+2025-03-17 13:18:55,766 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:18:55] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-17 13:18:56,009 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:18:56] "OPTIONS /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 13:18:56,123 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:18:56] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-17 13:19:02,558 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:19:02] "OPTIONS /api/customer/list HTTP/1.1" 200 -
+2025-03-17 13:19:02,730 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:19:02] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 13:19:04,051 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:19:04] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 13:19:05,475 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:19:05] "OPTIONS /api/admin/list HTTP/1.1" 200 -
+2025-03-17 13:19:05,569 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:19:05] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-17 13:19:07,329 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:19:07] "[35m[1mOPTIONS /api/log/logs HTTP/1.1[0m" 204 -
+2025-03-17 13:19:07,434 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:19:07] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-17 13:19:17,365 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:19:17] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-17 13:19:19,250 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:19:19] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-17 13:19:19,254 - werkzeug - INFO - 127.0.0.1 - - [17/Mar/2025 13:19:19] "POST /api/products/list HTTP/1.1" 200 -
