@@ -18,6 +18,7 @@ import json
 import time
 import shutil
 import urllib.parse
+from backend.utils.scheduler import run_clean_task_manually
 
 product_bp = Blueprint('product', __name__)
 
@@ -899,6 +900,28 @@ def unlock_date():
             
     except Exception as e:
         print(f"Error in unlock_date: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+@product_bp.route('/products/clean-expired-dates', methods=['POST'])
+def clean_expired_dates_route():
+    """手动触发清理过期锁定日期的API"""
+    try:
+        data = request.json
+        if not data.get('type') == 'admin':
+            return jsonify({
+                'status': 'error',
+                'message': 'Unauthorized access'
+            }), 403
+            
+        # 执行清理
+        result = run_clean_task_manually()
+        return jsonify(result)
+            
+    except Exception as e:
+        print(f"Error in clean_expired_dates: {str(e)}")
         return jsonify({
             'status': 'error',
             'message': str(e)

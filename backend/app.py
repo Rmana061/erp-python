@@ -3,6 +3,7 @@ import sys
 from dotenv import load_dotenv
 import base64
 import urllib.parse
+import atexit  # 添加atexit模块
 
 # 載入環境變數
 load_dotenv()
@@ -21,6 +22,7 @@ from backend.routes.line_bot_routes import line_bot_bp
 from backend.routes.log_routes import log_bp
 from backend.routes.order_check_routes import order_check_bp
 from backend.config.database import get_db_connection
+from backend.utils.scheduler import initialize_scheduler, shutdown_scheduler  # 导入调度器函数
 
 # 定义从双轨文件名中提取原始文件名的函数
 def extract_original_filename(dual_filename):
@@ -179,6 +181,12 @@ app.register_blueprint(order_bp, url_prefix='/api')
 app.register_blueprint(line_bot_bp, url_prefix='/api/line')
 app.register_blueprint(log_bp, url_prefix='/api/log')
 app.register_blueprint(order_check_bp, url_prefix='/api')
+
+# 初始化调度器
+scheduler = initialize_scheduler()
+
+# 注册应用关闭时的清理函数
+atexit.register(shutdown_scheduler)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
