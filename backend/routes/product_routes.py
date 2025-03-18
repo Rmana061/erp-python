@@ -838,11 +838,38 @@ def lock_date():
             cursor.execute("""
                 INSERT INTO locked_dates (locked_date, created_at)
                 VALUES (%s, CURRENT_TIMESTAMP)
-                RETURNING id
+                RETURNING id, locked_date
             """, (data['date'],))
             
-            new_id = cursor.fetchone()[0]
+            result = cursor.fetchone()
+            new_id = result[0]
+            locked_date = result[1]
             conn.commit()
+            
+            # 记录操作日志
+            try:
+                admin_id = get_admin_id_from_session()
+                
+                if admin_id:
+                    # 确保锁定日期是字符串格式
+                    locked_date_str = locked_date.strftime('%Y-%m-%d') if hasattr(locked_date, 'strftime') else str(locked_date)
+                    
+                    # 创建日志记录
+                    log_service = LogServiceRegistry.get_service(conn, 'products')
+                    log_service.log_operation(
+                        table_name='products',
+                        operation_type='新增',
+                        record_id=new_id,
+                        old_data=None,
+                        new_data={'id': new_id, 'locked_date': locked_date_str, 'record_type': '锁定日期'},
+                        performed_by=admin_id,
+                        user_type='管理員'
+                    )
+                    print(f"已記錄鎖定日期操作: {locked_date_str}")
+            except Exception as log_error:
+                print(f"記錄鎖定日期日誌時出錯: {str(log_error)}")
+                # 继续执行，不要因为日志记录失败而中断主流程
+            
             cursor.close()
             
             return jsonify({
@@ -857,6 +884,19 @@ def lock_date():
             'status': 'error',
             'message': str(e)
         }), 500
+
+def get_admin_id_from_session():
+    """从会话中获取管理员ID"""
+    try:
+        # 从cookie或session中获取admin_id
+        admin_id = request.cookies.get('admin_id') or session.get('admin_id')
+        if not admin_id:
+            # 尝试从请求数据中获取
+            admin_id = request.json.get('admin_id')
+        return int(admin_id) if admin_id else None
+    except Exception as e:
+        print(f"获取管理员ID时出错: {str(e)}")
+        return None
 
 @product_bp.route('/products/unlock-date', methods=['POST'])
 def unlock_date():
@@ -877,20 +917,54 @@ def unlock_date():
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # 删除锁定日期
+            # 获取日期信息用于日志
             cursor.execute("""
-                DELETE FROM locked_dates
+                SELECT id, locked_date FROM locked_dates
                 WHERE id = %s
-                RETURNING id
             """, (data['date_id'],))
             
-            if not cursor.fetchone():
+            date_info = cursor.fetchone()
+            if not date_info:
                 return jsonify({
                     'status': 'error',
                     'message': '找不到该锁定日期'
                 }), 404
+                
+            date_id = date_info[0]
+            locked_date = date_info[1]
+            
+            # 删除锁定日期
+            cursor.execute("""
+                DELETE FROM locked_dates
+                WHERE id = %s
+            """, (data['date_id'],))
             
             conn.commit()
+            
+            # 记录操作日志
+            try:
+                admin_id = get_admin_id_from_session()
+                
+                if admin_id:
+                    # 确保锁定日期是字符串格式
+                    locked_date_str = locked_date.strftime('%Y-%m-%d') if hasattr(locked_date, 'strftime') else str(locked_date)
+                    
+                    # 创建日志记录
+                    log_service = LogServiceRegistry.get_service(conn, 'products')
+                    log_service.log_operation(
+                        table_name='products',
+                        operation_type='刪除',
+                        record_id=date_id,
+                        old_data={'id': date_id, 'locked_date': locked_date_str, 'record_type': '锁定日期'},
+                        new_data=None,
+                        performed_by=admin_id,
+                        user_type='管理員'
+                    )
+                    print(f"已記錄解鎖日期操作: {locked_date_str}")
+            except Exception as log_error:
+                print(f"記錄解鎖日期日誌時出錯: {str(log_error)}")
+                # 继续执行，不要因为日志记录失败而中断主流程
+            
             cursor.close()
             
             return jsonify({

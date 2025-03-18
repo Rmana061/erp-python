@@ -91,7 +91,8 @@ class BaseLogService:
                 performed_by: Optional[int] = None,
                 record_detail: Optional[str] = None,
                 limit: int = 100,
-                offset: int = 0) -> tuple:
+                offset: int = 0,
+                record_only_search: bool = False) -> tuple:
         """獲取並分頁日誌記錄"""
         try:
             cursor = self.conn.cursor()
@@ -125,24 +126,118 @@ class BaseLogService:
                 params.append(performed_by)
                 
             if record_detail:
-                conditions.append("""
-                    (
-                        CASE
-                            WHEN l.table_name = 'orders' THEN COALESCE(o.order_number, CAST(l.record_id AS TEXT))
-                            WHEN l.table_name = 'products' THEN COALESCE(p.name, CAST(l.record_id AS TEXT))
-                            WHEN l.table_name = 'customers' THEN COALESCE(c.company_name, CAST(l.record_id AS TEXT))
-                            WHEN l.table_name = 'administrators' THEN COALESCE(a.staff_no, CAST(l.record_id AS TEXT))
-                            ELSE CAST(l.record_id AS TEXT)
-                        END ILIKE %s
-                        OR (l.operation_detail)::text ILIKE %s
-                    )
-                """)
+                # 基本的操作對象搜索條件
+                base_condition = """
+                    CASE
+                        WHEN l.table_name = 'orders' THEN COALESCE(o.order_number, CAST(l.record_id AS TEXT))
+                        WHEN l.table_name = 'products' AND ((l.operation_detail)::jsonb->'message'->>'locked_date') IS NOT NULL THEN 
+                            CASE
+                                WHEN (l.operation_detail)::jsonb->>'message' IS NOT NULL AND 
+                                     (l.operation_detail)::jsonb->'message'->>'locked_date' IS NOT NULL AND
+                                     (l.operation_detail)::jsonb->'message'->'locked_date'->>'date' IS NOT NULL
+                                THEN (l.operation_detail)::jsonb->'message'->'locked_date'->>'date'
+                                ELSE CAST(l.record_id AS TEXT)
+                            END
+                        WHEN l.table_name = 'products' THEN COALESCE(p.name, CAST(l.record_id AS TEXT))
+                        WHEN l.table_name = 'customers' THEN COALESCE(c.company_name, CAST(l.record_id AS TEXT))
+                        WHEN l.table_name = 'administrators' THEN COALESCE(a.staff_no, CAST(l.record_id AS TEXT))
+                        ELSE CAST(l.record_id AS TEXT)
+                    END
+                """
+                
+                if record_only_search:
+                    # 嚴格模式：只搜索操作對象
+                    record_search_condition = f"({base_condition} ILIKE %s"
+                else:
+                    # 寬鬆模式：可以搜索操作對象和操作詳情
+                    record_search_condition = f"({base_condition} ILIKE %s OR (l.operation_detail)::text ILIKE %s"
+                    params.append(f'%{record_detail}%')  # 添加一個額外的參數用於操作詳情搜索
+                
+                # 添加參數
                 like_pattern = f'%{record_detail}%'
                 params.append(like_pattern)
-                params.append(like_pattern)
+                
+                # 優化日期搜索 - 判斷是否為日期格式
+                if record_detail.replace('-', '').isdigit() and '-' in record_detail:
+                    date_parts = record_detail.split('-')
+                    # 如果是日期部分 (例如 MM-DD)
+                    if len(date_parts) == 2 and len(date_parts[0]) <= 2 and len(date_parts[1]) <= 2:
+                        # 添加針對鎖定日期的特殊搜索條件
+                        if record_only_search:
+                            # 嚴格匹配日期格式，只搜索操作對象
+                            record_search_condition += """ OR (
+                                ((l.operation_detail)::jsonb->'message'->>'locked_date') IS NOT NULL AND
+                                (
+                                    SUBSTRING(((l.operation_detail)::jsonb->'message'->'locked_date'->>'date') FROM 6 FOR 5) = %s
+                                )
+                            )"""
+                            # 严格匹配 MM-DD 部分
+                            params.append(f'{date_parts[0]}-{date_parts[1]}')
+                        else:
+                            # 非嚴格模式，可以搜索operation_detail
+                            record_search_condition += """ OR (
+                                ((l.operation_detail)::jsonb->'message'->>'locked_date') IS NOT NULL AND
+                                (
+                                    ((l.operation_detail)::jsonb->'message'->'locked_date'->>'date') LIKE %s OR
+                                    ((l.operation_detail)::jsonb->'message'->'locked_date'->>'date') LIKE %s
+                                )
+                            )"""
+                            params.append(f'%{date_parts[0]}-{date_parts[1]}%')  # 任何年份-指定月日
+                            params.append(f'%{date_parts[0]}-{date_parts[1]}')    # 结尾是月日格式
+                            
+                            # 添加額外的日期搜索條件（針對一般operation_detail）
+                            record_search_condition += " OR CAST((l.operation_detail)::text AS TEXT) LIKE %s"
+                            params.append(f'%{date_parts[0]}-{date_parts[1]}%')  # 支持任何包含MM-DD的文本
+                    # 如果是年份-月份 (例如 YYYY-MM)
+                    elif len(date_parts) == 2 and len(date_parts[0]) == 4:
+                        if record_only_search:
+                            # 嚴格匹配日期格式，只搜索操作對象
+                            record_search_condition += """ OR (
+                                ((l.operation_detail)::jsonb->'message'->>'locked_date') IS NOT NULL AND
+                                ((l.operation_detail)::jsonb->'message'->'locked_date'->>'date') LIKE %s
+                            )"""
+                            params.append(f'{date_parts[0]}-{date_parts[1]}-')  # 年份-月份开头
+                        else:
+                            # 非嚴格模式，可以搜索operation_detail
+                            record_search_condition += """ OR (
+                                ((l.operation_detail)::jsonb->'message'->>'locked_date') IS NOT NULL AND
+                                ((l.operation_detail)::jsonb->'message'->'locked_date'->>'date') LIKE %s
+                            )"""
+                            params.append(f'{date_parts[0]}-{date_parts[1]}%')  # 年份-月份开头
+                            
+                            record_search_condition += " OR CAST((l.operation_detail)::text AS TEXT) LIKE %s"
+                            params.append(f'%{date_parts[0]}-{date_parts[1]}%')
+                    # 如果是完整日期 (例如 YYYY-MM-DD)
+                    elif len(date_parts) == 3:
+                        if record_only_search:
+                            # 嚴格匹配日期格式，只搜索操作對象
+                            record_search_condition += """ OR (
+                                ((l.operation_detail)::jsonb->'message'->>'locked_date') IS NOT NULL AND
+                                ((l.operation_detail)::jsonb->'message'->'locked_date'->>'date') = %s
+                            )"""
+                            params.append(f'{date_parts[0]}-{date_parts[1]}-{date_parts[2]}')  # 完整日期精确匹配
+                        else:
+                            # 非嚴格模式，可以搜索operation_detail
+                            record_search_condition += """ OR (
+                                ((l.operation_detail)::jsonb->'message'->>'locked_date') IS NOT NULL AND
+                                ((l.operation_detail)::jsonb->'message'->'locked_date'->>'date') = %s
+                            )"""
+                            params.append(f'{date_parts[0]}-{date_parts[1]}-{date_parts[2]}')  # 完整日期精确匹配
+                            
+                            record_search_condition += " OR CAST((l.operation_detail)::text AS TEXT) LIKE %s"
+                            params.append(f'%{record_detail}%')
+                
+                # 如果不是僅搜索操作對象，也搜索operation_detail - 已在上面處理，這裡不需要重複
+                # 添加結束括號
+                record_search_condition += ")"
+                conditions.append(record_search_condition)
 
             # 構建 WHERE 子句
             where_clause = " AND ".join(conditions) if conditions else "1=1"
+            
+            print(f"過濾條件: table_name={table_name}, operation_type={operation_type}, start_date={start_date}, end_date={end_date}, user_type={user_type}, performed_by={performed_by}, record_detail={record_detail}, record_only_search={record_only_search}")
+            print(f"WHERE 子句: {where_clause}")
+            print(f"參數: {params}")
 
             # 計算總數量
             count_query = f"""
@@ -154,25 +249,51 @@ class BaseLogService:
                 LEFT JOIN products p ON l.record_id = p.id AND l.table_name = 'products'
                 WHERE {where_clause}
             """
-            cursor.execute(count_query, params)
-            total_count = cursor.fetchone()[0]
+            
+            try:
+                print(f"執行計數查詢: {count_query}")
+                print(f"參數: {params}")
+                cursor.execute(count_query, params)
+                result = cursor.fetchone()
+                print(f"計數查詢結果: {result}")
+                total_count = result[0] if result else 0
+                print(f"計算得到總記錄數: {total_count}")
+            except Exception as count_error:
+                print(f"計算總記錄數時出錯: {str(count_error)}")
+                total_count = 0
+                # 不中斷執行，繼續嘗試獲取記錄
 
             # 獲取日誌數據
             query = f"""
-                SELECT l.id, l.table_name, l.operation_type, l.record_id,
-                       l.operation_detail, l.performed_by, l.user_type, l.created_at,
-                       CASE
-                           WHEN l.user_type = '管理員' THEN a.staff_no
-                           WHEN l.user_type = '客戶' THEN c.company_name
-                           ELSE '未知'
-                       END as performer_name,
-                       CASE
-                           WHEN l.table_name = 'orders' THEN COALESCE(o.order_number, CAST(l.record_id AS TEXT))
-                           WHEN l.table_name = 'products' THEN COALESCE(p.name, CAST(l.record_id AS TEXT))
-                           WHEN l.table_name = 'customers' THEN COALESCE(c.company_name, CAST(l.record_id AS TEXT))
-                           WHEN l.table_name = 'administrators' THEN COALESCE(a.staff_no, CAST(l.record_id AS TEXT))
-                           ELSE CAST(l.record_id AS TEXT)
-                       END as record_detail
+                SELECT 
+                    l.id, 
+                    l.table_name, 
+                    l.operation_type, 
+                    l.record_id,
+                    l.operation_detail, 
+                    l.performed_by, 
+                    l.user_type, 
+                    l.created_at,
+                    CASE
+                        WHEN l.user_type = '管理員' THEN a.staff_no
+                        WHEN l.user_type = '客戶' THEN c.company_name
+                        ELSE '未知'
+                    END as performer_name,
+                    CASE
+                        WHEN l.table_name = 'orders' THEN COALESCE(o.order_number, CAST(l.record_id AS TEXT))
+                        WHEN l.table_name = 'products' AND ((l.operation_detail)::jsonb->'message'->>'locked_date') IS NOT NULL THEN 
+                            CASE
+                                WHEN (l.operation_detail)::jsonb->>'message' IS NOT NULL AND 
+                                     (l.operation_detail)::jsonb->'message'->>'locked_date' IS NOT NULL AND
+                                     (l.operation_detail)::jsonb->'message'->'locked_date'->>'date' IS NOT NULL
+                                THEN (l.operation_detail)::jsonb->'message'->'locked_date'->>'date'
+                                ELSE CAST(l.record_id AS TEXT)
+                            END
+                        WHEN l.table_name = 'products' THEN COALESCE(p.name, CAST(l.record_id AS TEXT))
+                        WHEN l.table_name = 'customers' THEN COALESCE(c.company_name, CAST(l.record_id AS TEXT))
+                        WHEN l.table_name = 'administrators' THEN COALESCE(a.staff_no, CAST(l.record_id AS TEXT))
+                        ELSE CAST(l.record_id AS TEXT)
+                    END as record_detail
                 FROM logs l
                 LEFT JOIN administrators a ON l.performed_by = a.id AND l.user_type = '管理員'
                 LEFT JOIN customers c ON l.performed_by = c.id AND l.user_type = '客戶'
@@ -183,26 +304,46 @@ class BaseLogService:
                 LIMIT %s OFFSET %s
             """
 
-            params.extend([limit, offset])
-            cursor.execute(query, params)
-
-            log_list = []
-            for row in cursor.fetchall():
-                log_dict = {
-                    'id': row[0],
-                    'table_name': row[1],
-                    'operation_type': row[2],
-                    'record_id': row[3],
-                    'operation_detail': row[4],
-                    'performed_by': row[5],
-                    'user_type': row[6],
-                    'created_at': row[7].strftime('%Y-%m-%d %H:%M:%S') if row[7] else None,
-                    'performer_name': row[8],
-                    'record_detail': row[9]
-                }
-                log_list.append(log_dict)
-
-            return log_list, total_count
+            params_copy = params.copy()  # 複製參數列表，避免影響原始參數
+            params_copy.extend([limit, offset])
+            
+            try:
+                print(f"執行記錄查詢: {query}")
+                print(f"參數: {params_copy}")
+                cursor.execute(query, params_copy)
+                rows = cursor.fetchall()
+                print(f"查詢到 {len(rows)} 條記錄")
+                
+                log_list = []
+                for row in rows:
+                    # 保護性地訪問每個欄位，防止索引越界
+                    if len(row) >= 10:
+                        log_dict = {
+                            'id': row[0] if len(row) > 0 else None,
+                            'table_name': row[1] if len(row) > 1 else None,
+                            'operation_type': row[2] if len(row) > 2 else None,
+                            'record_id': row[3] if len(row) > 3 else None,
+                            'operation_detail': row[4] if len(row) > 4 else None,
+                            'performed_by': row[5] if len(row) > 5 else None,
+                            'user_type': row[6] if len(row) > 6 else None,
+                            'created_at': row[7].strftime('%Y-%m-%d %H:%M:%S') if row[7] and len(row) > 7 else None,
+                            'performer_name': row[8] if len(row) > 8 else '未知',
+                            'record_detail': row[9] if len(row) > 9 else None
+                        }
+                        log_list.append(log_dict)
+                    else:
+                        print(f"警告: 跳過不完整的日誌記錄，只有 {len(row)} 個欄位: {row}")
+                
+                # 如果沒有記錄，返回空列表
+                if not log_list:
+                    print("沒有找到符合條件的日誌記錄")
+                    
+                return log_list, total_count
+            except Exception as query_error:
+                print(f"執行日誌查詢時出錯: {str(query_error)}")
+                return [], total_count
+                
         except Exception as e:
             print(f"Error getting logs: {str(e)}")
+            print(f"錯誤堆疊: ", e.__traceback__)
             return [], 0 

@@ -41,7 +41,10 @@ def check_recent_order():
             if limit_days <= 0:
                 return jsonify({
                     "status": "success",
-                    "canOrder": True
+                    "data": {
+                        "can_order": True,
+                        "limitDays": 0
+                    }
                 })
             
             # 查询客户在限制日期内是否订购过该产品
@@ -60,19 +63,24 @@ def check_recent_order():
             
             if recent_order:
                 # 找到了最近的订单，不允许下单
+                print(f"找到最近订单: 客户ID={customer_id}, 产品ID={product_id}, 限制天数={limit_days}")
                 return jsonify({
-                    "status": "warning",
-                    "canOrder": False,
-                    "message": f"您在{limit_days}天内已经订购过此产品",
-                    "limitDays": limit_days,
-                    "lastOrderDate": recent_order[0]
+                    "status": "success",
+                    "data": {
+                        "can_order": False,
+                        "limit_days": limit_days,
+                        "message": f"您在{limit_days}天内已经订购过此产品"
+                    }
                 })
             
             # 没有找到最近的订单，允许下单
+            print(f"没有找到最近订单: 客户ID={customer_id}, 产品ID={product_id}")
             return jsonify({
                 "status": "success",
-                "canOrder": True,
-                "limitDays": limit_days
+                "data": {
+                    "can_order": True,
+                    "limit_days": limit_days
+                }
             })
             
     except Exception as e:

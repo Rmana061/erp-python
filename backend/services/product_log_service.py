@@ -9,9 +9,17 @@ class ProductLogService(BaseLogService):
     def _get_changes(self, old_data: Optional[Dict[str, Any]], new_data: Optional[Dict[str, Any]], operation_type: str = None) -> Dict[str, Any]:
         """根据操作类型获取变更信息"""
         if operation_type == '新增' and new_data:
-            return self._process_create(new_data)
+            # 检查是否是锁定日期的操作
+            if new_data.get('record_type') == '锁定日期':
+                return self._process_lock_date(new_data)
+            else:
+                return self._process_create(new_data)
         elif operation_type == '刪除' and old_data:
-            return self._process_delete(old_data)
+            # 检查是否是解锁日期的操作
+            if old_data.get('record_type') == '锁定日期':
+                return self._process_unlock_date(old_data)
+            else:
+                return self._process_delete(old_data)
         elif operation_type == '修改' and old_data and new_data:
             return self._process_update(old_data, new_data)
         else:
@@ -21,6 +29,54 @@ class ProductLogService(BaseLogService):
                     'product': {}
                 },
                 'operation_type': operation_type or '未知'
+            }
+    
+    def _process_lock_date(self, new_data: Dict[str, Any]) -> Dict[str, Any]:
+        """处理锁定日期的日志记录"""
+        try:
+            locked_date = new_data.get('locked_date', '')
+            
+            return {
+                'message': {
+                    'locked_date': {
+                        'id': new_data.get('id', ''),
+                        'date': locked_date,
+                        'action': '鎖定日期'
+                    }
+                },
+                'operation_type': '鎖定日期'
+            }
+        except Exception as e:
+            print(f"处理锁定日期日志错误: {str(e)}")
+            return {
+                'message': {
+                    'locked_date': {}
+                },
+                'operation_type': '鎖定日期'
+            }
+    
+    def _process_unlock_date(self, old_data: Dict[str, Any]) -> Dict[str, Any]:
+        """处理解锁日期的日志记录"""
+        try:
+            locked_date = old_data.get('locked_date', '')
+            
+            return {
+                'message': {
+                    'locked_date': {
+                        'id': old_data.get('id', ''),
+                        'date': locked_date,
+                        'action': '解鎖日期'
+                    }
+                },
+                'operation_type': '解鎖日期'
+            }
+        except Exception as e:
+            print(f"处理解锁日期日志错误: {str(e)}")
+            return {
+                'message': {
+                    'locked_date': {}
+                },
+                'operation_type': '解鎖日期'
             }
     
     def _process_create(self, new_data: Dict[str, Any]) -> Dict[str, Any]:

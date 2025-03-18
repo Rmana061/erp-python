@@ -127,10 +127,11 @@ def get_logs():
         user_type = data.get('user_type')
         performed_by = data.get('performed_by')
         record_detail = data.get('record_detail')  # 新增：獲取操作對象搜索參數
+        record_only_search = data.get('record_only_search', False)  # 獲取是否僅搜索操作對象的參數
         page = data.get('page', 1)
         per_page = data.get('per_page', 10)
 
-        print(f"過濾條件: table_name={table_name}, operation_type={operation_type}, start_date={start_date}, end_date={end_date}, user_type={user_type}, performed_by={performed_by}, record_detail={record_detail}")
+        print(f"過濾條件: table_name={table_name}, operation_type={operation_type}, start_date={start_date}, end_date={end_date}, user_type={user_type}, performed_by={performed_by}, record_detail={record_detail}, record_only_search={record_only_search}")
         print(f"分頁: page={page}, per_page={per_page}")
 
         # 計算分頁偏移量
@@ -150,34 +151,40 @@ def get_logs():
                 end_date=end_date,
                 user_type=user_type,
                 performed_by=performed_by,
-                record_detail=record_detail,  # 新增：傳入操作對象搜索參數
+                record_detail=record_detail,  # 傳入操作對象搜索參數
+                record_only_search=record_only_search,  # 傳入是否僅搜索操作對象的參數
                 limit=per_page,
                 offset=offset
             )
             
+            # 確保logs是列表
+            logs = logs if isinstance(logs, list) else []
+            
             print(f"獲取到的日誌記錄數量: {len(logs)}, 總記錄數: {total_count}")
             
-            # 計算總頁數
-            total_pages = (total_count + per_page - 1) // per_page if per_page > 0 else 1
-
-        # 返回結果
-        return jsonify({
-            'status': 'success',
-            'data': logs,
-            'pagination': {
-                'total': total_count,
-                'per_page': per_page,
-                'current_page': page,
-                'last_page': total_pages
-            }
-        })
+            # 計算總頁數，確保不為零
+            total_pages = max(1, (total_count + per_page - 1) // per_page if total_count and total_count > 0 else 1)
+            
+            # 返回日誌記錄
+            return jsonify({
+                "status": "success",
+                "data": logs,
+                "total_count": total_count,
+                "current_page": page,
+                "total_pages": total_pages
+            })
 
     except Exception as e:
-        print(f"Error getting logs: {str(e)}")
+        print(f"返回日誌記錄時發生錯誤: {str(e)}")
+        # 即使發生錯誤，也返回一個有效的響應
         return jsonify({
-            'status': 'error',
-            'message': f'獲取日誌記錄失敗: {str(e)}'
-        }), 500
+            "status": "error",
+            "message": "獲取日誌記錄時發生錯誤",
+            "data": [],
+            "total_count": 0,
+            "current_page": page,
+            "total_pages": 1
+        })
 
 @log_bp.route("/record", methods=['POST', 'OPTIONS'])
 def record_log():
