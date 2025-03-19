@@ -197,22 +197,30 @@ class ProductLogService(BaseLogService):
                     }
             
             # 特殊处理图片和文档URL
-            old_image_url = old_data.get('image_url', '')
+            old_image_url = old_data.get('image_url_original', old_data.get('image_url', ''))
             new_image_url = new_data.get('image_url', '')
+            
+            # 获取原始文件名，优先使用original_image_filename，其次使用image_original_filename
+            old_image_original_filename = old_data.get('original_image_filename', old_data.get('image_original_filename', ''))
+            new_image_original_filename = new_data.get('image_original_filename', new_data.get('original_image_filename', ''))
             
             if old_image_url != new_image_url:
                 changes['image_url'] = {
-                    'before': self._get_friendly_filename(old_image_url, old_data.get('original_image_filename', '')),
-                    'after': self._get_friendly_filename(new_image_url, new_data.get('image_original_filename', ''))
+                    'before': old_image_original_filename or self._get_friendly_filename(old_image_url, old_image_original_filename),
+                    'after': new_image_original_filename or self._get_friendly_filename(new_image_url, new_image_original_filename)
                 }
             
-            old_dm_url = old_data.get('dm_url', '')
+            old_dm_url = old_data.get('dm_url_original', old_data.get('dm_url', ''))
             new_dm_url = new_data.get('dm_url', '')
+            
+            # 获取原始文件名，优先使用original_dm_filename，其次使用dm_original_filename
+            old_dm_original_filename = old_data.get('original_dm_filename', old_data.get('dm_original_filename', ''))
+            new_dm_original_filename = new_data.get('dm_original_filename', new_data.get('original_dm_filename', ''))
             
             if old_dm_url != new_dm_url:
                 changes['dm_url'] = {
-                    'before': self._get_friendly_filename(old_dm_url, old_data.get('original_dm_filename', '')),
-                    'after': self._get_friendly_filename(new_dm_url, new_data.get('dm_original_filename', ''))
+                    'before': old_dm_original_filename or self._get_friendly_filename(old_dm_url, old_dm_original_filename),
+                    'after': new_dm_original_filename or self._get_friendly_filename(new_dm_url, new_dm_original_filename)
                 }
             
             # 检查是否有任何实际变更

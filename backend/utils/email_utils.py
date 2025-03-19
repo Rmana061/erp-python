@@ -167,7 +167,7 @@ class EmailSender:
                             <td style="padding: 10px; border: 1px solid #ddd;">{item.get('product_name', '')}</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{item.get('quantity', '')}</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{item.get('unit', '')}</td>
-                            {'<td style="padding: 10px; border: 1px solid #ddd;">{}</td>'.format(item.get('shipping_date', '')) if '下單' in subject or '確認' in subject else ''}
+                            {'<td style="padding: 10px; border: 1px solid #ddd;">{}</td>'.format(item.get('shipping_date') if item.get('shipping_date') else '待和供應商確認') if '下單' in subject or '確認' in subject else ''}
                             {f'''<td style="padding: 10px; border: 1px solid #ddd;">{remark if remark else ''}</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{supplier_note if supplier_note else ''}</td>''' if show_notes else ''}
                             {f'''<td style="padding: 10px; border: 1px solid #ddd; color: {status_color};">{product_status}</td>''' if show_status else ''}

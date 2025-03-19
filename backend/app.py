@@ -22,23 +22,23 @@ from backend.routes.line_bot_routes import line_bot_bp
 from backend.routes.log_routes import log_bp
 from backend.routes.order_check_routes import order_check_bp
 from backend.config.database import get_db_connection
-from backend.utils.scheduler import initialize_scheduler, shutdown_scheduler  # 导入调度器函数
+from backend.utils.scheduler import initialize_scheduler, shutdown_scheduler  # 導入調度器函數  
 
-# 定义从双轨文件名中提取原始文件名的函数
+# 定義從雙軌文件名中提取原始文件名的函數
 def extract_original_filename(dual_filename):
-    """从双轨文件名中提取原始文件名"""
+    """從雙軌文件名中提取原始文件名"""
     try:
-        # 分离文件名和扩展名
+        # 分離文件名和擴展名
         file_name, file_ext = os.path.splitext(dual_filename)
-        # 分离UUID和编码部分
+        # 分離UUID和編碼部分
         parts = file_name.split('___')
         if len(parts) > 1:
-            # 解码原始文件名
+            # 解碼原始文件名
             original_name = base64.urlsafe_b64decode(parts[1].encode()).decode()
             return f"{original_name}{file_ext}"
         return dual_filename
     except:
-        return dual_filename  # 如果解析失败，返回原文件名
+        return dual_filename  # 如果解析失敗，返回原文件名
 
 app = Flask(__name__)
 
@@ -74,7 +74,7 @@ def before_request():
     print(f"Origin: {request.headers.get('Origin')}")
     print(f"Authorization: {request.headers.get('Authorization')}")
     
-    # 打印前端传递的自定义头部
+    # 打印前端傳遞的自定義頭部
     customer_id = request.headers.get('X-Customer-ID')
     company_name = request.headers.get('X-Company-Name')
     if customer_id:
@@ -93,7 +93,7 @@ def before_request():
         except ValueError:
             print(f"Invalid admin_id format: {admin_id}")
 
-# 设置响应头
+# 設置響應頭
 @app.after_request
 def after_request(response):
     origin = request.headers.get('Origin')
@@ -113,63 +113,63 @@ def after_request(response):
         print(f"Origin不匹配: '{origin}' 不在允许列表中")
     return response
 
-# 添加静态文件路由，用于访问上传的文件
+# 添加靜態文件路由，用於訪問上傳的文件
 @app.route('/uploads/<path:filename>')
 def serve_upload(filename):
-    """提供静态文件访问"""
+    """提供靜態文件訪問"""
     try:
         print(f"请求上传文件: {filename}")
         print(f"完整路径: {os.path.join(UPLOAD_FOLDER, filename)}")
         
-        # 获取文件的基本名称(不含路径)
+        # 獲取文件的基本名稱(不含路徑)
         basename = os.path.basename(filename)
         
-        # 尝试从数据库中获取原始文件名
+        # 嘗試從資料庫中獲取原始文件名
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # 尝试查找匹配的图片
+            # 嘗試查找匹配的圖片
             cursor.execute("SELECT image_original_filename FROM products WHERE image_url LIKE %s", (f'%{basename}%',))
             result = cursor.fetchone()
             
             if result and result[0]:
                 original_filename = result[0]
                 response = send_from_directory(UPLOAD_FOLDER, filename)
-                # 使用RFC 5987编码格式
+                # 使用RFC 5987編碼格式
                 encoded_filename = urllib.parse.quote(original_filename)
                 response.headers["Content-Disposition"] = f"inline; filename=\"{encoded_filename}\"; filename*=UTF-8''{encoded_filename}"
-                print(f"从数据库获取图片原始文件名: {original_filename}")
+                print(f"從資料庫獲取圖片原始文件名: {original_filename}")
                 return response
                 
-            # 尝试查找匹配的文档
+            # 嘗試查找匹配的文件
             cursor.execute("SELECT dm_original_filename FROM products WHERE dm_url LIKE %s", (f'%{basename}%',))
             result = cursor.fetchone()
             
             if result and result[0]:
                 original_filename = result[0]
                 response = send_from_directory(UPLOAD_FOLDER, filename)
-                # 使用RFC 5987编码格式
+                # 使用RFC 5987編碼格式
                 encoded_filename = urllib.parse.quote(original_filename)
                 response.headers["Content-Disposition"] = f"inline; filename=\"{encoded_filename}\"; filename*=UTF-8''{encoded_filename}"
-                print(f"从数据库获取文档原始文件名: {original_filename}")
+                print(f"從資料庫獲取文件原始文件名: {original_filename}")
                 return response
         
-        # 如果数据库中没有找到，尝试从文件名中提取
+        # 如果資料庫中沒有找到，嘗試從文件名中提取
         original_filename = extract_original_filename(basename)
         
         if original_filename and original_filename != basename:
             response = send_from_directory(UPLOAD_FOLDER, filename)
-            # 使用RFC 5987编码格式
+            # 使用RFC 5987編碼格式
             encoded_filename = urllib.parse.quote(original_filename)
             response.headers["Content-Disposition"] = f"inline; filename=\"{encoded_filename}\"; filename*=UTF-8''{encoded_filename}"
-            print(f"从文件名提取原始文件名: {original_filename}")
+            print(f"從文件名提取原始文件名: {original_filename}")
             return response
             
-        # 如果都没有找到，直接返回文件
+        # 如果都沒有找到，直接返回文件
         return send_from_directory(UPLOAD_FOLDER, filename)
         
     except Exception as e:
-        print(f"处理文件访问出错: {str(e)}")
+        print(f"處理文件訪問出錯: {str(e)}")
         return send_from_directory(UPLOAD_FOLDER, filename)
 
 # 註冊藍圖
@@ -182,10 +182,10 @@ app.register_blueprint(line_bot_bp, url_prefix='/api/line')
 app.register_blueprint(log_bp, url_prefix='/api/log')
 app.register_blueprint(order_check_bp, url_prefix='/api')
 
-# 初始化调度器
+# 初始化調度器
 scheduler = initialize_scheduler()
 
-# 注册应用关闭时的清理函数
+# 註冊應用關閉時的清理函數
 atexit.register(shutdown_scheduler)
 
 if __name__ == '__main__':
