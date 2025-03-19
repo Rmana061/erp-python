@@ -32494,3 +32494,1200 @@ Response headers:
 2025-03-19 13:59:28,867 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 13:59:28] "POST /api/customer/info HTTP/1.1" 200 -
 2025-03-19 14:00:06,031 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:00:06] "POST /api/customer/info HTTP/1.1" 200 -
 2025-03-19 14:00:06,425 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:00:06] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:09:20,158 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:09:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:09:52,270 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\routes\\line_bot_routes.py', reloading
+2025-03-19 14:09:52,333 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-19 14:09:52,334 - date_cleaner - INFO - 調度器已關閉
+2025-03-19 14:09:52,566 - werkzeug - INFO -  * Restarting with stat
+2025-03-19 14:09:55,737 - date_cleaner - INFO - 初始化調度器
+2025-03-19 14:09:55,997 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-19T14:09:55.997934+08:00
+2025-03-19 14:09:56,002 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 14:09:56,004 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 14:09:56,009 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-19 14:09:56,009 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-19 14:09:56,010 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-19 14:09:56,011 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-19 14:09:56,012 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-19 14:10:06
+2025-03-19 14:09:56,013 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-20 00:05:00
+2025-03-19 14:09:56,034 - werkzeug - WARNING -  * Debugger is active!
+2025-03-19 14:09:56,045 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-19 14:10:06,024 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 14:10:06 CST], next run at: 2025-03-19 14:10:06 CST)" (scheduled at 2025-03-19 14:10:06.003918+08:00)
+2025-03-19 14:10:06,024 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-19 14:10:06,025 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-19 14:10:06,026 - date_cleaner - INFO - 當前日期: 2025-03-19
+2025-03-19 14:10:06,031 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-19', '2025-03-20']
+2025-03-19 14:10:06,033 - date_cleaner - INFO - 已提交事務
+2025-03-19 14:10:06,034 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-19 14:10:06,035 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-19', '2025-03-20']
+2025-03-19 14:10:06,035 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-19 14:10:06,036 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 14:10:06 CST], next run at: 2025-03-19 14:10:06 CST)" executed successfully
+2025-03-19 14:10:06,040 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-19 14:11:47,372 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:11:47] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 14:11:47,538 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:11:47] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:11:49,560 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:11:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:11:57,237 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:11:57] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:12:00,369 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:12:00] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:12:03,373 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:12:03] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:12:06,369 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:12:06] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:17:22,912 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\routes\\line_bot_routes.py', reloading
+2025-03-19 14:17:22,976 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-19 14:17:23,021 - date_cleaner - INFO - 調度器已關閉
+2025-03-19 14:17:23,420 - werkzeug - INFO -  * Restarting with stat
+2025-03-19 14:17:40,765 - date_cleaner - INFO - 初始化調度器
+2025-03-19 14:17:41,146 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-19T14:17:41.145723+08:00
+2025-03-19 14:17:41,154 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 14:17:41,156 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 14:17:41,164 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-19 14:17:41,165 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-19 14:17:41,166 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-19 14:17:41,167 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-19 14:17:41,168 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-19 14:17:51
+2025-03-19 14:17:41,168 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-20 00:05:00
+2025-03-19 14:17:41,198 - werkzeug - WARNING -  * Debugger is active!
+2025-03-19 14:17:41,211 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-19 14:17:41,266 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:17:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:17:51,172 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 14:17:51 CST], next run at: 2025-03-19 14:17:51 CST)" (scheduled at 2025-03-19 14:17:51.154699+08:00)
+2025-03-19 14:17:51,173 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-19 14:17:51,179 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-19 14:17:51,181 - date_cleaner - INFO - 當前日期: 2025-03-19
+2025-03-19 14:17:51,183 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-19', '2025-03-20']
+2025-03-19 14:17:51,185 - date_cleaner - INFO - 已提交事務
+2025-03-19 14:17:51,185 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-19 14:17:51,186 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-19', '2025-03-20']
+2025-03-19 14:17:51,187 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-19 14:17:51,187 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 14:17:51 CST], next run at: 2025-03-19 14:17:51 CST)" executed successfully
+2025-03-19 14:17:51,188 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-19 14:19:42,225 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\routes\\line_bot_routes.py', reloading
+2025-03-19 14:19:42,227 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-19 14:19:42,228 - date_cleaner - INFO - 調度器已關閉
+2025-03-19 14:19:42,425 - werkzeug - INFO -  * Restarting with stat
+2025-03-19 14:19:45,459 - date_cleaner - INFO - 初始化調度器
+2025-03-19 14:19:45,720 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-19T14:19:45.720356+08:00
+2025-03-19 14:19:45,725 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 14:19:45,727 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 14:19:45,731 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-19 14:19:45,732 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-19 14:19:45,733 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-19 14:19:45,734 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-19 14:19:45,735 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-19 14:19:55
+2025-03-19 14:19:45,735 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-20 00:05:00
+2025-03-19 14:19:45,758 - werkzeug - WARNING -  * Debugger is active!
+2025-03-19 14:19:45,771 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-19 14:19:55,750 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 14:19:55 CST], next run at: 2025-03-19 14:19:55 CST)" (scheduled at 2025-03-19 14:19:55.725342+08:00)
+2025-03-19 14:19:55,750 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-19 14:19:55,751 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-19 14:19:55,751 - date_cleaner - INFO - 當前日期: 2025-03-19
+2025-03-19 14:19:55,754 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-19', '2025-03-20']
+2025-03-19 14:19:55,755 - date_cleaner - INFO - 已提交事務
+2025-03-19 14:19:55,755 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-19 14:19:55,756 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-19', '2025-03-20']
+2025-03-19 14:19:55,756 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-19 14:19:55,757 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 14:19:55 CST], next run at: 2025-03-19 14:19:55 CST)" executed successfully
+2025-03-19 14:19:55,758 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-19 14:25:11,170 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:11] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 14:25:11,371 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:11] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:25:13,317 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:25:16,408 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:16] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:25:19,533 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:19] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:25:22,560 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:22] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:25:25,540 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:25:33,217 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:33] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:25:36,334 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:36] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:25:39,329 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:25:42,326 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:42] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:25:48,013 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:48] "OPTIONS /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:25:48,047 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:48] "OPTIONS /api/admin/info HTTP/1.1" 200 -
+2025-03-19 14:25:48,219 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:48] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:25:48,229 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:48] "[35m[1mPOST /api/admin/info HTTP/1.1[0m" 500 -
+2025-03-19 14:25:49,449 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:25:49] "[35m[1mPOST /api/admin/info HTTP/1.1[0m" 500 -
+2025-03-19 14:26:09,627 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:26:09] "OPTIONS /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:26:09,797 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:26:09] "[31m[1mPOST /api/customer/info HTTP/1.1[0m" 401 -
+2025-03-19 14:26:25,168 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:26:25] "[31m[1mPOST /api/customer/info HTTP/1.1[0m" 401 -
+2025-03-19 14:27:08,891 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:27:08] "[31m[1mPOST /api/customer/info HTTP/1.1[0m" 401 -
+2025-03-19 14:27:09,628 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:27:09] "[31m[1mPOST /api/customer/info HTTP/1.1[0m" 401 -
+2025-03-19 14:27:41,721 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:27:41] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:27:44,826 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:27:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:27:47,840 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:27:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:27:49,547 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:27:49] "OPTIONS /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:27:49,778 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:27:49] "[31m[1mPOST /api/customer/info HTTP/1.1[0m" 401 -
+2025-03-19 14:27:50,843 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:27:50] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:27:53,842 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:27:53] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:27:56,835 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:27:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:27:59,837 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:27:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:28:02,850 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:28:05,065 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:05] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:28:08,178 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:28:09,698 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:09] "OPTIONS /api/products/list HTTP/1.1" 200 -
+2025-03-19 14:28:09,805 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:09] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 14:28:10,311 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:10] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:28:10,332 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:10] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:28:10,349 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:10] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:28:10,354 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:10] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-19 14:28:10,361 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:10] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:28:10,369 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:10] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-19 14:28:10,382 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:10] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-19 14:28:10,383 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:10] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:28:10,415 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:10] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:28:10,420 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:28:10] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-19 14:30:42,876 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:42] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 14:30:43,144 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-19 14:30:43,146 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:30:43,216 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:30:43,222 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:30:43,230 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:30:43,232 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-19 14:30:43,232 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-19 14:30:43,241 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:30:43,246 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-19 14:30:43,247 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:30:43,677 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "OPTIONS /api/admin/list HTTP/1.1" 200 -
+2025-03-19 14:30:43,883 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:43] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-19 14:30:45,780 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:45] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:30:47,484 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:47] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:30:50,607 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:30:50] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:31:08,971 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:31:08] "[31m[1mPOST /api/customer/info HTTP/1.1[0m" 401 -
+2025-03-19 14:31:09,922 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:31:09] "[31m[1mPOST /api/customer/info HTTP/1.1[0m" 401 -
+2025-03-19 14:32:26,088 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:32:26] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 14:32:26,238 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:32:26] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:32:28,252 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:32:28] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:32:32,912 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:32:32] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:32:36,033 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:32:36] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:32:39,028 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:32:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:32:42,480 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:32:42] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:33:05,365 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:33:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:33:06,615 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:33:06] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:33:09,731 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:33:09] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:33:12,733 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:33:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:33:15,734 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:33:15] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:33:37,829 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:33:37] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 14:33:37,979 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:33:37] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:33:39,928 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:33:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:33:43,987 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:33:43] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:33:47,119 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:33:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:34:04,461 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\routes\\line_bot_routes.py', reloading
+2025-03-19 14:34:04,476 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-19 14:34:04,484 - date_cleaner - INFO - 調度器已關閉
+2025-03-19 14:34:04,663 - werkzeug - INFO -  * Restarting with stat
+2025-03-19 14:34:15,403 - date_cleaner - INFO - 初始化調度器
+2025-03-19 14:34:17,682 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-19T14:34:17.682033+08:00
+2025-03-19 14:34:17,691 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 14:34:17,694 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 14:34:17,704 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-19 14:34:17,709 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-19 14:34:17,709 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-19 14:34:17,712 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-19 14:34:17,713 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-19 14:34:27
+2025-03-19 14:34:17,714 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-20 00:05:00
+2025-03-19 14:34:17,754 - werkzeug - WARNING -  * Debugger is active!
+2025-03-19 14:34:17,770 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-19 14:34:17,835 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:34:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:34:27,696 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 14:34:27 CST], next run at: 2025-03-19 14:34:27 CST)" (scheduled at 2025-03-19 14:34:27.693519+08:00)
+2025-03-19 14:34:27,697 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-19 14:34:27,697 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-19 14:34:27,698 - date_cleaner - INFO - 當前日期: 2025-03-19
+2025-03-19 14:34:27,701 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-19', '2025-03-20']
+2025-03-19 14:34:27,703 - date_cleaner - INFO - 已提交事務
+2025-03-19 14:34:27,703 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-19 14:34:27,704 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-19', '2025-03-20']
+2025-03-19 14:34:27,705 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-19 14:34:27,706 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 14:34:27 CST], next run at: 2025-03-19 14:34:27 CST)" executed successfully
+2025-03-19 14:34:27,707 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-19 14:34:46,830 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:34:46] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 14:34:47,006 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:34:47] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:34:48,972 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:34:48] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:34:52,353 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:34:52] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:34:55,480 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:34:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:34:58,479 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:34:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:35:01,471 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:35:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:35:14,143 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:35:14] "OPTIONS /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:35:14,151 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:35:14] "[31m[1mGET /api/customer/info HTTP/1.1[0m" 405 -
+2025-03-19 14:35:14,328 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:35:14] "[35m[1mPOST /api/admin/info HTTP/1.1[0m" 500 -
+2025-03-19 14:35:23,592 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:35:23] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:35:26,725 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:35:26] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:35:29,705 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:35:29] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:35:32,721 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:35:32] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:35:35,704 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:35:35] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:35:38,720 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:35:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:39:52,997 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:39:52] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:39:56,121 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:39:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:39:59,107 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:39:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:40:02,106 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:40:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:40:05,133 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:40:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:40:08,112 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:40:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:41:35,511 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\routes\\line_bot_routes.py', reloading
+2025-03-19 14:41:35,512 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-19 14:41:35,513 - date_cleaner - INFO - 調度器已關閉
+2025-03-19 14:41:35,610 - werkzeug - INFO -  * Restarting with stat
+2025-03-19 14:41:39,273 - date_cleaner - INFO - 初始化調度器
+2025-03-19 14:41:39,508 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-19T14:41:39.508874+08:00
+2025-03-19 14:41:39,514 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 14:41:39,516 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 14:41:39,519 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-19 14:41:39,520 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-19 14:41:39,521 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-19 14:41:39,525 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-19 14:41:39,527 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-19 14:41:49
+2025-03-19 14:41:39,528 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-20 00:05:00
+2025-03-19 14:41:39,552 - werkzeug - WARNING -  * Debugger is active!
+2025-03-19 14:41:39,564 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-19 14:41:46,948 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:41:46] "OPTIONS /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:41:47,034 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:41:47] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:41:49,527 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 14:41:49 CST], next run at: 2025-03-19 14:41:49 CST)" (scheduled at 2025-03-19 14:41:49.514874+08:00)
+2025-03-19 14:41:49,528 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-19 14:41:49,531 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-19 14:41:49,533 - date_cleaner - INFO - 當前日期: 2025-03-19
+2025-03-19 14:41:49,541 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-19', '2025-03-20']
+2025-03-19 14:41:49,543 - date_cleaner - INFO - 已提交事務
+2025-03-19 14:41:49,544 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-19 14:41:49,546 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-19', '2025-03-20']
+2025-03-19 14:41:49,547 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-19 14:41:49,548 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 14:41:49 CST], next run at: 2025-03-19 14:41:49 CST)" executed successfully
+2025-03-19 14:41:49,550 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-19 14:41:50,153 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:41:50] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:41:53,149 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:41:53] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:41:56,160 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:41:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:42:27,070 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:42:27] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 14:42:27,274 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:42:27] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:42:28,957 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:42:28] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:42:32,039 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:42:32] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:42:35,159 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:42:35] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:42:38,177 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:42:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:42:41,169 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:42:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:42:44,164 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:42:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:45:15,449 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:45:15] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:45:18,583 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:45:18] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:45:21,577 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:45:21] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:46:49,657 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:46:49] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:46:52,785 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:46:52] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:46:55,782 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:46:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:46:58,869 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:46:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:01,783 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:04,780 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:04] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:07,799 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:07] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:10,786 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:10] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:13,786 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:16,769 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:19,782 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:19] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:22,781 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:22] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:25,774 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:28,783 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:28] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:31,786 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:31] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:34,776 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:34] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:37,815 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:37] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:40,764 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:40] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:43,784 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:46,761 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:49,774 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:52,774 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:52] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:55,797 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:47:58,766 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:47:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:48:01,777 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:48:04,773 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:04] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:48:06,351 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:06] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 14:48:06,674 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:06] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-19 14:48:06,679 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:06] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:48:06,683 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:06] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:48:06,729 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:06] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:48:06,733 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:06] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-19 14:48:06,752 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:06] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-19 14:48:06,759 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:06] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-19 14:48:06,761 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:06] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:48:06,762 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:06] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:48:06,771 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:06] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-19 14:48:07,727 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:48:07] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:49:04,802 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:49:04] "OPTIONS /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:49:05,048 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:49:05] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:49:06,777 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:49:06] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-19 14:49:14,359 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:49:14] "OPTIONS /api/customer-login HTTP/1.1" 200 -
+2025-03-19 14:49:14,919 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:49:14] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 14:49:15,088 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:49:15] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:49:47,952 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:49:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:49:55,997 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:49:55] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:49:59,108 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:49:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:50:02,139 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:50:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:52:46,494 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:52:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:53:00,307 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:53:00] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:53:13,071 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:53:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:53:27,907 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:53:27] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:53:54,502 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:53:54] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:54:14,783 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:54:14] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 14:54:14,957 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:54:14] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:54:16,966 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:54:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:54:18,480 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:54:18] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:54:21,624 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:54:21] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:54:24,630 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:54:24] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:54:27,628 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:54:27] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:54:30,622 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:54:30] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:54:33,615 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:54:33] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:54:36,680 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:54:36] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:56:24,933 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:56:24] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 14:56:25,108 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:56:25] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:56:27,217 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:56:27] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:56:33,252 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:56:33] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:56:36,402 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:56:36] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:56:39,380 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:56:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:56:42,394 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:56:42] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:56:45,377 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:56:45] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:57:24,482 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:57:24] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:58:55,232 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:58:55] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:58:58,351 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:58:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:01,360 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:04,362 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:04] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:07,361 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:07] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:10,344 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:10] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:13,374 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:16,356 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:18,357 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:18] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:59:28,788 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:28] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 14:59:28,989 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:28] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 14:59:30,822 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:30] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:35,008 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:35] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 14:59:38,157 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:41,134 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:44,153 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:47,138 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:50,203 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:50] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:53,156 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:53] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:56,142 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 14:59:59,168 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 14:59:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:00:02,149 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:00:04,014 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:04] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:00:07,146 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:07] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:00:10,142 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:10] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:00:13,166 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:00:20,529 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:20] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 15:00:20,685 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:20] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 15:00:28,779 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:28] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:00:33,112 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:33] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:00:36,267 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:36] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:00:39,284 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:00:42,262 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:00:42] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:01:39,743 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:01:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:05:15,893 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:15] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 15:05:16,047 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:16] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 15:05:17,959 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:05:32,538 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:32] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:05:35,683 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:35] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:05:38,687 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:05:41,878 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:05:44,894 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:05:47,891 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:05:50,876 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:50] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:05:53,909 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:53] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:05:56,894 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:05:59,886 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:05:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:06:02,878 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:06:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:06:05,898 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:06:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:06:08,892 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:06:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:06:11,930 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:06:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:06:15,066 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:06:15] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:06:18,239 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:06:18] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:06:21,192 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:06:21] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:07:06,458 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:07:06] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:07:09,578 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:07:09] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:07:12,598 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:07:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:07:15,567 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:07:15] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:07:37,523 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:07:37] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:07:40,667 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:07:40] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:07:43,654 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:07:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:07:46,640 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:07:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:07:55,947 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:07:55] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 15:07:56,092 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:07:56] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 15:07:58,009 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:07:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:08:06,684 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:08:06] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:08:09,815 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:08:09] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:08:12,830 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:08:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:08:15,813 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:08:15] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:08:18,807 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:08:18] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:08:21,812 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:08:21] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:09,745 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:09] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:09:12,854 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:15,859 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:15] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:18,870 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:18] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:21,861 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:21] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:24,867 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:24] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:27,901 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:27] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:30,874 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:30] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:33,863 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:33] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:36,856 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:36] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:39,864 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:42,855 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:42] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:45,871 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:45] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:48,871 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:48] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:51,864 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:51] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:54,868 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:54] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:09:57,880 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:09:57] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:01,049 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:03,875 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:03] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:06,854 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:06] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:09,870 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:09] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:12,869 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:15,874 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:15] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:18,908 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:18] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:21,918 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:21] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:24,869 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:24] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:27,880 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:27] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:30,917 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:30] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:33,877 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:33] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:36,873 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:36] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:40,389 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:40] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:42,876 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:42] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:45,875 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:45] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:48,869 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:48] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:51,874 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:51] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:54,869 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:54] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:10:57,937 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:10:57] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:11:00,874 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:11:00] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:11:03,903 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:11:03] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:11:06,872 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:11:06] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:11:09,877 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:11:09] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:11:12,887 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:11:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:11:15,897 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:11:15] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:11:18,866 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:11:18] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:11:21,870 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:11:21] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:11:49,901 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:11:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:11:58,448 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:11:58] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 15:11:58,629 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:11:58] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 15:12:00,389 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:00] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:05,198 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:05] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:12:08,330 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:11,326 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:14,323 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:14] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:17,875 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:20,882 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:23,886 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:26,903 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:26] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:34,694 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:34] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 15:12:34,849 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:34] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 15:12:38,560 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:39,694 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:39] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:12:42,818 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:42] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:45,831 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:45] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:48,895 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:48] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:51,814 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:51] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:53,768 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:53] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:12:56,884 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:12:59,875 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:12:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:02,876 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:05,888 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:08,885 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:11,878 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:14,877 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:14] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:17,884 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:20,888 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:23,882 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:26,888 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:26] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:29,890 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:29] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:32,875 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:32] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:35,878 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:35] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:38,891 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:41,897 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:44,886 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:47,877 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:50,892 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:50] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:53,883 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:53] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:56,903 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:13:59,892 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:13:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:02,882 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:05,876 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:08,896 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:11,883 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:14,895 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:14] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:17,884 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:20,886 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:23,876 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:26,891 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:26] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:29,871 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:29] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:32,878 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:32] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:35,881 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:35] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:38,886 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:41,882 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:44,895 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:47,904 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:54,377 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:54] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 15:14:54,522 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:54] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 15:14:56,697 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:14:59,009 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:14:59] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:15:02,144 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:05,864 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:08,867 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:11,866 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:14,881 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:14] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:17,876 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:20,885 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:23,865 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:26,870 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:26] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:29,877 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:29] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:32,873 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:32] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:35,130 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:35] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:38,132 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:41,130 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:44,148 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:47,142 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:50,136 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:50] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:53,132 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:53] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:56,126 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:15:59,141 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:15:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:02,144 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:05,126 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:08,136 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:11,137 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:14,153 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:14] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:17,141 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:20,136 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:23,142 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:26,160 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:26] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:29,142 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:29] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:32,141 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:32] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:35,133 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:35] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:38,139 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:41,141 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:44,140 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:47,133 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:50,131 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:50] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:53,129 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:53] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:56,145 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:16:59,133 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:16:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:02,148 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:05,134 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:08,140 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:11,125 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:14,166 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:14] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:17,137 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:20,132 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:23,133 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:26,143 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:26] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:29,129 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:29] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:32,135 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:32] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:35,137 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:35] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:38,150 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:41,130 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:44,139 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:47,123 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:50,142 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:50] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:53,131 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:53] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:56,153 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:17:59,137 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:17:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:18:02,135 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:18:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:18:05,135 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:18:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:18:08,139 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:18:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:18:11,138 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:18:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:18:14,140 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:18:14] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:18:17,132 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:18:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:18:20,133 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:18:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:18:53,903 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:18:53] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:18:57,020 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:18:57] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:19:00,040 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:19:00] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:19:03,017 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:19:03] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:19:06,046 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:19:06] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:19:26,182 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:19:26] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:24:03,305 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:24:03] "[31m[1mGET /api/customer/info HTTP/1.1[0m" 405 -
+2025-03-19 15:24:03,563 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:24:03] "[35m[1mPOST /api/admin/info HTTP/1.1[0m" 500 -
+2025-03-19 15:25:48,513 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:25:48] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:25:51,772 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:25:51] "OPTIONS /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:25:51,938 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:25:51] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:25:54,668 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:25:54] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:25:57,632 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:25:57] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:26:00,650 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:26:00] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:26:02,812 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-19 15:26:02,814 - date_cleaner - INFO - 調度器已關閉
+2025-03-19 15:26:03,046 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-19 15:26:03,050 - date_cleaner - INFO - 調度器已關閉
+2025-03-19 15:26:08,646 - date_cleaner - INFO - 初始化調度器
+2025-03-19 15:26:08,953 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-19T15:26:08.953790+08:00
+2025-03-19 15:26:08,960 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 15:26:08,963 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 15:26:08,966 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-19 15:26:08,967 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-19 15:26:08,968 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-19 15:26:08,969 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-19 15:26:08,970 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-19 15:26:18
+2025-03-19 15:26:08,970 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-20 00:05:00
+2025-03-19 15:26:09,015 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-19 15:26:09,016 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-19 15:26:09,020 - werkzeug - INFO -  * Restarting with stat
+2025-03-19 15:26:12,369 - date_cleaner - INFO - 初始化調度器
+2025-03-19 15:26:12,800 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-19T15:26:12.800465+08:00
+2025-03-19 15:26:12,809 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 15:26:12,813 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 15:26:12,816 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-19 15:26:12,816 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-19 15:26:12,817 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-19 15:26:12,818 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-19 15:26:12,818 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-19 15:26:22
+2025-03-19 15:26:12,819 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-20 00:05:00
+2025-03-19 15:26:12,847 - werkzeug - WARNING -  * Debugger is active!
+2025-03-19 15:26:12,865 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-19 15:26:12,920 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:26:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:26:18,974 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 15:26:18 CST], next run at: 2025-03-19 15:26:18 CST)" (scheduled at 2025-03-19 15:26:18.961759+08:00)
+2025-03-19 15:26:18,974 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-19 15:26:18,975 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-19 15:26:18,976 - date_cleaner - INFO - 當前日期: 2025-03-19
+2025-03-19 15:26:18,979 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-19', '2025-03-20']
+2025-03-19 15:26:18,980 - date_cleaner - INFO - 已提交事務
+2025-03-19 15:26:18,981 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-19 15:26:18,981 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-19', '2025-03-20']
+2025-03-19 15:26:18,982 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-19 15:26:18,982 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 15:26:18 CST], next run at: 2025-03-19 15:26:18 CST)" executed successfully
+2025-03-19 15:26:18,983 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-19 15:26:19,210 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:26:19] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 15:26:19,377 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:26:19] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 15:26:22,813 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 15:26:22 CST], next run at: 2025-03-19 15:26:22 CST)" (scheduled at 2025-03-19 15:26:22.810227+08:00)
+2025-03-19 15:26:22,813 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-19 15:26:22,814 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-19 15:26:22,814 - date_cleaner - INFO - 當前日期: 2025-03-19
+2025-03-19 15:26:22,817 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-19', '2025-03-20']
+2025-03-19 15:26:22,818 - date_cleaner - INFO - 已提交事務
+2025-03-19 15:26:22,818 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-19 15:26:22,820 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-19', '2025-03-20']
+2025-03-19 15:26:22,821 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-19 15:26:22,822 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 15:26:22 CST], next run at: 2025-03-19 15:26:22 CST)" executed successfully
+2025-03-19 15:26:22,823 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-19 15:26:23,396 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:26:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:26:24,900 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:26:24] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:26:28,030 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:26:28] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:26:29,560 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:26:29] "[33mGET /line-binding?liff.state=?customer_id%3D3 HTTP/1.1[0m" 404 -
+2025-03-19 15:26:31,061 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:26:31] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:26:34,026 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:26:34] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:31:41,352 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:31:41] "OPTIONS /api/admin/list HTTP/1.1" 200 -
+2025-03-19 15:31:41,356 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:31:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:31:41,563 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:31:41] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-19 15:31:57,751 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:31:57] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 15:31:57,900 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:31:57] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 15:31:59,764 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:31:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:00,553 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:00] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:32:03,675 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:03] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:06,692 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:06] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:09,673 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:09] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:12,681 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:15,674 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:15] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:18,696 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:18] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:21,687 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:21] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:24,678 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:24] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:27,677 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:27] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:30,700 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:30] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:33,677 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:33] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:36,676 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:36] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:39,680 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:42,697 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:42] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:45,673 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:45] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:48,685 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:48] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:51,868 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:51] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:54,871 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:54] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:32:57,863 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:32:57] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:00,874 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:00] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:03,866 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:03] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:06,888 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:06] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:09,867 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:09] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:12,883 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:15,884 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:15] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:18,867 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:18] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:21,866 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:21] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:24,871 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:24] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:27,676 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:27] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:33,934 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:33] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:33:37,042 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:37] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:40,051 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:40] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:43,046 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:46,061 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:49,057 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:52,057 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:52] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:55,053 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:33:58,060 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:33:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:34:01,052 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:34:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:34:04,049 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:34:04] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:34:07,050 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:34:07] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:34:10,062 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:34:10] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:34:13,038 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:34:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:34:16,054 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:34:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:34:19,048 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:34:19] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:34:22,045 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:34:22] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:36:15,720 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:36:15] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-19 15:36:16,044 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:36:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:36:25,357 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:36:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:36:29,995 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:36:29] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:36:33,129 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:36:33] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:36:36,137 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:36:36] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:36:39,133 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:36:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:36:42,142 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:36:42] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:36:51,641 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:36:51] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 15:36:51,810 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:36:51] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 15:37:12,638 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:37:13,696 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:13] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:37:16,809 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:37:19,815 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:19] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:37:22,818 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:22] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:37:25,814 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:37:38,890 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:38] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-19 15:37:39,669 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:37:41,493 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "OPTIONS /api/products/list HTTP/1.1" 200 -
+2025-03-19 15:37:41,596 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 15:37:41,762 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 15:37:41,768 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-19 15:37:41,814 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-19 15:37:41,824 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-19 15:37:41,841 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-19 15:37:41,847 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-19 15:37:41,850 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 15:37:41,866 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-19 15:37:41,867 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-19 15:37:41,873 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:41] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-19 15:37:42,213 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:42] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:37:43,625 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:43] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:37:46,747 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:37:49,753 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:37:52,739 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:52] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:37:55,872 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:37:58,880 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:37:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:01,860 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:04,886 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:04] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:07,872 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:07] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:10,868 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:10] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:13,877 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:16,892 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:19,887 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:19] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:22,882 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:22] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:25,870 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:28,878 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:28] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:31,880 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:31] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:34,887 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:34] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:37,881 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:37] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:40,866 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:40] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:43,877 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:46,889 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:49,874 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:38:52,877 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:38:52] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:39:49,874 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:39:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:39:57,834 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:39:57] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:39:58,743 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:39:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:40:09,169 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:40:09] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 15:40:09,423 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:40:09] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 15:40:11,682 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:40:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:40:14,847 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:40:14] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:40:17,976 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:40:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:40:20,992 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:40:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:40:23,969 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:40:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:42:18,740 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:42:18] "OPTIONS /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:42:18,750 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:42:18] "[31m[1mGET /api/customer/info HTTP/1.1[0m" 405 -
+2025-03-19 15:42:18,806 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:42:18] "OPTIONS /api/admin/info HTTP/1.1" 200 -
+2025-03-19 15:42:18,897 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:42:18] "[35m[1mPOST /api/admin/info HTTP/1.1[0m" 500 -
+2025-03-19 15:45:14,499 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:45:14] "OPTIONS /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:45:14,584 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:45:14] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 15:45:17,705 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:45:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:45:20,702 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:45:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:45:23,706 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:45:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 15:53:38,092 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:53:38] "[31m[1mGET /api/customer/info HTTP/1.1[0m" 405 -
+2025-03-19 15:53:38,455 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:53:38] "[35m[1mPOST /api/admin/info HTTP/1.1[0m" 500 -
+2025-03-19 15:54:03,571 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:54:03] "[31m[1mGET /api/customer/info HTTP/1.1[0m" 405 -
+2025-03-19 15:54:03,793 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 15:54:03] "[35m[1mPOST /api/admin/info HTTP/1.1[0m" 500 -
+2025-03-19 16:00:58,916 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:00:58] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:00:58,942 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:00:58] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:01:02,037 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:02,055 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:05,054 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:05,057 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:08,038 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:08,047 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:11,028 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:11,039 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:14,047 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:14] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:14,057 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:14] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:17,038 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:20,031 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:23,036 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:26,878 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:26] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:29,862 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:29] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:44,162 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:44] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 16:01:44,390 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:44] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-19 16:01:44,396 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:44] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:01:44,396 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:44] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:01:44,398 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:44] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:01:44,431 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:44] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:01:44,434 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:44] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-19 16:01:44,445 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:44] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:01:44,452 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:44] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-19 16:01:44,456 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:44] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:01:44,462 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:44] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-19 16:01:45,870 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:45] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:51,288 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:51] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:01:54,411 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:54] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:01:59,101 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:01:59] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:02:02,228 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:02:18,466 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:18] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:02:28,050 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:28] "OPTIONS /api/customer-login HTTP/1.1" 200 -
+2025-03-19 16:02:28,633 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:28] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 16:02:28,811 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:28] "OPTIONS /api/orders/list HTTP/1.1" 200 -
+2025-03-19 16:02:28,928 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:28] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 16:02:34,728 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:34] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:02:37,708 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:37] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:02:40,831 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:40] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:02:43,831 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:02:46,845 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:02:49,833 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:02:52,832 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:52] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:02:55,830 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:02:58,823 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:02:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:03:01,825 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:03:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:03:04,825 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:03:04] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:03:07,840 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:03:07] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:03:10,828 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:03:10] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:03:13,823 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:03:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:07:51,325 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:07:51] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:07:54,444 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:07:54] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:07:57,448 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:07:57] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:08:49,706 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:08:49] "[35m[1mOPTIONS /api/log/logs HTTP/1.1[0m" 204 -
+2025-03-19 16:08:49,876 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:08:49] "[31m[1mPOST /api/log/logs HTTP/1.1[0m" 401 -
+2025-03-19 16:08:53,025 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:08:53] "OPTIONS /api/admin-login HTTP/1.1" 200 -
+2025-03-19 16:08:53,527 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:08:53] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-19 16:08:53,640 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:08:53] "OPTIONS /api/orders/pending HTTP/1.1" 200 -
+2025-03-19 16:08:53,729 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:08:53] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-19 16:08:54,455 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:08:54] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-19 16:08:56,170 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:08:56] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-19 16:09:56,738 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:09:56] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:09:59,858 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:09:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:10:02,857 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:10:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:10:05,860 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:10:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:13:36,032 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:13:36] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:13:39,150 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:13:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:13:42,163 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:13:42] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:13:45,151 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:13:45] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:13:48,167 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:13:48] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:13:51,143 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:13:51] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:13:55,216 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:13:55] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 16:13:55,977 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:13:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:14:11,402 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:11] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 16:14:11,755 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:11] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-19 16:14:11,760 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:11] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:14:11,766 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:11] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:14:11,777 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:11] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:14:11,782 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:11] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-19 16:14:11,783 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:11] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:14:11,791 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:11] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:14:11,798 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:11] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-19 16:14:11,805 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:11] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:14:11,807 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:11] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-19 16:14:12,057 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:14:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:15:11,354 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:15:11] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 16:15:12,877 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:15:12] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 16:15:15,560 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:15:15] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:09,906 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:09] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:22:13,034 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:16,030 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:19,040 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:19] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:22,043 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:22] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:25,043 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:28,030 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:28] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:31,043 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:31] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:34,034 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:34] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:37,021 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:37] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:40,032 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:40] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:43,022 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:46,041 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:49,024 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:52,048 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:52] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:55,030 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:22:58,043 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:22:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:01,027 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:04,028 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:04] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:07,032 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:07] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:10,045 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:10] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:13,032 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:16,033 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:19,036 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:19] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:22,046 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:22] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:25,037 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:28,043 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:28] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:31,039 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:31] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:34,024 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:34] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:37,036 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:37] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:40,041 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:40] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:43,030 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:46,035 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:49,029 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:52,023 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:52] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:55,018 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:23:58,029 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:23:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:01,022 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:04,035 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:04] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:07,029 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:07] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:10,212 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:10] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:13,027 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:16,051 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:19,037 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:19] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:22,051 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:22] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:25,024 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:28,035 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:28] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:31,028 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:31] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:34,045 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:34] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:37,029 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:37] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:40,029 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:40] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:43,022 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:46,052 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:49,038 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:52,035 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:52] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:55,025 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:24:58,038 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:24:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:01,032 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:04,024 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:04] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:07,034 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:07] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:10,038 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:10] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:13,029 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:16,033 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:19,024 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:19] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:22,035 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:22] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:25,029 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:28,029 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:28] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:31,021 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:31] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:34,034 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:34] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:37,027 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:37] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:40,032 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:40] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:25:43,046 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:25:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:26:02,118 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:26:02] "OPTIONS /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:26:02,214 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:26:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:26:03,479 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:26:03] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-19 16:26:32,378 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:26:32] "[31m[1mPOST /api/customer-login HTTP/1.1[0m" 401 -
+2025-03-19 16:26:37,724 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:26:37] "[31m[1mPOST /api/customer-login HTTP/1.1[0m" 401 -
+2025-03-19 16:26:41,125 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-19 16:26:41,129 - date_cleaner - INFO - 調度器已關閉
+2025-03-19 16:26:41,497 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-19 16:26:41,511 - date_cleaner - INFO - 調度器已關閉
+2025-03-19 16:26:48,703 - date_cleaner - INFO - 初始化調度器
+2025-03-19 16:26:49,141 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-19T16:26:49.141064+08:00
+2025-03-19 16:26:49,150 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 16:26:49,156 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 16:26:49,159 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-19 16:26:49,159 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-19 16:26:49,160 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-19 16:26:49,160 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-19 16:26:49,161 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-19 16:26:59
+2025-03-19 16:26:49,161 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-20 00:05:00
+2025-03-19 16:26:49,215 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-19 16:26:49,220 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-19 16:26:49,224 - werkzeug - INFO -  * Restarting with stat
+2025-03-19 16:26:52,679 - date_cleaner - INFO - 初始化調度器
+2025-03-19 16:26:52,985 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-19T16:26:52.985799+08:00
+2025-03-19 16:26:52,990 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 16:26:52,992 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-19 16:26:52,995 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-19 16:26:52,996 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-19 16:26:52,996 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-19 16:26:53,003 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-19 16:26:53,003 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-19 16:27:02
+2025-03-19 16:26:53,004 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-20 00:05:00
+2025-03-19 16:26:53,028 - werkzeug - WARNING -  * Debugger is active!
+2025-03-19 16:26:53,045 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-19 16:26:53,492 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:26:53] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 16:26:53,657 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:26:53] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 16:26:55,879 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:26:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:26:59,163 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 16:26:59 CST], next run at: 2025-03-19 16:26:59 CST)" (scheduled at 2025-03-19 16:26:59.153032+08:00)
+2025-03-19 16:26:59,164 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-19 16:26:59,166 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-19 16:26:59,169 - date_cleaner - INFO - 當前日期: 2025-03-19
+2025-03-19 16:26:59,178 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-19', '2025-03-20']
+2025-03-19 16:26:59,183 - date_cleaner - INFO - 已提交事務
+2025-03-19 16:26:59,184 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-19 16:26:59,187 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-19', '2025-03-20']
+2025-03-19 16:26:59,188 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-19 16:26:59,189 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 16:26:59 CST], next run at: 2025-03-19 16:26:59 CST)" executed successfully
+2025-03-19 16:26:59,191 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-19 16:27:03,010 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 16:27:02 CST], next run at: 2025-03-19 16:27:02 CST)" (scheduled at 2025-03-19 16:27:02.991801+08:00)
+2025-03-19 16:27:03,010 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-19 16:27:03,011 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-19 16:27:03,012 - date_cleaner - INFO - 當前日期: 2025-03-19
+2025-03-19 16:27:03,016 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-19', '2025-03-20']
+2025-03-19 16:27:03,018 - date_cleaner - INFO - 已提交事務
+2025-03-19 16:27:03,019 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-19 16:27:03,020 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-19', '2025-03-20']
+2025-03-19 16:27:03,021 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-19 16:27:03,022 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-19 16:27:02 CST], next run at: 2025-03-19 16:27:02 CST)" executed successfully
+2025-03-19 16:27:03,023 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-19 16:27:03,242 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:27:03] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:27:06,377 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:27:06] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:27:09,383 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:27:09] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:27:12,369 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:27:12] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:27:15,365 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:27:15] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:29:17,684 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:17] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 16:29:17,826 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:17] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 16:29:19,644 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:19] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:29:20,602 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:20] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:29:23,745 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:29:26,720 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:26] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:29:29,721 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:29] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:29:32,714 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:32] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:29:35,725 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:35] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:29:38,733 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:29:41,742 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:29:44,741 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:29:47,736 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:29:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:33:59,320 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:33:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:34:02,149 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:34:02] "[31m[1mPOST /api/log/logs HTTP/1.1[0m" 401 -
+2025-03-19 16:34:46,708 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:34:46] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:34:49,858 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:34:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:34:52,846 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:34:52] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:34:55,844 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:34:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:34:58,857 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:34:58] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:01,839 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:01] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:04,839 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:04] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:07,867 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:07] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:10,862 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:10] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:13,854 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:13] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:16,851 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:19,859 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:19] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:22,846 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:22] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:25,850 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:28,839 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:28] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:31,849 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:31] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:34,868 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:34] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:37,833 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:37] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:40,851 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:40] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:43,849 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:46,861 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:49,835 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:52,845 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:52] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:35:55,831 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:35:55] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:42:15,681 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:42:15] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 16:43:45,427 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:45] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:43:46,462 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:46] "OPTIONS /api/products/list HTTP/1.1" 200 -
+2025-03-19 16:43:46,643 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:46] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 16:43:47,019 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:47] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:43:47,021 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:47] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:43:47,023 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:47] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-19 16:43:47,040 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:47] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-19 16:43:47,042 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:47] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:43:47,056 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:47] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:43:47,056 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:47] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-19 16:43:47,058 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:47] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:43:47,060 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:47] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:43:47,062 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:43:47] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-19 16:57:13,219 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:13] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 16:57:13,397 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:13] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:57:13,401 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:13] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-19 16:57:13,498 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:13] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:57:13,509 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:13] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:57:13,602 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:13] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:57:13,624 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:13] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-19 16:57:13,668 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:13] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-19 16:57:13,707 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:13] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-19 16:57:13,725 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:13] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:57:13,784 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:13] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-19 16:57:58,034 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:57:58] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 16:58:23,785 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:58:24,909 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:24] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 16:58:31,455 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:31] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 16:58:31,593 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:31] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 16:58:39,119 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:39] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:58:40,223 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:40] "OPTIONS /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:58:40,307 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:40] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 16:58:43,433 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:58:46,419 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:46] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:58:48,587 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:48] "[35m[1mOPTIONS /api/line/bind HTTP/1.1[0m" 204 -
+2025-03-19 16:58:48,932 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:48] "POST /api/line/bind HTTP/1.1" 200 -
+2025-03-19 16:58:49,434 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:58:49] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:59:04,021 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:04] "POST /api/line/callback HTTP/1.1" 200 -
+2025-03-19 16:59:05,376 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:05] "POST /api/line/callback HTTP/1.1" 200 -
+2025-03-19 16:59:06,992 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:06] "POST /api/line/callback HTTP/1.1" 200 -
+2025-03-19 16:59:08,680 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:08] "POST /api/line/callback HTTP/1.1" 200 -
+2025-03-19 16:59:43,332 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:43] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:59:50,284 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:50] "OPTIONS /api/customer/update-self HTTP/1.1" 200 -
+2025-03-19 16:59:50,379 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:50] "POST /api/customer/update-self HTTP/1.1" 200 -
+2025-03-19 16:59:51,260 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:51] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 16:59:55,264 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:55] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-19 16:59:55,390 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:55] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-19 16:59:56,545 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:56] "OPTIONS /api/admin/list HTTP/1.1" 200 -
+2025-03-19 16:59:56,634 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:56] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-19 16:59:57,172 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 16:59:57] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-19 17:00:35,499 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:00:35] "OPTIONS /api/line/unbind HTTP/1.1" 200 -
+2025-03-19 17:00:35,597 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:00:35] "POST /api/line/unbind HTTP/1.1" 200 -
+2025-03-19 17:00:45,596 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:00:45] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:01:09,310 - linebot - INFO - No handler of UnfollowEvent and no default handler
+2025-03-19 17:01:09,313 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:01:09] "POST /api/line/callback HTTP/1.1" 200 -
+2025-03-19 17:01:27,955 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:01:27] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 17:01:31,070 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:01:31] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:01:34,069 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:01:34] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:01:35,382 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:01:35] "POST /api/line/bind HTTP/1.1" 200 -
+2025-03-19 17:01:37,083 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:01:37] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:01:40,294 - linebot - INFO - No handler of FollowEvent and no default handler
+2025-03-19 17:01:40,300 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:01:40] "POST /api/line/callback HTTP/1.1" 200 -
+2025-03-19 17:01:47,979 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:01:47] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 17:02:21,377 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:21] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-19 17:02:22,501 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:22] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 17:02:22,633 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:22] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:02:22,660 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:22] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-19 17:02:22,708 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:22] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:02:22,720 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:22] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:02:22,783 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:22] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:02:22,785 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:22] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-19 17:02:22,786 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:22] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-19 17:02:22,801 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:22] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:02:22,821 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:22] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-19 17:02:22,837 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:22] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:02:24,556 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:24] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-19 17:02:25,612 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:25] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 17:02:25,901 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:25] "OPTIONS /api/customer/list HTTP/1.1" 200 -
+2025-03-19 17:02:25,992 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:25] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-19 17:02:30,887 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:30] "OPTIONS /api/customer-login HTTP/1.1" 200 -
+2025-03-19 17:02:31,442 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:31] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 17:02:31,558 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:31] "OPTIONS /api/orders/list HTTP/1.1" 200 -
+2025-03-19 17:02:31,661 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:31] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 17:02:32,523 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:32] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:02:36,541 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:36] "POST /api/line/unbind HTTP/1.1" 200 -
+2025-03-19 17:02:37,783 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:37] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:02:38,748 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:38] "POST /api/line/generate-bind-url HTTP/1.1" 200 -
+2025-03-19 17:02:41,869 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:02:44,849 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:02:47,855 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:02:50,860 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:50] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:02:53,867 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:53] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:02:56,856 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:02:59,867 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:02:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:02,862 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:05,863 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:08,862 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:11,873 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:14,873 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:14] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:17,866 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:17] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:20,858 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:20] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:23,877 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:23] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:26,864 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:26] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:29,875 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:29] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:32,872 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:32] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:35,886 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:35] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:38,858 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:38] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:41,865 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:41] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:44,859 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:44] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:47,855 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:47] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:50,864 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:50] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:53,859 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:53] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:56,869 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:56] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:03:59,857 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:03:59] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:04:02,858 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:04:02] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:04:05,852 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:04:05] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:04:08,868 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:04:08] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:04:09,805 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:04:09] "[35m[1mOPTIONS /api/line/bind HTTP/1.1[0m" 204 -
+2025-03-19 17:04:10,202 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:04:10] "POST /api/line/bind HTTP/1.1" 200 -
+2025-03-19 17:04:11,882 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:04:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:04:14,795 - linebot - INFO - No handler of FollowEvent and no default handler
+2025-03-19 17:04:14,803 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:04:14] "POST /api/line/callback HTTP/1.1" 200 -
+2025-03-19 17:28:34,621 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:34] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-19 17:28:35,030 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:35] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-19 17:28:35,033 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:35] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:28:35,097 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:35] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:28:35,105 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:35] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-19 17:28:35,116 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:35] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:28:35,119 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:35] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:28:35,125 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:35] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:28:35,132 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:35] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-19 17:28:35,149 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:35] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-19 17:28:35,156 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:35] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-19 17:28:36,455 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:36] "OPTIONS /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:28:36,543 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:36] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-19 17:28:38,690 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:38] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 17:28:41,733 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:41] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-19 17:28:47,963 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:47] "POST /api/customer-login HTTP/1.1" 200 -
+2025-03-19 17:28:48,163 - werkzeug - INFO - 127.0.0.1 - - [19/Mar/2025 17:28:48] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-19 17:33:34,050 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-19 17:33:34,051 - date_cleaner - INFO - 調度器已關閉
+2025-03-19 17:33:34,217 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-19 17:33:34,219 - date_cleaner - INFO - 調度器已關閉

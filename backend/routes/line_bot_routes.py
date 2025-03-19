@@ -93,7 +93,7 @@ def callback():
 
     return 'OK'
 
-@line_bot_bp.route("/line-binding", methods=['POST', 'OPTIONS'])
+@line_bot_bp.route("/line-binding", methods=['GET', 'POST', 'OPTIONS'])
 def line_login_callback():
     if request.method == 'OPTIONS':
         return '', 204
