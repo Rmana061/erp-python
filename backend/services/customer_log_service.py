@@ -133,13 +133,7 @@ class CustomerLogService(BaseLogService):
                 'before': old_data.get('address', '-'),
                 'after': new_data.get('address', '-')
             }
-        
-        # LINE账号变更
-        if old_data.get('line_account') != new_data.get('line_account'):
-            changes['line_account'] = {
-                'before': old_data.get('line_account', '-'),
-                'after': new_data.get('line_account', '-')
-            }
+    
         
         # 可见产品变更
         if old_data.get('viewable_products') != new_data.get('viewable_products'):
@@ -172,6 +166,7 @@ class CustomerLogService(BaseLogService):
         
         return changes
     
+    
     def _process_create(self, new_data: Dict[str, Any]) -> Dict[str, Any]:
         """處理客戶新增操作"""
         try:
@@ -183,6 +178,10 @@ class CustomerLogService(BaseLogService):
                 viewable_products_ids = new_data.get('viewable_products', '')
                 viewable_products_names = self._get_product_names(viewable_products_ids)
                 
+                # 處理LINE帳號信息 - 新的多帳號結構
+                line_users = new_data.get('line_users', [])
+                line_groups = new_data.get('line_groups', [])
+                
                 customer_info = {
                     'id': new_data.get('id', ''),
                     'username': new_data.get('username', ''),
@@ -191,7 +190,8 @@ class CustomerLogService(BaseLogService):
                     'phone': new_data.get('phone', ''),
                     'email': new_data.get('email', ''),
                     'address': new_data.get('address', ''),
-                    'line_account': new_data.get('line_account', ''),
+                    'line_users': line_users,
+                    'line_groups': line_groups,
                     'viewable_products': viewable_products_names,  # 使用產品名稱
                     'viewable_products_ids': viewable_products_ids,  # 保留原始ID以供參考
                     'remark': new_data.get('remark', ''),
@@ -219,6 +219,10 @@ class CustomerLogService(BaseLogService):
                 viewable_products_ids = old_data.get('viewable_products', '')
                 viewable_products_names = self._get_product_names(viewable_products_ids)
                 
+                # 處理LINE帳號信息 - 新的多帳號結構
+                line_users = old_data.get('line_users', [])
+                line_groups = old_data.get('line_groups', [])
+                
                 customer_info = {
                     'id': old_data.get('id', ''),
                     'username': old_data.get('username', ''),
@@ -227,7 +231,8 @@ class CustomerLogService(BaseLogService):
                     'phone': old_data.get('phone', ''),
                     'email': old_data.get('email', ''),
                     'address': old_data.get('address', ''),
-                    'line_account': old_data.get('line_account', ''),
+                    'line_users': line_users,
+                    'line_groups': line_groups,
                     'viewable_products': viewable_products_names,  # 使用產品名稱
                     'viewable_products_ids': viewable_products_ids,  # 保留原始ID以供參考
                     'remark': old_data.get('remark', ''),
@@ -253,15 +258,53 @@ class CustomerLogService(BaseLogService):
             # 处理常规字段变更
             changes = self._compare_changes(old_data, new_data)
             
+            # 检查是否有LINE账号变更
+            has_line_changes = False
+            line_changes = new_data.get('line_changes')
+            
+            if line_changes:
+                print(f"Detected LINE changes for customer_id: {new_data.get('id')}")
+                # 将LINE变更信息合并到changes中
+                if isinstance(line_changes, dict):
+                    if 'line_users' in line_changes:
+                        # 簡化顯示，只保留用戶名稱
+                        changes['line_users'] = line_changes['line_users']
+                        has_line_changes = True
+                    
+                    if 'line_groups' in line_changes:
+                        # 簡化顯示，只保留群組名稱
+                        changes['line_groups'] = line_changes['line_groups']
+                        has_line_changes = True
+                        
+                    if 'line_account' in line_changes:
+                        # LINE帳號顯示使用名稱代替ID
+                        changes['line_account'] = {
+                            'before': line_changes['line_account'].get('before', ''),
+                            'after': line_changes['line_account'].get('after', '')
+                        }
+                        has_line_changes = True
+            
             # 如果是密码修改操作，添加明显标记
             if password_changed:
                 # 添加特殊字段，方便前端识别
                 changes['__password_changed__'] = True
+                changes['password'] = {
+                    'before': '********',
+                    'after': '********（已更新）'
+                }
             
-            if not changes and not password_changed:
+            if not changes and not password_changed and not has_line_changes:
                 print(f"Customer update - No changes detected for customer_id: {new_data.get('id')}")
                 return None
-                
+            
+            # 即使只有密碼變更，也要產生記錄
+            if password_changed and len(changes) <= 1:  # 只有密碼變更或許多__password_changed__標記
+                print(f"Customer password changed for customer_id: {new_data.get('id')}")
+                changes['password'] = {
+                    'before': '********',
+                    'after': '********（已更新）'
+                }
+            
             # 獲取產品名稱用於顯示
             old_products_ids = old_data.get('viewable_products', '')
             new_products_ids = new_data.get('viewable_products', '')
@@ -277,6 +320,14 @@ class CustomerLogService(BaseLogService):
                 'changes': changes
             }
             
+            # 如果有LINE变更，添加更多详细信息
+            if has_line_changes:
+                # 添加LINE用户和群组信息供前端显示
+                customer_info['old_line_users'] = old_data.get('line_users', [])
+                customer_info['new_line_users'] = new_data.get('line_users', [])
+                customer_info['old_line_groups'] = old_data.get('line_groups', [])
+                customer_info['new_line_groups'] = new_data.get('line_groups', [])
+            
             return {
                 'message': {
                     'customer': customer_info
@@ -285,4 +336,6 @@ class CustomerLogService(BaseLogService):
             }
         except Exception as e:
             print(f"客户更新日志处理错误: {str(e)}")
+            import traceback
+            traceback.print_exc()
             return None 

@@ -4,7 +4,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
     TemplateSendMessage, ButtonsTemplate, PostbackTemplateAction,
-    URIAction
+    URIAction, JoinEvent
 )
 import os
 from dotenv import load_dotenv
@@ -49,6 +49,11 @@ def generate_bind_url():
     try:
         data = request.get_json()
         customer_id = data.get('customer_id')
+        bind_type = data.get('bind_type', 'user')  # 默认为 'user'
+        
+        # 打印請求信息以便調試
+        print(f"Generate bind URL request: customer_id={customer_id}, bind_type={bind_type}")
+        print(f"Request headers: {dict(request.headers)}")
         
         if not customer_id:
             return jsonify({
@@ -60,18 +65,22 @@ def generate_bind_url():
         line_login_url = (
             f"https://liff.line.me/{LINE_LIFF_ID}"
             f"?customer_id={quote(str(customer_id))}"
+            f"&type={quote(bind_type)}"
         )
         print(f"Generated LIFF URL: {line_login_url}")
         
         return jsonify({
             "status": "success",
             "data": {
-                "url": line_login_url
+                "bind_url": line_login_url,
+                "url": line_login_url  # 兼容性保留
             }
         })
         
     except Exception as e:
         print(f"Error generating bind URL: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({
             "status": "error",
             "message": str(e)
@@ -86,9 +95,15 @@ def callback():
     body = request.get_data(as_text=True)
 
     try:
+        # 打印出请求信息，方便调试
+        print("=== LINE Callback ===")
+        print(f"Headers: {dict(request.headers)}")
+        print(f"Body: {body}")
+        
         # 验证签名
         handler.handle(body, signature)
     except InvalidSignatureError:
+        print("Invalid signature error")
         abort(400)
 
     return 'OK'
@@ -182,10 +197,27 @@ def line_login_callback():
             with get_db_connection() as conn:
                 cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
                 
+                # 检查该LINE账号是否已经绑定到其他客户
+                cursor.execute("""
+                    SELECT cu.id, cu.company_name 
+                    FROM line_users lu
+                    JOIN customers cu ON lu.customer_id = cu.id
+                    WHERE lu.line_user_id = %s 
+                      AND lu.customer_id != %s
+                      AND cu.status = 'active'
+                """, (profile_json['userId'], customer_id))
+                
+                existing = cursor.fetchone()
+                if existing:
+                    return jsonify({
+                        "status": "error",
+                        "message": f"此LINE帳號已被其他客戶綁定"
+                    }), 400
+                
                 # 获取客户旧数据用于记录日志
                 cursor.execute("""
                     SELECT id, username, company_name, contact_name, phone, email, address,
-                           line_account, viewable_products, remark, reorder_limit_days, status
+                           viewable_products, remark, reorder_limit_days, status
                     FROM customers 
                     WHERE id = %s AND status = 'active'
                 """, (customer_id,))
@@ -202,29 +234,74 @@ def line_login_callback():
                 if 'contact_name' in old_customer_data:
                     old_customer_data['contact_person'] = old_customer_data['contact_name']
                 
-                # 保存原LINE账号值，可能为NULL或已有值
-                old_line_account = old_customer_data.get('line_account')
-                
+                # 获取现有的LINE用户列表
                 cursor.execute("""
-                    UPDATE customers 
-                    SET line_account = %s,
-                        updated_at = NOW()
-                    WHERE id = %s AND status = 'active'
-                    RETURNING id
+                    SELECT id, line_user_id, user_name
+                    FROM line_users
+                    WHERE customer_id = %s
+                """, (customer_id,))
+                old_line_users = [dict(zip(['id', 'line_user_id', 'user_name'], row)) for row in cursor.fetchall()]
+                old_customer_data['line_users'] = old_line_users
+                
+                # 获取现有的LINE群组列表
+                cursor.execute("""
+                    SELECT id, line_group_id, group_name
+                    FROM line_groups
+                    WHERE customer_id = %s
+                """, (customer_id,))
+                old_line_groups = [dict(zip(['id', 'line_group_id', 'group_name'], row)) for row in cursor.fetchall()]
+                old_customer_data['line_groups'] = old_line_groups
+                
+                # 为向后兼容，添加空的line_account字段
+                old_customer_data['line_account'] = ''
+                
+                # 检查此LINE账号是否已经绑定到当前客户
+                cursor.execute("""
+                    SELECT id FROM line_users 
+                    WHERE line_user_id = %s AND customer_id = %s
                 """, (profile_json['userId'], customer_id))
                 
-                result = cursor.fetchone()
-                if not result:
-                    return jsonify({
-                        "status": "error",
-                        "message": "客戶不存在或狀態不正確"
-                    }), 400
-                    
+                # 如果尚未绑定，则创建新绑定
+                if not cursor.fetchone():
+                    # 绑定LINE用户
+                    cursor.execute("""
+                        INSERT INTO line_users (
+                            customer_id, line_user_id, user_name, created_at, updated_at
+                        ) VALUES (
+                            %s, %s, %s, NOW(), NOW()
+                        )
+                    """, (customer_id, profile_json['userId'], profile_json.get('displayName', '')))
+                
                 conn.commit()
+                
+                # 获取更新后的LINE用户列表
+                cursor.execute("""
+                    SELECT id, line_user_id, user_name
+                    FROM line_users
+                    WHERE customer_id = %s
+                """, (customer_id,))
+                new_line_users = [dict(zip(['id', 'line_user_id', 'user_name'], row)) for row in cursor.fetchall()]
                 
                 # 准备新客户数据用于日志记录
                 new_customer_data = old_customer_data.copy()
-                new_customer_data['line_account'] = profile_json['userId']
+                new_customer_data['line_users'] = new_line_users
+                
+                # 創建變更詳情
+                changes = {}
+                changes['line_users'] = {
+                    'before': [{'user_name': user.get('user_name', '未知用戶')} for user in old_line_users],
+                    'after': [{'user_name': user.get('user_name', '未知用戶')} for user in new_line_users]
+                }
+                
+                # 添加LINE帳號變更記錄
+                user_name = profile_json.get('displayName', '未知用戶')
+                changes['line_account'] = {
+                    'before': '',
+                    'after': user_name
+                }
+                
+                # 將變更詳情添加到新數據中
+                new_customer_data['line_changes'] = changes
                 
                 try:
                     # 记录日志
@@ -287,10 +364,14 @@ def bind():
             with get_db_connection() as conn:
                 cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
                 
-                # 检查是否已经绑定
+                # 检查该LINE账号是否已经绑定到其他客户
                 cursor.execute("""
-                    SELECT id, company_name FROM customers 
-                    WHERE line_account = %s AND id != %s AND status = 'active'
+                    SELECT cu.id, cu.company_name 
+                    FROM line_users lu
+                    JOIN customers cu ON lu.customer_id = cu.id
+                    WHERE lu.line_user_id = %s 
+                      AND lu.customer_id != %s
+                      AND cu.status = 'active'
                 """, (line_user_id, customer_id))
                 
                 existing = cursor.fetchone()
@@ -303,7 +384,7 @@ def bind():
                 # 获取客户旧数据用于记录日志
                 cursor.execute("""
                     SELECT id, username, company_name, contact_name, phone, email, address,
-                           line_account, viewable_products, remark, reorder_limit_days, status
+                           viewable_products, remark, reorder_limit_days, status
                     FROM customers 
                     WHERE id = %s AND status = 'active'
                 """, (customer_id,))
@@ -320,36 +401,80 @@ def bind():
                 if 'contact_name' in old_customer_data:
                     old_customer_data['contact_person'] = old_customer_data['contact_name']
                 
-                # 保存原LINE账号值，可能为NULL或已有值
-                old_line_account = old_customer_data.get('line_account')
-                
-                # 更新绑定
+                # 获取现有的LINE用户列表
                 cursor.execute("""
-                    UPDATE customers 
-                    SET line_account = %s,
-                        updated_at = NOW()
-                    WHERE id = %s AND status = 'active'
-                    RETURNING id, company_name
+                    SELECT id, line_user_id, user_name
+                    FROM line_users
+                    WHERE customer_id = %s
+                """, (customer_id,))
+                old_line_users = [dict(zip(['id', 'line_user_id', 'user_name'], row)) for row in cursor.fetchall()]
+                old_customer_data['line_users'] = old_line_users
+                
+                # 获取现有的LINE群组列表
+                cursor.execute("""
+                    SELECT id, line_group_id, group_name
+                    FROM line_groups
+                    WHERE customer_id = %s
+                """, (customer_id,))
+                old_line_groups = [dict(zip(['id', 'line_group_id', 'group_name'], row)) for row in cursor.fetchall()]
+                old_customer_data['line_groups'] = old_line_groups
+                
+                # 为向后兼容，添加空的line_account字段
+                old_customer_data['line_account'] = ''
+                
+                # 检查用户是否已经绑定到当前客户
+                cursor.execute("""
+                    SELECT id FROM line_users 
+                    WHERE line_user_id = %s AND customer_id = %s
                 """, (line_user_id, customer_id))
                 
-                result = cursor.fetchone()
-                if not result:
-                    return jsonify({
-                        "status": "error",
-                        "message": "客戶不存在或狀態不正確"
-                    }), 400
-                    
+                # 如果此LINE账号尚未绑定到当前客户，则创建新绑定
+                if not cursor.fetchone():
+                    # 绑定新的LINE用户
+                    cursor.execute("""
+                        INSERT INTO line_users (
+                            customer_id, line_user_id, user_name, created_at, updated_at
+                        ) VALUES (
+                            %s, %s, %s, NOW(), NOW()
+                        )
+                    """, (customer_id, line_user_id, data.get('user_name', '')))
+                
                 conn.commit()
+                
+                # 获取更新后的LINE用户列表
+                cursor.execute("""
+                    SELECT id, line_user_id, user_name
+                    FROM line_users
+                    WHERE customer_id = %s
+                """, (customer_id,))
+                new_line_users = [dict(zip(['id', 'line_user_id', 'user_name'], row)) for row in cursor.fetchall()]
                 
                 # 准备新客户数据用于日志记录
                 new_customer_data = old_customer_data.copy()
-                new_customer_data['line_account'] = line_user_id
+                new_customer_data['line_users'] = new_line_users
+                
+                # 創建變更詳情
+                changes = {}
+                changes['line_users'] = {
+                    'before': [{'user_name': user.get('user_name', '未知用戶')} for user in old_line_users],
+                    'after': [{'user_name': user.get('user_name', '未知用戶')} for user in new_line_users]
+                }
+                
+                # 添加LINE帳號變更記錄
+                user_name = data.get('user_name', '未知用戶')
+                changes['line_account'] = {
+                    'before': '',
+                    'after': user_name
+                }
+                
+                # 將變更詳情添加到新數據中
+                new_customer_data['line_changes'] = changes
                 
                 try:
                     # 记录日志
                     from backend.services.log_service_registry import LogServiceRegistry
                     
-                    # 初始化日志服务并记录操作
+                    # 初始化日誌服務並記錄操作
                     log_service = LogServiceRegistry.get_service(conn, 'customers')
                     log_service.log_operation(
                         table_name='customers',
@@ -361,7 +486,7 @@ def bind():
                         user_type='客戶'
                     )
                 except Exception as log_error:
-                    # 日志记录失败不影响主要功能
+                    # 日誌記錄失敗不影響主要功能
                     print(f"Error logging LINE bind operation: {str(log_error)}")
                 
                 # 发送欢迎消息
@@ -392,23 +517,270 @@ def bind():
             "message": str(e)
         }), 500
 
+@handler.add(JoinEvent)
+def handle_join(event):
+    """處理機器人被加入群組的事件"""
+    try:
+        # 獲取群組ID
+        group_id = event.source.group_id
+        
+        # 取得群組資訊
+        group_summary = line_bot_api.get_group_summary(group_id)
+        group_name = group_summary.group_name if hasattr(group_summary, 'group_name') else '未命名群組'
+        
+        # 回覆歡迎訊息
+        welcome_text = (
+            f"感謝將我加入「{group_name}」群組！\n\n"
+            "請使用以下指令將此群組與您的帳號綁定：\n"
+            "「綁定帳號 公司的帳號名稱」\n\n"
+            "例如：綁定帳號 company123\n\n"
+            "您也可以隨時輸入「功能」來查看所有可用的功能介紹。"
+        )
+        
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=welcome_text)
+        )
+        
+    except Exception as e:
+        print(f"處理加入群組事件時發生錯誤: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        # 發送錯誤訊息
+        try:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="加入群組時發生錯誤，請稍後再試或聯絡系統管理員。")
+            )
+        except:
+            pass
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     try:
         user_message = event.message.text
         user_id = event.source.user_id
         
+        # 檢查是否為群組訊息
+        is_group_message = False
+        group_id = None
+        
+        if hasattr(event.source, 'type') and event.source.type == 'group':
+            is_group_message = True
+            group_id = event.source.group_id
+        
+        # 檢查是否為"功能"指令
+        if user_message.strip() == '功能':
+            feature_text = (
+                "📱 功能列表 📱\n\n"
+                "🔹 綁定帳號 [公司帳號名稱]\n"
+                "   將此LINE群組與您的公司帳號綁定\n"
+                "   範例：綁定帳號 company123\n\n"
+                "🔹 近兩週訂單\n"
+                "   查詢最近14天內的前10筆訂單狀態\n\n"
+                "🔹 待確認訂單\n"
+                "   查詢尚未確認的前10筆訂單\n\n"
+                "🔹 已確認訂單\n"
+                "   查詢已確認但尚未出貨的前10筆訂單\n\n"
+                "🔹 已完成訂單\n"
+                "   查詢已出貨完成的前10筆訂單\n\n"
+                "輸入以上關鍵字即可使用對應功能"
+            )
+            
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=feature_text)
+            )
+            return
+            
+        # 檢查是否為綁定帳號指令
+        if is_group_message and user_message.startswith('綁定帳號') and len(user_message.split()) >= 2:
+            # 提取使用者名稱
+            username = user_message.split(None, 1)[1].strip()
+            
+            with get_db_connection() as conn:
+                cursor = conn.cursor()
+                
+                # 檢查使用者名稱是否存在
+                cursor.execute("""
+                    SELECT id, company_name FROM customers 
+                    WHERE username = %s AND status = 'active'
+                """, (username,))
+                
+                customer = cursor.fetchone()
+                
+                if not customer:
+                    # 使用者名稱不存在
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=f"找不到帳號 '{username}'，請確認帳號名稱是否正確。")
+                    )
+                    return
+                
+                customer_id, company_name = customer
+                
+                # 檢查此群組是否已綁定到其他客戶
+                cursor.execute("""
+                    SELECT c.id, c.company_name 
+                    FROM line_groups lg
+                    JOIN customers c ON lg.customer_id = c.id
+                    WHERE lg.line_group_id = %s 
+                      AND lg.customer_id != %s
+                      AND c.status = 'active'
+                """, (group_id, customer_id))
+                
+                existing = cursor.fetchone()
+                if existing:
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=f"此群組已綁定到 '{existing[1]}' 公司，無法重複綁定。")
+                    )
+                    return
+                
+                # 檢查此群組是否已綁定到當前客戶
+                cursor.execute("""
+                    SELECT id FROM line_groups 
+                    WHERE line_group_id = %s AND customer_id = %s
+                """, (group_id, customer_id))
+                
+                # 若尚未綁定，則創建新綁定
+                if not cursor.fetchone():
+                    # 取得群組名稱
+                    try:
+                        group_summary = line_bot_api.get_group_summary(group_id)
+                        group_name = group_summary.group_name if hasattr(group_summary, 'group_name') else '未命名群組'
+                    except:
+                        group_name = '未命名群組'
+                    
+                    # 獲取客戶舊數據用於記錄日誌
+                    cursor.execute("""
+                        SELECT id, username, company_name, contact_name, phone, email, address,
+                               viewable_products, remark, reorder_limit_days, status
+                        FROM customers 
+                        WHERE id = %s AND status = 'active'
+                    """, (customer_id,))
+                    
+                    old_data_row = cursor.fetchone()
+                    old_customer_data = dict(zip([desc[0] for desc in cursor.description], old_data_row))
+                    
+                    # 獲取現有的LINE用戶列表
+                    cursor.execute("""
+                        SELECT id, line_user_id, user_name
+                        FROM line_users
+                        WHERE customer_id = %s
+                    """, (customer_id,))
+                    old_line_users = [dict(zip(['id', 'line_user_id', 'user_name'], row)) for row in cursor.fetchall()]
+                    old_customer_data['line_users'] = old_line_users
+                    
+                    # 獲取現有的LINE群組列表
+                    cursor.execute("""
+                        SELECT id, line_group_id, group_name
+                        FROM line_groups
+                        WHERE customer_id = %s
+                    """, (customer_id,))
+                    old_line_groups = [dict(zip(['id', 'line_group_id', 'group_name'], row)) for row in cursor.fetchall()]
+                    old_customer_data['line_groups'] = old_line_groups
+                    
+                    # 為向後兼容，添加空的line_account字段
+                    old_customer_data['line_account'] = ''
+                    
+                    # 綁定新的LINE群組
+                    cursor.execute("""
+                        INSERT INTO line_groups (
+                            customer_id, line_group_id, group_name, created_at, updated_at
+                        ) VALUES (
+                            %s, %s, %s, NOW(), NOW()
+                        )
+                    """, (customer_id, group_id, group_name))
+                    
+                    conn.commit()
+                    
+                    # 獲取更新後的LINE群組列表
+                    cursor.execute("""
+                        SELECT id, line_group_id, group_name
+                        FROM line_groups
+                        WHERE customer_id = %s
+                    """, (customer_id,))
+                    new_line_groups = [dict(zip(['id', 'line_group_id', 'group_name'], row)) for row in cursor.fetchall()]
+                    
+                    # 準備新客戶數據用於日誌記錄
+                    new_customer_data = old_customer_data.copy()
+                    new_customer_data['line_groups'] = new_line_groups
+                    
+                    # 創建變更詳情
+                    changes = {}
+                    changes['line_groups'] = {
+                        'before': [{'group_name': group.get('group_name', '未命名群組')} for group in old_line_groups],
+                        'after': [{'group_name': group.get('group_name', '未命名群組')} for group in new_line_groups]
+                    }
+                    
+                    # 添加LINE帳號變更記錄
+                    changes['line_account'] = {
+                        'before': '',
+                        'after': group_name
+                    }
+                    
+                    # 將變更詳情添加到新數據中
+                    new_customer_data['line_changes'] = changes
+                    
+                    try:
+                        # 記錄日誌
+                        from backend.services.log_service_registry import LogServiceRegistry
+                        
+                        # 初始化日誌服務並記錄操作
+                        log_service = LogServiceRegistry.get_service(conn, 'customers')
+                        log_service.log_operation(
+                            table_name='customers',
+                            operation_type='修改',
+                            record_id=customer_id,
+                            old_data=old_customer_data,
+                            new_data=new_customer_data,
+                            performed_by=customer_id,
+                            user_type='客戶'
+                        )
+                    except Exception as log_error:
+                        # 日誌記錄失敗不影響主要功能
+                        print(f"Error logging LINE group bind operation: {str(log_error)}")
+                    
+                    # 回覆綁定成功訊息
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=f"群組已成功綁定到 '{company_name}' 公司！您現在可以在此群組中接收訂單通知。")
+                    )
+                else:
+                    # 已經綁定過了
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=f"此群組已經綁定到 '{company_name}' 公司。")
+                    )
+                
+                return
+            
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # 檢查用戶是否已綁定
-            cursor.execute("""
-                SELECT id, company_name FROM customers 
-                WHERE line_account = %s AND status = 'active'
-            """, (user_id,))
+            # 檢查是否為群組訊息，若是則檢查群組綁定
+            if is_group_message:
+                cursor.execute("""
+                    SELECT c.id, c.company_name 
+                    FROM customers c
+                    JOIN line_groups lg ON c.id = lg.customer_id
+                    WHERE lg.line_group_id = %s AND c.status = 'active'
+                """, (group_id,))
+                
+                customer = cursor.fetchone()
+            else:
+                # 檢查用戶是否已綁定
+                cursor.execute("""
+                    SELECT c.id, c.company_name 
+                    FROM customers c
+                    JOIN line_users lu ON c.id = lu.customer_id
+                    WHERE lu.line_user_id = %s AND c.status = 'active'
+                """, (user_id,))
+                
+                customer = cursor.fetchone()
             
-            customer = cursor.fetchone()
-            
+            # 以下是原有的訊息處理邏輯
             if customer:
                 if user_message == '近兩週訂單':
                     cursor.execute("""
@@ -574,9 +946,9 @@ def handle_message(event):
                     else:
                         reply_text = "目前沒有已完成的訂單。"
                 else:
-                    reply_text = f"您好 {customer[1]}，請選擇您要查詢的訂單類型。"
+                    reply_text = f"您好 {customer[1]}，請選擇您要查詢的訂單類型。\n\n若您需要查看所有功能介紹，請輸入「功能」。"
             else:
-                reply_text = "您尚未綁定帳號，請先完成帳號綁定。"
+                reply_text = "您尚未綁定帳號，請先完成帳號綁定。\n\n若您需要查看所有功能介紹，請輸入「功能」。"
                 
             line_bot_api.reply_message(
                 event.reply_token,
