@@ -1008,7 +1008,8 @@ def update_order_shipped():
                             'unit', od.product_unit,
                             'shipping_date', od.shipping_date,
                             'remark', od.remark,
-                            'supplier_note', od.supplier_note
+                            'supplier_note', od.supplier_note,
+                            'status', od.order_status
                         )) as items
                     FROM orders o
                     JOIN order_details od ON o.id = od.order_id

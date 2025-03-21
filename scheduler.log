@@ -1,0 +1,1171 @@
+2025-03-20 17:47:44,357 - date_cleaner - INFO - 初始化調度器
+2025-03-20 17:47:44,651 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-20T17:47:44.651740+08:00
+2025-03-20 17:47:44,656 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-20 17:47:44,660 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-20 17:47:44,666 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-20 17:47:44,667 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-20 17:47:44,668 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-20 17:47:44,669 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-20 17:47:44,670 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-20 17:47:54
+2025-03-20 17:47:44,670 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-21 00:05:00
+2025-03-20 17:47:44,713 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-20 17:47:44,714 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-20 17:47:44,717 - werkzeug - INFO -  * Restarting with stat
+2025-03-20 17:47:48,053 - date_cleaner - INFO - 初始化調度器
+2025-03-20 17:47:48,477 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-20T17:47:48.476188+08:00
+2025-03-20 17:47:48,481 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-20 17:47:48,483 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-20 17:47:48,486 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-20 17:47:48,487 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-20 17:47:48,487 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-20 17:47:48,488 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-20 17:47:48,489 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-20 17:47:58
+2025-03-20 17:47:48,489 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-21 00:05:00
+2025-03-20 17:47:48,515 - werkzeug - WARNING -  * Debugger is active!
+2025-03-20 17:47:48,530 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-20 17:47:53,766 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:47:53] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-20 17:47:54,659 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-20 17:47:54 CST], next run at: 2025-03-20 17:47:54 CST)" (scheduled at 2025-03-20 17:47:54.657725+08:00)
+2025-03-20 17:47:54,660 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-20 17:47:54,661 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-20 17:47:54,663 - date_cleaner - INFO - 當前日期: 2025-03-20
+2025-03-20 17:47:54,668 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-20', '2025-03-21']
+2025-03-20 17:47:54,670 - date_cleaner - INFO - 已提交事務
+2025-03-20 17:47:54,671 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-20 17:47:54,673 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-20', '2025-03-21']
+2025-03-20 17:47:54,675 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-20 17:47:54,676 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-20 17:47:54 CST], next run at: 2025-03-20 17:47:54 CST)" executed successfully
+2025-03-20 17:47:54,677 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-20 17:47:57,827 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:47:57] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-20 17:47:58,499 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-20 17:47:58 CST], next run at: 2025-03-20 17:47:58 CST)" (scheduled at 2025-03-20 17:47:58.482761+08:00)
+2025-03-20 17:47:58,500 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-20 17:47:58,501 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-20 17:47:58,502 - date_cleaner - INFO - 當前日期: 2025-03-20
+2025-03-20 17:47:58,505 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-20', '2025-03-21']
+2025-03-20 17:47:58,507 - date_cleaner - INFO - 已提交事務
+2025-03-20 17:47:58,507 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-20 17:47:58,508 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-20', '2025-03-21']
+2025-03-20 17:47:58,509 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-20 17:47:58,510 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-20 17:47:58 CST], next run at: 2025-03-20 17:47:58 CST)" executed successfully
+2025-03-20 17:47:58,510 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-20 17:48:06,261 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:48:06] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-20 17:48:11,292 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:48:11] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-20 17:52:42,651 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\utils\\email_utils.py', reloading
+2025-03-20 17:52:42,655 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-20 17:52:42,655 - date_cleaner - INFO - 調度器已關閉
+2025-03-20 17:52:42,785 - werkzeug - INFO -  * Restarting with stat
+2025-03-20 17:52:45,914 - date_cleaner - INFO - 初始化調度器
+2025-03-20 17:52:46,193 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-20T17:52:46.193628+08:00
+2025-03-20 17:52:46,199 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-20 17:52:46,201 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-20 17:52:46,204 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-20 17:52:46,205 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-20 17:52:46,206 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-20 17:52:46,207 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-20 17:52:46,208 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-20 17:52:56
+2025-03-20 17:52:46,209 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-21 00:05:00
+2025-03-20 17:52:46,231 - werkzeug - WARNING -  * Debugger is active!
+2025-03-20 17:52:46,245 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-20 17:52:56,216 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-20 17:52:56 CST], next run at: 2025-03-20 17:52:56 CST)" (scheduled at 2025-03-20 17:52:56.199617+08:00)
+2025-03-20 17:52:56,216 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-20 17:52:56,217 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-20 17:52:56,218 - date_cleaner - INFO - 當前日期: 2025-03-20
+2025-03-20 17:52:56,221 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-20', '2025-03-21']
+2025-03-20 17:52:56,223 - date_cleaner - INFO - 已提交事務
+2025-03-20 17:52:56,224 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-20 17:52:56,225 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-20', '2025-03-21']
+2025-03-20 17:52:56,225 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-20 17:52:56,226 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-20 17:52:56 CST], next run at: 2025-03-20 17:52:56 CST)" executed successfully
+2025-03-20 17:52:56,227 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-20 17:53:41,740 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:53:41] "POST /api/orders/batch-update-status HTTP/1.1" 200 -
+2025-03-20 17:53:41,845 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:53:41] "POST /api/orders/update-shipped HTTP/1.1" 200 -
+2025-03-20 17:53:41,960 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:53:41] "POST /api/log/record HTTP/1.1" 200 -
+2025-03-20 17:53:43,010 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:53:43] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-20 17:54:15,886 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:15] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-20 17:54:16,652 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:16] "POST /api/products/locked-dates HTTP/1.1" 200 -
+2025-03-20 17:54:16,696 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:16] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-20 17:54:16,720 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:16] "OPTIONS /api/products/list HTTP/1.1" 200 -
+2025-03-20 17:54:16,790 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:16] "OPTIONS /api/products/list HTTP/1.1" 200 -
+2025-03-20 17:54:16,794 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:16] "POST /api/products/locked-dates HTTP/1.1" 200 -
+2025-03-20 17:54:16,818 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:16] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-20 17:54:16,892 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:16] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-20 17:54:18,547 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:18] "POST /api/orders/check-recent HTTP/1.1" 200 -
+2025-03-20 17:54:25,541 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:25] "POST /api/orders/check-recent HTTP/1.1" 200 -
+2025-03-20 17:54:30,940 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:30] "POST /api/orders/check-recent HTTP/1.1" 200 -
+2025-03-20 17:54:31,042 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:31] "POST /api/orders/check-recent HTTP/1.1" 200 -
+2025-03-20 17:54:31,186 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:31] "POST /api/orders/create HTTP/1.1" 200 -
+2025-03-20 17:54:31,319 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:31] "[31m[1mPOST /api/orders/list HTTP/1.1[0m" 400 -
+2025-03-20 17:54:32,664 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:32] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-20 17:54:35,718 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:35] "OPTIONS /api/admin/list HTTP/1.1" 200 -
+2025-03-20 17:54:35,823 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:35] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-20 17:54:36,399 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:36] "[35m[1mOPTIONS /api/log/logs HTTP/1.1[0m" 204 -
+2025-03-20 17:54:36,519 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:36] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-20 17:54:45,054 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:45] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-20 17:54:46,921 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:54:46] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-20 17:55:11,930 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:55:11] "POST /api/orders/batch-update-status HTTP/1.1" 200 -
+2025-03-20 17:55:12,026 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:55:12] "POST /api/orders/update-confirmed HTTP/1.1" 200 -
+2025-03-20 17:55:12,155 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:55:12] "POST /api/log/record HTTP/1.1" 200 -
+2025-03-20 17:55:16,011 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:55:16] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-20 17:55:25,258 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:55:25] "POST /api/orders/batch-update-status HTTP/1.1" 200 -
+2025-03-20 17:55:25,385 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:55:25] "POST /api/orders/update-shipped HTTP/1.1" 200 -
+2025-03-20 17:55:25,516 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:55:25] "POST /api/log/record HTTP/1.1" 200 -
+2025-03-20 17:55:26,452 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:55:26] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-20 17:56:06,662 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:56:06] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-20 17:56:07,497 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:56:07] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-20 17:57:28,222 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\utils\\email_utils.py', reloading
+2025-03-20 17:57:28,224 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-20 17:57:28,225 - date_cleaner - INFO - 調度器已關閉
+2025-03-20 17:57:28,363 - werkzeug - INFO -  * Restarting with stat
+2025-03-20 17:57:31,350 - date_cleaner - INFO - 初始化調度器
+2025-03-20 17:57:31,636 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-20T17:57:31.636264+08:00
+2025-03-20 17:57:31,641 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-20 17:57:31,644 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-20 17:57:31,645 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-20 17:57:31,646 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-20 17:57:31,646 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-20 17:57:31,647 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-20 17:57:31,648 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-20 17:57:41
+2025-03-20 17:57:31,650 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-21 00:05:00
+2025-03-20 17:57:31,680 - werkzeug - WARNING -  * Debugger is active!
+2025-03-20 17:57:31,696 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-20 17:57:39,472 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:57:39] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-20 17:57:41,656 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-20 17:57:41 CST], next run at: 2025-03-20 17:57:41 CST)" (scheduled at 2025-03-20 17:57:41.642220+08:00)
+2025-03-20 17:57:41,656 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-20 17:57:41,657 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-20 17:57:41,658 - date_cleaner - INFO - 當前日期: 2025-03-20
+2025-03-20 17:57:41,660 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-20', '2025-03-21']
+2025-03-20 17:57:41,661 - date_cleaner - INFO - 已提交事務
+2025-03-20 17:57:41,662 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-20 17:57:41,663 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-20', '2025-03-21']
+2025-03-20 17:57:41,663 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-20 17:57:41,664 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-20 17:57:41 CST], next run at: 2025-03-20 17:57:41 CST)" executed successfully
+2025-03-20 17:57:41,665 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-20 17:58:10,215 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:58:10] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-20 17:58:10,887 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:58:10] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-20 17:58:21,361 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:58:21] "POST /api/orders/batch-update-status HTTP/1.1" 200 -
+2025-03-20 17:58:21,468 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:58:21] "POST /api/orders/update-shipped HTTP/1.1" 200 -
+2025-03-20 17:58:21,577 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:58:21] "POST /api/log/record HTTP/1.1" 200 -
+2025-03-20 17:58:33,680 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:58:33] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-20 17:59:01,949 - linebot - INFO - No handler of MessageEvent and no default handler
+2025-03-20 17:59:01,953 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 17:59:01] "POST /api/line/callback HTTP/1.1" 200 -
+2025-03-20 18:02:01,076 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\routes\\order_routes.py', reloading
+2025-03-20 18:02:01,077 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-20 18:02:01,078 - date_cleaner - INFO - 調度器已關閉
+2025-03-20 18:02:01,203 - werkzeug - INFO -  * Restarting with stat
+2025-03-20 18:02:03,975 - date_cleaner - INFO - 初始化調度器
+2025-03-20 18:02:04,211 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-20T18:02:04.211454+08:00
+2025-03-20 18:02:04,216 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-20 18:02:04,219 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-20 18:02:04,221 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-20 18:02:04,222 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-20 18:02:04,222 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-20 18:02:04,224 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-20 18:02:04,224 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-20 18:02:14
+2025-03-20 18:02:04,225 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-21 00:05:00
+2025-03-20 18:02:04,248 - werkzeug - WARNING -  * Debugger is active!
+2025-03-20 18:02:04,260 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-20 18:02:14,223 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-20 18:02:14 CST], next run at: 2025-03-20 18:02:14 CST)" (scheduled at 2025-03-20 18:02:14.217439+08:00)
+2025-03-20 18:02:14,224 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-20 18:02:14,226 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-20 18:02:14,227 - date_cleaner - INFO - 當前日期: 2025-03-20
+2025-03-20 18:02:14,236 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-20', '2025-03-21']
+2025-03-20 18:02:14,240 - date_cleaner - INFO - 已提交事務
+2025-03-20 18:02:14,242 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-20 18:02:14,244 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-20', '2025-03-21']
+2025-03-20 18:02:14,245 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-20 18:02:14,247 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-20 18:02:14 CST], next run at: 2025-03-20 18:02:14 CST)" executed successfully
+2025-03-20 18:02:14,249 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-20 21:26:31,523 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 21:26:31] "OPTIONS /api/orders/pending HTTP/1.1" 200 -
+2025-03-20 21:26:31,822 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 21:26:31] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-20 21:26:32,344 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 21:26:32] "OPTIONS /api/orders/all HTTP/1.1" 200 -
+2025-03-20 21:26:32,615 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 21:26:32] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-20 21:26:50,731 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 21:26:50] "OPTIONS /api/orders/batch-update-status HTTP/1.1" 200 -
+2025-03-20 21:26:50,914 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 21:26:50] "POST /api/orders/batch-update-status HTTP/1.1" 200 -
+2025-03-20 21:26:51,003 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 21:26:51] "OPTIONS /api/orders/update-shipped HTTP/1.1" 200 -
+2025-03-20 21:26:51,107 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 21:26:51] "POST /api/orders/update-shipped HTTP/1.1" 200 -
+2025-03-20 21:26:51,220 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 21:26:51] "[35m[1mOPTIONS /api/log/record HTTP/1.1[0m" 204 -
+2025-03-20 21:26:51,382 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 21:26:51] "POST /api/log/record HTTP/1.1" 200 -
+2025-03-20 21:26:54,241 - werkzeug - INFO - 127.0.0.1 - - [20/Mar/2025 21:26:54] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-21 00:05:00,008 - apscheduler.executors.default - INFO - Running job "清理過期鎖定日期任務 (trigger: cron[hour='0', minute='5'], next run at: 2025-03-22 00:05:00 CST)" (scheduled at 2025-03-21 00:05:00+08:00)
+2025-03-21 00:05:00,012 - apscheduler.executors.default - INFO - Running job "清理過期鎖定日期任務 (trigger: cron[hour='0', minute='5'], next run at: 2025-03-22 00:05:00 CST)" (scheduled at 2025-03-21 00:05:00+08:00)
+2025-03-21 00:05:00,014 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-21 00:05:00,014 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-21 00:05:00,015 - date_cleaner - INFO - 當前日期: 2025-03-21
+2025-03-21 00:05:00,016 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-20', '2025-03-21']
+2025-03-21 00:05:00,017 - date_cleaner - INFO - 已提交事務
+2025-03-21 00:05:00,017 - date_cleaner - INFO - 當前日期: 2025-03-21
+2025-03-21 00:05:00,018 - date_cleaner - INFO - 已刪除 1 個過期鎖定日期
+2025-03-21 00:05:00,018 - date_cleaner - INFO - 已刪除的日期: 2025-03-20
+2025-03-21 00:05:00,019 - date_cleaner - INFO - 已刪除的ID: 19
+2025-03-21 00:05:00,022 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-21']
+2025-03-21 00:05:00,022 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-21']
+2025-03-21 00:05:00,023 - date_cleaner - INFO - 已提交事務
+�任務結束
+2025-03-21 00:05:00,024 - apscheduler.executors.default - INFO - Job "清理過期鎖定日期任務 (trigger: cron[hour='0', minute='5'], next run at: 2025-03-22 00:05:00 CST)" executed successfully
+2025-03-21 00:05:00,024 - date_cleaner - INFO - 任務 clean_expired_dates_job 執行成功，清理了 1 個過期日期
+2025-03-21 00:05:00,025 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-21 00:05:00,026 - date_cleaner - INFO - 清理後資料庫中的日期: ['2025-03-21']
+2025-03-21 00:05:00,026 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-21 00:05:00,027 - apscheduler.executors.default - INFO - Job "清理過期鎖定日期任務 (trigger: cron[hour='0', minute='5'], next run at: 2025-03-22 00:05:00 CST)" executed successfully
+2025-03-21 00:05:00,027 - date_cleaner - INFO - 任務 clean_expired_dates_job 執行成功，清理了 0 個過期日期
+2025-03-21 09:14:17,302 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:17] "OPTIONS /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 09:14:17,512 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:17] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 09:14:18,252 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:18] "OPTIONS /api/admin/list HTTP/1.1" 200 -
+2025-03-21 09:14:18,349 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:18] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 09:14:19,364 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:19] "[35m[1mOPTIONS /api/log/logs HTTP/1.1[0m" 204 -
+2025-03-21 09:14:19,481 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:19] "[31m[1mPOST /api/log/logs HTTP/1.1[0m" 401 -
+2025-03-21 09:14:23,215 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:23] "OPTIONS /api/admin-login HTTP/1.1" 200 -
+2025-03-21 09:14:23,848 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:23] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-21 09:14:23,969 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:23] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 09:14:54,080 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:54] "OPTIONS /api/orders/all HTTP/1.1" 200 -
+2025-03-21 09:14:54,205 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:54] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-21 09:14:56,153 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:56] "OPTIONS /api/customer/list HTTP/1.1" 200 -
+2025-03-21 09:14:56,263 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:14:56] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 09:15:05,838 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:05] "OPTIONS /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:15:05,947 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:05] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:15:06,189 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:06] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-21 09:15:06,220 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:06] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-21 09:15:06,242 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:06] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-21 09:15:06,242 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:06] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-21 09:15:06,243 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:06] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-21 09:15:06,245 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:06] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-21 09:15:06,255 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:06] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-21 09:15:06,257 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:06] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-21 09:15:06,280 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:06] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-21 09:15:06,283 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:06] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-21 09:15:07,932 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:07] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 09:15:10,494 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:10] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 09:15:12,239 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:12] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-21 09:15:26,036 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:26] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:15:32,012 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:32] "OPTIONS /api/customer/info HTTP/1.1" 200 -
+2025-03-21 09:15:32,100 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:32] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-21 09:15:36,004 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:36] "OPTIONS /api/orders/list HTTP/1.1" 200 -
+2025-03-21 09:15:36,126 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:36] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-21 09:15:38,244 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:15:38] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-21 09:16:08,316 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:16:08] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 09:16:09,257 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:16:09] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-21 09:22:32,212 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:22:32] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:22:34,578 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:22:34] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 09:22:36,701 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:22:36] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:22:36,767 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:22:36] "OPTIONS /api/customer/3/info HTTP/1.1" 200 -
+2025-03-21 09:22:36,864 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:22:36] "POST /api/customer/3/info HTTP/1.1" 200 -
+2025-03-21 09:22:36,972 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:22:36] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:22:58,192 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:22:58] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 09:23:04,798 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:23:04] "POST /api/customer/3/info HTTP/1.1" 200 -
+2025-03-21 09:23:04,807 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:23:04] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:23:04,958 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:23:04] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:26:25,896 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:26:25] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 09:26:27,447 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:26:27] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-21 09:26:44,137 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:26:44] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:26:45,257 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:26:45] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 09:26:46,179 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:26:46] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-21 09:26:47,594 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:26:47] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:26:48,154 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:26:48] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 09:26:49,108 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:26:49] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:26:52,837 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:26:52] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 09:26:54,536 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:26:54] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-21 09:27:11,480 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:11] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 09:27:12,927 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:12] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-21 09:27:17,107 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:17] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 09:27:40,634 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:40] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:27:41,584 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:41] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 09:27:43,467 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:43] "OPTIONS /api/customer/34/info HTTP/1.1" 200 -
+2025-03-21 09:27:43,483 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:43] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:27:43,654 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:43] "POST /api/customer/34/info HTTP/1.1" 200 -
+2025-03-21 09:27:43,791 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:43] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:27:46,117 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:46] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 09:27:52,883 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:52] "POST /api/customer/3/info HTTP/1.1" 200 -
+2025-03-21 09:27:52,921 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:52] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:27:52,994 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:27:52] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 09:28:09,446 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:28:09] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-21 09:28:12,961 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:28:12] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-21 09:28:14,527 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 09:28:14] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-21 10:09:18,718 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:09:18] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 10:09:19,959 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:09:19] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 10:09:24,067 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:09:24] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-21 10:09:24,830 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:09:24] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:09:25,631 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:09:25] "POST /api/customer/info HTTP/1.1" 200 -
+2025-03-21 10:09:32,161 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:09:32] "POST /api/orders/all HTTP/1.1" 200 -
+2025-03-21 10:10:18,284 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:10:18] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 10:10:24,335 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:10:24] "POST /api/customer/3/info HTTP/1.1" 200 -
+2025-03-21 10:10:24,352 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:10:24] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:10:24,439 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:10:24] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:16:08,539 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:16:08] "OPTIONS /api/orders/list HTTP/1.1" 200 -
+2025-03-21 10:16:08,773 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:16:08] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-21 10:16:10,336 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:16:10] "POST /api/orders/list HTTP/1.1" 200 -
+2025-03-21 10:16:11,600 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:16:11] "OPTIONS /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:16:11,696 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:16:11] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:16:25,093 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:16:25] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:16:55,514 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:16:55] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:16:59,144 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:16:59] "OPTIONS /api/products/31/detail HTTP/1.1" 200 -
+2025-03-21 10:16:59,237 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:16:59] "POST /api/products/31/detail HTTP/1.1" 200 -
+2025-03-21 10:17:14,864 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:14] "OPTIONS /api/products/update/31 HTTP/1.1" 200 -
+2025-03-21 10:17:14,986 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:14] "POST /api/products/update/31 HTTP/1.1" 200 -
+2025-03-21 10:17:15,798 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:15] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:17:16,771 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:16] "OPTIONS /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:17:16,867 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:16] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:17:17,396 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:17] "[35m[1mOPTIONS /api/log/logs HTTP/1.1[0m" 204 -
+2025-03-21 10:17:17,488 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:17] "[31m[1mPOST /api/log/logs HTTP/1.1[0m" 401 -
+2025-03-21 10:17:20,612 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:20] "OPTIONS /api/admin-login HTTP/1.1" 200 -
+2025-03-21 10:17:21,279 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:21] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-21 10:17:21,397 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:21] "OPTIONS /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 10:17:21,495 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:21] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 10:17:22,186 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:22] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:17:22,785 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:22] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-21 10:17:33,133 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:33] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:17:33,397 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:33] "[36mGET /uploads/qq/qq.png HTTP/1.1[0m" 304 -
+2025-03-21 10:17:33,418 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:33] "[36mGET /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg HTTP/1.1[0m" 304 -
+2025-03-21 10:17:33,427 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:33] "[36mGET /uploads/77777/77777.jpg HTTP/1.1[0m" 304 -
+2025-03-21 10:17:33,451 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:33] "[36mGET /uploads/11111/11111.jpg HTTP/1.1[0m" 304 -
+2025-03-21 10:17:33,451 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:33] "[36mGET /uploads/1/1.png HTTP/1.1[0m" 304 -
+2025-03-21 10:17:33,465 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:33] "[36mGET /uploads/222/222.png HTTP/1.1[0m" 304 -
+2025-03-21 10:17:33,500 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:33] "[36mGET /uploads/1111/1111.png HTTP/1.1[0m" 304 -
+2025-03-21 10:17:33,501 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:33] "[36mGET /uploads/777/777.jpg HTTP/1.1[0m" 304 -
+2025-03-21 10:17:33,503 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:33] "[36mGET /uploads/99/99.jpg HTTP/1.1[0m" 304 -
+2025-03-21 10:17:33,505 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:33] "[36mGET /uploads/a/a.jpg HTTP/1.1[0m" 304 -
+2025-03-21 10:17:34,853 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:34] "POST /api/products/31/detail HTTP/1.1" 200 -
+2025-03-21 10:17:45,024 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads?restype=REDACTED&comp=REDACTED&prefix=REDACTED'
+Request method: 'GET'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'acf5a544-05fa-11f0-a823-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:17:45,216 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Transfer-Encoding': 'chunked'
+    'Content-Type': 'application/xml'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '02389cc1-401e-0005-6607-9af7bb000000'
+    'x-ms-client-request-id': 'acf5a544-05fa-11f0-a823-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:17:44 GMT'
+2025-03-21 10:17:45,233 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads?restype=REDACTED'
+Request method: 'GET'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'ad15de73-05fa-11f0-a8e6-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:17:45,330 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Content-Length': '0'
+    'Last-Modified': 'Tue, 18 Mar 2025 07:51:30 GMT'
+    'ETag': '"0x8DD65F1B22B7684"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '6064fe3d-d01e-0075-2107-9a4e4c000000'
+    'x-ms-client-request-id': 'ad15de73-05fa-11f0-a8e6-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-has-immutability-policy': 'REDACTED'
+    'x-ms-has-legal-hold': 'REDACTED'
+    'x-ms-immutable-storage-with-versioning-enabled': 'REDACTED'
+    'x-ms-blob-public-access': 'REDACTED'
+    'x-ms-default-encryption-scope': 'REDACTED'
+    'x-ms-deny-encryption-scope-override': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:17:44 GMT'
+2025-03-21 10:17:45,337 - root - INFO - 上傳文件: 6082b761-88bf-4efc-9a28-421c537ebd22___cG5n, 內容類型: image/png
+2025-03-21 10:17:45,338 - root - INFO - 已添加副檔名: 6082b761-88bf-4efc-9a28-421c537ebd22___cG5n.png
+2025-03-21 10:17:45,347 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/6082b761-88bf-4efc-9a28-421c537ebd22___cG5n.png'
+Request method: 'PUT'
+Request headers:
+    'Content-Length': '2265890'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-version': 'REDACTED'
+    'Content-Type': 'image/png'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'ad271c52-05fa-11f0-9be8-b88198d47dd9'
+    'Authorization': 'REDACTED'
+A body is sent with the request
+2025-03-21 10:17:45,624 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 201
+Response headers:
+    'Content-Length': '0'
+    'Content-MD5': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:17:45 GMT'
+    'ETag': '"0x8DD681E916547E6"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '3e2f34f0-101e-0055-6707-9a35eb000000'
+    'x-ms-client-request-id': 'ad271c52-05fa-11f0-9be8-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-content-crc64': 'REDACTED'
+    'x-ms-request-server-encrypted': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:17:44 GMT'
+2025-03-21 10:17:45,628 - root - INFO - 文件已上傳到Azure Blob，路徑: lll/6082b761-88bf-4efc-9a28-421c537ebd22___cG5n.png, 內容類型: image/png
+2025-03-21 10:17:45,633 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:45] "POST /api/upload/image HTTP/1.1" 200 -
+2025-03-21 10:17:46,020 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads?restype=REDACTED&comp=REDACTED&prefix=REDACTED'
+Request method: 'GET'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'ad8dec63-05fa-11f0-acc9-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:17:46,113 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Transfer-Encoding': 'chunked'
+    'Content-Type': 'application/xml'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '9d1b8afe-501e-0009-2b07-9a60b3000000'
+    'x-ms-client-request-id': 'ad8dec63-05fa-11f0-acc9-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:17:45 GMT'
+2025-03-21 10:17:46,121 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads?restype=REDACTED'
+Request method: 'GET'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'ad9d138f-05fa-11f0-bdfa-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:17:46,210 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Content-Length': '0'
+    'Last-Modified': 'Tue, 18 Mar 2025 07:51:30 GMT'
+    'ETag': '"0x8DD65F1B22B7684"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '8daa10df-a01e-0040-4007-9a2258000000'
+    'x-ms-client-request-id': 'ad9d138f-05fa-11f0-bdfa-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-has-immutability-policy': 'REDACTED'
+    'x-ms-has-legal-hold': 'REDACTED'
+    'x-ms-immutable-storage-with-versioning-enabled': 'REDACTED'
+    'x-ms-blob-public-access': 'REDACTED'
+    'x-ms-default-encryption-scope': 'REDACTED'
+    'x-ms-deny-encryption-scope-override': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:17:45 GMT'
+2025-03-21 10:17:46,214 - root - INFO - 上傳文件: fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf, 內容類型: application/pdf
+2025-03-21 10:17:46,217 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf'
+Request method: 'PUT'
+Request headers:
+    'Content-Length': '528152'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-version': 'REDACTED'
+    'Content-Type': 'application/pdf'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'adabb7de-05fa-11f0-9452-b88198d47dd9'
+    'Authorization': 'REDACTED'
+A body is sent with the request
+2025-03-21 10:17:46,400 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 201
+Response headers:
+    'Content-Length': '0'
+    'Content-MD5': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:17:46 GMT'
+    'ETag': '"0x8DD681E91DB9E69"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'b1705a88-c01e-0079-2307-9ad944000000'
+    'x-ms-client-request-id': 'adabb7de-05fa-11f0-9452-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-content-crc64': 'REDACTED'
+    'x-ms-request-server-encrypted': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:17:46 GMT'
+2025-03-21 10:17:46,403 - root - INFO - 文件已上傳到Azure Blob，路徑: lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf, 內容類型: application/pdf
+2025-03-21 10:17:46,406 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:46] "POST /api/upload/document HTTP/1.1" 200 -
+2025-03-21 10:17:46,496 - root - INFO - 使用直接提供的blob路徑: /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg
+2025-03-21 10:17:46,498 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads//uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw%3D%3D.jpg'
+Request method: 'HEAD'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'add6a690-05fa-11f0-b53d-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:17:46,614 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 404
+Response headers:
+    'Transfer-Encoding': 'chunked'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '6d9eca6d-e01e-000c-5107-9ab268000000'
+    'x-ms-client-request-id': 'add6a690-05fa-11f0-b53d-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-error-code': 'BlobNotFound'
+    'Date': 'Fri, 21 Mar 2025 02:17:45 GMT'
+2025-03-21 10:17:46,617 - root - WARNING - 要刪除的blob不存在: /uploads/ll/2617c171-0997-4466-9e4f-cf896a5c7dfd___5ZCI5o-a6IiI5qWtLeWuouaItuioguiyqOezu-e1seWgseWDueWWruWbnuWCsw==.jpg
+2025-03-21 10:17:46,620 - root - INFO - 從URL提取的blob路徑: ll/7538f43f-95b3-40d0-8f28-1029650e1833.docx
+2025-03-21 10:17:46,621 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/ll/7538f43f-95b3-40d0-8f28-1029650e1833.docx'
+Request method: 'HEAD'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'ade98f87-05fa-11f0-9ada-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:17:46,714 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Content-Length': '14552'
+    'Content-Type': 'application/octet-stream'
+    'Content-MD5': 'REDACTED'
+    'Last-Modified': 'Wed, 19 Mar 2025 01:13:15 GMT'
+    'Accept-Ranges': 'REDACTED'
+    'ETag': '"0x8DD66833A1D4286"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '0fdb2714-701e-006c-5f07-9acef7000000'
+    'x-ms-client-request-id': 'ade98f87-05fa-11f0-9ada-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-creation-time': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-server-encrypted': 'REDACTED'
+    'x-ms-access-tier': 'REDACTED'
+    'x-ms-access-tier-inferred': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:17:46 GMT'
+2025-03-21 10:17:46,719 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/ll/7538f43f-95b3-40d0-8f28-1029650e1833.docx'
+Request method: 'DELETE'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'adf89495-05fa-11f0-a529-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:17:46,747 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 202
+Response headers:
+    'Content-Length': '0'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '0fdb273b-701e-006c-8007-9acef7000000'
+    'x-ms-client-request-id': 'adf89495-05fa-11f0-a529-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-delete-type-permanent': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:17:46 GMT'
+2025-03-21 10:17:46,750 - root - INFO - 成功刪除blob: https://uatrdgrandholystorage.blob.core.windows.net/uploads/ll/7538f43f-95b3-40d0-8f28-1029650e1833.docx
+2025-03-21 10:17:46,762 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:46] "POST /api/products/update/31 HTTP/1.1" 200 -
+2025-03-21 10:17:49,117 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:17:49] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:18:11,635 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf'
+Request method: 'HEAD'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'bcd23786-05fa-11f0-b014-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:18:11,725 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Content-Length': '528152'
+    'Content-Type': 'application/pdf'
+    'Content-MD5': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:17:46 GMT'
+    'Accept-Ranges': 'REDACTED'
+    'ETag': '"0x8DD681E91DB9E69"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'e201f52e-301e-001f-2d07-9a9664000000'
+    'x-ms-client-request-id': 'bcd23786-05fa-11f0-b014-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-creation-time': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-server-encrypted': 'REDACTED'
+    'x-ms-access-tier': 'REDACTED'
+    'x-ms-access-tier-inferred': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:18:10 GMT'
+2025-03-21 10:18:11,733 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf'
+Request method: 'GET'
+Request headers:
+    'x-ms-range': 'REDACTED'
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'bce164b7-05fa-11f0-9834-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:18:11,765 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 206
+Response headers:
+    'Content-Length': '528152'
+    'Content-Type': 'application/pdf'
+    'Content-Range': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:17:46 GMT'
+    'Accept-Ranges': 'REDACTED'
+    'ETag': '"0x8DD681E91DB9E69"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'e201f542-301e-001f-3f07-9a9664000000'
+    'x-ms-client-request-id': 'bce164b7-05fa-11f0-9834-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-creation-time': 'REDACTED'
+    'x-ms-blob-content-md5': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-server-encrypted': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:18:10 GMT'
+2025-03-21 10:18:12,262 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:12] "GET /api/azure-blob/download?url=https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf&filename=SQL.pdf HTTP/1.1" 200 -
+2025-03-21 10:18:14,662 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf'
+Request method: 'HEAD'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'bea00a1d-05fa-11f0-9035-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:18:14,949 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Content-Length': '528152'
+    'Content-Type': 'application/pdf'
+    'Content-MD5': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:17:46 GMT'
+    'Accept-Ranges': 'REDACTED'
+    'ETag': '"0x8DD681E91DB9E69"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '0d6c33f2-b01e-0063-0f07-9ab89b000000'
+    'x-ms-client-request-id': 'bea00a1d-05fa-11f0-9035-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-creation-time': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-server-encrypted': 'REDACTED'
+    'x-ms-access-tier': 'REDACTED'
+    'x-ms-access-tier-inferred': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:18:14 GMT'
+2025-03-21 10:18:14,962 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf'
+Request method: 'GET'
+Request headers:
+    'x-ms-range': 'REDACTED'
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'becdfa00-05fa-11f0-ac22-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:18:15,003 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 206
+Response headers:
+    'Content-Length': '528152'
+    'Content-Type': 'application/pdf'
+    'Content-Range': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:17:46 GMT'
+    'Accept-Ranges': 'REDACTED'
+    'ETag': '"0x8DD681E91DB9E69"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '0d6c3418-b01e-0063-3207-9ab89b000000'
+    'x-ms-client-request-id': 'becdfa00-05fa-11f0-ac22-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-creation-time': 'REDACTED'
+    'x-ms-blob-content-md5': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-server-encrypted': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:18:14 GMT'
+2025-03-21 10:18:15,140 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:15] "GET /api/azure-blob/download?url=https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf&filename=SQL.pdf HTTP/1.1" 200 -
+2025-03-21 10:18:22,101 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:22] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:18:23,095 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:23] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:18:28,836 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:28] "OPTIONS /api/products/delete/31 HTTP/1.1" 200 -
+2025-03-21 10:18:28,946 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads?restype=REDACTED&comp=REDACTED&prefix=REDACTED'
+Request method: 'GET'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'c723ed73-05fa-11f0-8373-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:18:29,061 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Transfer-Encoding': 'chunked'
+    'Content-Type': 'application/xml'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'bb4ef23c-201e-005e-6307-9ace80000000'
+    'x-ms-client-request-id': 'c723ed73-05fa-11f0-8373-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:18:28 GMT'
+2025-03-21 10:18:29,067 - root - INFO - 使用直接提供的blob路徑: lll/6082b761-88bf-4efc-9a28-421c537ebd22___cG5n.png
+2025-03-21 10:18:29,068 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/6082b761-88bf-4efc-9a28-421c537ebd22___cG5n.png'
+Request method: 'HEAD'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'c736893d-05fa-11f0-aaf4-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:18:29,160 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Content-Length': '2265890'
+    'Content-Type': 'image/png'
+    'Content-MD5': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:17:45 GMT'
+    'Accept-Ranges': 'REDACTED'
+    'ETag': '"0x8DD681E916547E6"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '7cd16b0d-c01e-0046-7f07-9a11e7000000'
+    'x-ms-client-request-id': 'c736893d-05fa-11f0-aaf4-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-creation-time': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-server-encrypted': 'REDACTED'
+    'x-ms-access-tier': 'REDACTED'
+    'x-ms-access-tier-inferred': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:18:28 GMT'
+2025-03-21 10:18:29,168 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/6082b761-88bf-4efc-9a28-421c537ebd22___cG5n.png'
+Request method: 'DELETE'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'c7458daa-05fa-11f0-a603-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:18:29,197 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 202
+Response headers:
+    'Content-Length': '0'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '7cd16b20-c01e-0046-0f07-9a11e7000000'
+    'x-ms-client-request-id': 'c7458daa-05fa-11f0-a603-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-delete-type-permanent': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:18:28 GMT'
+2025-03-21 10:18:29,200 - root - INFO - 成功刪除blob: lll/6082b761-88bf-4efc-9a28-421c537ebd22___cG5n.png
+2025-03-21 10:18:29,203 - root - INFO - 使用直接提供的blob路徑: lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf
+2025-03-21 10:18:29,205 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf'
+Request method: 'HEAD'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'c74b3fae-05fa-11f0-abaa-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:18:29,308 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Content-Length': '528152'
+    'Content-Type': 'application/pdf'
+    'Content-MD5': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:17:46 GMT'
+    'Accept-Ranges': 'REDACTED'
+    'ETag': '"0x8DD681E91DB9E69"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'e28e2486-101e-006a-5607-9afd48000000'
+    'x-ms-client-request-id': 'c74b3fae-05fa-11f0-abaa-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-creation-time': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-server-encrypted': 'REDACTED'
+    'x-ms-access-tier': 'REDACTED'
+    'x-ms-access-tier-inferred': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:18:28 GMT'
+2025-03-21 10:18:29,312 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf'
+Request method: 'DELETE'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'c75b9ea5-05fa-11f0-8bf8-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:18:29,339 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 202
+Response headers:
+    'Content-Length': '0'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'e28e249e-101e-006a-6907-9afd48000000'
+    'x-ms-client-request-id': 'c75b9ea5-05fa-11f0-8bf8-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-delete-type-permanent': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:18:28 GMT'
+2025-03-21 10:18:29,342 - root - INFO - 成功刪除blob: lll/fa1f1762-fb99-43e0-bf38-52c39b12b331___U1FM.pdf
+2025-03-21 10:18:29,352 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:29] "POST /api/products/delete/31 HTTP/1.1" 200 -
+2025-03-21 10:18:30,577 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:30] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:18:40,745 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:40] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:18:41,293 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:41] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:18:41,946 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:41] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-21 10:18:48,022 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:48] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:18:49,238 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:49] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:18:50,592 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:50] "OPTIONS /api/products/29/detail HTTP/1.1" 200 -
+2025-03-21 10:18:50,678 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:50] "POST /api/products/29/detail HTTP/1.1" 200 -
+2025-03-21 10:18:52,672 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:52] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:18:54,151 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:54] "POST /api/products/29/detail HTTP/1.1" 200 -
+2025-03-21 10:18:55,482 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:55] "OPTIONS /api/products/update/29 HTTP/1.1" 200 -
+2025-03-21 10:18:55,581 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:55] "POST /api/products/update/29 HTTP/1.1" 200 -
+2025-03-21 10:18:56,652 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:56] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:18:57,433 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:57] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:18:58,547 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:18:58] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-21 10:19:00,381 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:00] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:19:01,685 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:01] "OPTIONS /api/customer/list HTTP/1.1" 200 -
+2025-03-21 10:19:01,824 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:01] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 10:19:03,345 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:03] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:19:39,458 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads?restype=REDACTED&comp=REDACTED&prefix=REDACTED'
+Request method: 'GET'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'f12b113c-05fa-11f0-a1d9-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:19:39,596 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Transfer-Encoding': 'chunked'
+    'Content-Type': 'application/xml'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'c5ada14d-301e-0042-6f07-9a9ce0000000'
+    'x-ms-client-request-id': 'f12b113c-05fa-11f0-a1d9-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:19:38 GMT'
+2025-03-21 10:19:39,607 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads?restype=REDACTED'
+Request method: 'GET'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'f141eb82-05fa-11f0-bc49-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:19:39,718 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Content-Length': '0'
+    'Last-Modified': 'Tue, 18 Mar 2025 07:51:30 GMT'
+    'ETag': '"0x8DD65F1B22B7684"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '07b10c11-f01e-005d-1b07-9a2fe4000000'
+    'x-ms-client-request-id': 'f141eb82-05fa-11f0-bc49-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-has-immutability-policy': 'REDACTED'
+    'x-ms-has-legal-hold': 'REDACTED'
+    'x-ms-immutable-storage-with-versioning-enabled': 'REDACTED'
+    'x-ms-blob-public-access': 'REDACTED'
+    'x-ms-default-encryption-scope': 'REDACTED'
+    'x-ms-deny-encryption-scope-override': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:19:38 GMT'
+2025-03-21 10:19:39,722 - root - INFO - 上傳文件: cbed337f-3d9d-4c5d-aef9-85acfe143b5e___cG5n, 內容類型: image/png
+2025-03-21 10:19:39,723 - root - INFO - 已添加副檔名: cbed337f-3d9d-4c5d-aef9-85acfe143b5e___cG5n.png
+2025-03-21 10:19:39,726 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/741/cbed337f-3d9d-4c5d-aef9-85acfe143b5e___cG5n.png'
+Request method: 'PUT'
+Request headers:
+    'Content-Length': '2265890'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-version': 'REDACTED'
+    'Content-Type': 'image/png'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'f153d0cc-05fa-11f0-9e8a-b88198d47dd9'
+    'Authorization': 'REDACTED'
+A body is sent with the request
+2025-03-21 10:19:40,011 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 201
+Response headers:
+    'Content-Length': '0'
+    'Content-MD5': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:19:39 GMT'
+    'ETag': '"0x8DD681ED59335C1"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'b9ec5e88-d01e-005a-0e07-9a4387000000'
+    'x-ms-client-request-id': 'f153d0cc-05fa-11f0-9e8a-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-content-crc64': 'REDACTED'
+    'x-ms-request-server-encrypted': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:19:39 GMT'
+2025-03-21 10:19:40,015 - root - INFO - 文件已上傳到Azure Blob，路徑: 741/cbed337f-3d9d-4c5d-aef9-85acfe143b5e___cG5n.png, 內容類型: image/png
+2025-03-21 10:19:40,019 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:40] "POST /api/upload/image HTTP/1.1" 200 -
+2025-03-21 10:19:40,145 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads?restype=REDACTED&comp=REDACTED&prefix=REDACTED'
+Request method: 'GET'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'f1940183-05fa-11f0-a759-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:19:40,249 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Transfer-Encoding': 'chunked'
+    'Content-Type': 'application/xml'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'f8d2e4da-501e-0019-0507-9aa5db000000'
+    'x-ms-client-request-id': 'f1940183-05fa-11f0-a759-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:19:40 GMT'
+2025-03-21 10:19:40,261 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads?restype=REDACTED'
+Request method: 'GET'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'f1a5b56f-05fa-11f0-b224-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:19:40,365 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Content-Length': '0'
+    'Last-Modified': 'Tue, 18 Mar 2025 07:51:30 GMT'
+    'ETag': '"0x8DD65F1B22B7684"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'e46e711d-f01e-004d-6407-9aea8c000000'
+    'x-ms-client-request-id': 'f1a5b56f-05fa-11f0-b224-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-has-immutability-policy': 'REDACTED'
+    'x-ms-has-legal-hold': 'REDACTED'
+    'x-ms-immutable-storage-with-versioning-enabled': 'REDACTED'
+    'x-ms-blob-public-access': 'REDACTED'
+    'x-ms-default-encryption-scope': 'REDACTED'
+    'x-ms-deny-encryption-scope-override': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:19:40 GMT'
+2025-03-21 10:19:40,369 - root - INFO - 上傳文件: d8f2b42b-b04d-4c03-9099-ba7c4536a693___cGRm, 內容類型: application/pdf
+2025-03-21 10:19:40,370 - root - INFO - 已添加副檔名: d8f2b42b-b04d-4c03-9099-ba7c4536a693___cGRm.pdf
+2025-03-21 10:19:40,376 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/741/d8f2b42b-b04d-4c03-9099-ba7c4536a693___cGRm.pdf'
+Request method: 'PUT'
+Request headers:
+    'Content-Length': '102080'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-version': 'REDACTED'
+    'Content-Type': 'application/pdf'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'f1b72920-05fa-11f0-83c0-b88198d47dd9'
+    'Authorization': 'REDACTED'
+A body is sent with the request
+2025-03-21 10:19:40,519 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 201
+Response headers:
+    'Content-Length': '0'
+    'Content-MD5': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:19:40 GMT'
+    'ETag': '"0x8DD681ED5E086AB"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '0239ff5a-401e-0005-3d07-9af7bb000000'
+    'x-ms-client-request-id': 'f1b72920-05fa-11f0-83c0-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-content-crc64': 'REDACTED'
+    'x-ms-request-server-encrypted': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:19:40 GMT'
+2025-03-21 10:19:40,521 - root - INFO - 文件已上傳到Azure Blob，路徑: 741/d8f2b42b-b04d-4c03-9099-ba7c4536a693___cGRm.pdf, 內容類型: application/pdf
+2025-03-21 10:19:40,525 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:40] "POST /api/upload/document HTTP/1.1" 200 -
+2025-03-21 10:19:40,614 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:40] "OPTIONS /api/products/add HTTP/1.1" 200 -
+2025-03-21 10:19:40,714 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:40] "POST /api/products/add HTTP/1.1" 200 -
+2025-03-21 10:19:41,948 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:41] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:19:43,353 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:43] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:19:45,628 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:45] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:19:47,921 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:47] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:19:48,656 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:48] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-21 10:19:51,923 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:19:51] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:20:00,958 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:00] "OPTIONS /api/products/delete/34 HTTP/1.1" 200 -
+2025-03-21 10:20:00,993 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:00] "OPTIONS /api/products/delete/10 HTTP/1.1" 200 -
+2025-03-21 10:20:01,047 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads?restype=REDACTED&comp=REDACTED&prefix=REDACTED'
+Request method: 'GET'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'fe0932c4-05fa-11f0-b44d-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:20:01,099 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads?restype=REDACTED&comp=REDACTED&prefix=REDACTED'
+Request method: 'GET'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'fe1114d5-05fa-11f0-8739-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:20:01,147 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Transfer-Encoding': 'chunked'
+    'Content-Type': 'application/xml'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '77c5b7e6-001e-0014-7507-9a6d0f000000'
+    'x-ms-client-request-id': 'fe0932c4-05fa-11f0-b44d-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:20:00 GMT'
+2025-03-21 10:20:01,154 - root - INFO - 使用直接提供的blob路徑: 741/cbed337f-3d9d-4c5d-aef9-85acfe143b5e___cG5n.png
+2025-03-21 10:20:01,155 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/741/cbed337f-3d9d-4c5d-aef9-85acfe143b5e___cG5n.png'
+Request method: 'HEAD'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'fe19eb45-05fa-11f0-8ac0-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:20:01,194 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Transfer-Encoding': 'chunked'
+    'Content-Type': 'application/xml'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'fc91db23-001e-003b-1507-9a60c4000000'
+    'x-ms-client-request-id': 'fe1114d5-05fa-11f0-8739-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:20:00 GMT'
+2025-03-21 10:20:01,213 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:01] "POST /api/products/delete/10 HTTP/1.1" 200 -
+2025-03-21 10:20:01,245 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Content-Length': '2265890'
+    'Content-Type': 'image/png'
+    'Content-MD5': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:19:39 GMT'
+    'Accept-Ranges': 'REDACTED'
+    'ETag': '"0x8DD681ED59335C1"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'f7f34f8e-101e-0037-7507-9af7cc000000'
+    'x-ms-client-request-id': 'fe19eb45-05fa-11f0-8ac0-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-creation-time': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-server-encrypted': 'REDACTED'
+    'x-ms-access-tier': 'REDACTED'
+    'x-ms-access-tier-inferred': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:20:00 GMT'
+2025-03-21 10:20:01,250 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/741/cbed337f-3d9d-4c5d-aef9-85acfe143b5e___cG5n.png'
+Request method: 'DELETE'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'fe282e5d-05fa-11f0-aa24-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:20:01,281 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 202
+Response headers:
+    'Content-Length': '0'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': 'f7f34fa5-101e-0037-0a07-9af7cc000000'
+    'x-ms-client-request-id': 'fe282e5d-05fa-11f0-aa24-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-delete-type-permanent': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:20:00 GMT'
+2025-03-21 10:20:01,283 - root - INFO - 成功刪除blob: 741/cbed337f-3d9d-4c5d-aef9-85acfe143b5e___cG5n.png
+2025-03-21 10:20:01,287 - root - INFO - 使用直接提供的blob路徑: 741/d8f2b42b-b04d-4c03-9099-ba7c4536a693___cGRm.pdf
+2025-03-21 10:20:01,288 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/741/d8f2b42b-b04d-4c03-9099-ba7c4536a693___cGRm.pdf'
+Request method: 'HEAD'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'fe2e1a9b-05fa-11f0-9679-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:20:01,383 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 200
+Response headers:
+    'Content-Length': '102080'
+    'Content-Type': 'application/pdf'
+    'Content-MD5': 'REDACTED'
+    'Last-Modified': 'Fri, 21 Mar 2025 02:19:40 GMT'
+    'Accept-Ranges': 'REDACTED'
+    'ETag': '"0x8DD681ED5E086AB"'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '0d6d60db-b01e-0063-6407-9ab89b000000'
+    'x-ms-client-request-id': 'fe2e1a9b-05fa-11f0-9679-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-creation-time': 'REDACTED'
+    'x-ms-lease-status': 'REDACTED'
+    'x-ms-lease-state': 'REDACTED'
+    'x-ms-blob-type': 'REDACTED'
+    'x-ms-server-encrypted': 'REDACTED'
+    'x-ms-access-tier': 'REDACTED'
+    'x-ms-access-tier-inferred': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:20:00 GMT'
+2025-03-21 10:20:01,387 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://uatrdgrandholystorage.blob.core.windows.net/uploads/741/d8f2b42b-b04d-4c03-9099-ba7c4536a693___cGRm.pdf'
+Request method: 'DELETE'
+Request headers:
+    'x-ms-version': 'REDACTED'
+    'Accept': 'application/xml'
+    'User-Agent': 'azsdk-python-storage-blob/12.25.0 Python/3.8.19 (Windows-10-10.0.19045-SP0)'
+    'x-ms-date': 'REDACTED'
+    'x-ms-client-request-id': 'fe3d3af1-05fa-11f0-a975-b88198d47dd9'
+    'Authorization': 'REDACTED'
+No body was attached to the request
+2025-03-21 10:20:01,413 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 202
+Response headers:
+    'Content-Length': '0'
+    'Server': 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0'
+    'x-ms-request-id': '0d6d60ec-b01e-0063-7307-9ab89b000000'
+    'x-ms-client-request-id': 'fe3d3af1-05fa-11f0-a975-b88198d47dd9'
+    'x-ms-version': 'REDACTED'
+    'x-ms-delete-type-permanent': 'REDACTED'
+    'Date': 'Fri, 21 Mar 2025 02:20:00 GMT'
+2025-03-21 10:20:01,415 - root - INFO - 成功刪除blob: 741/d8f2b42b-b04d-4c03-9099-ba7c4536a693___cGRm.pdf
+2025-03-21 10:20:01,423 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:01] "POST /api/products/delete/34 HTTP/1.1" 200 -
+2025-03-21 10:20:02,324 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:02] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:20:03,217 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:03] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:20:03,855 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:03] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-21 10:20:11,627 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:11] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:20:13,134 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:13] "OPTIONS /api/admin/info HTTP/1.1" 200 -
+2025-03-21 10:20:13,229 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:13] "POST /api/admin/info HTTP/1.1" 200 -
+2025-03-21 10:20:19,423 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:19] "OPTIONS /api/admin/update HTTP/1.1" 200 -
+2025-03-21 10:20:19,927 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:19] "POST /api/admin/update HTTP/1.1" 200 -
+2025-03-21 10:20:21,380 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:21] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:20:22,523 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:22] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-21 10:20:25,676 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:25] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:20:29,223 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:29] "OPTIONS /api/admin/delete HTTP/1.1" 200 -
+2025-03-21 10:20:29,467 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:29] "POST /api/admin/delete HTTP/1.1" 200 -
+2025-03-21 10:20:30,820 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:30] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:20:32,629 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:32] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-21 10:20:35,372 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:35] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:20:47,526 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:47] "OPTIONS /api/admin/add HTTP/1.1" 200 -
+2025-03-21 10:20:48,015 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:48] "POST /api/admin/add HTTP/1.1" 200 -
+2025-03-21 10:20:50,186 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:50] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:20:54,748 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:54] "POST /api/log/logs HTTP/1.1" 200 -
+2025-03-21 10:20:57,680 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:20:57] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:21:02,694 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:02] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-21 10:21:05,373 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:05] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-21 10:21:05,502 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:05] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 10:21:06,614 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:06] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:21:12,382 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:12] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:21:15,286 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:15] "[33mOPTIONS /api/logout HTTP/1.1[0m" 404 -
+2025-03-21 10:21:18,301 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:18] "POST /api/admin-login HTTP/1.1" 200 -
+2025-03-21 10:21:18,413 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:18] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 10:21:21,157 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:21] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:21:21,555 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:21] "POST /api/admin/list HTTP/1.1" 200 -
+2025-03-21 10:21:34,218 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:34] "POST /api/orders/pending HTTP/1.1" 200 -
+2025-03-21 10:21:40,386 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:40] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 10:21:41,606 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:41] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:21:43,485 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:43] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 10:21:45,170 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:45] "POST /api/customer/34/info HTTP/1.1" 200 -
+2025-03-21 10:21:45,171 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:45] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:21:45,336 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:45] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:21:46,587 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:46] "POST /api/customer/list HTTP/1.1" 200 -
+2025-03-21 10:21:48,731 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:48] "POST /api/customer/3/info HTTP/1.1" 200 -
+2025-03-21 10:21:48,784 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:48] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:21:48,828 - werkzeug - INFO - 127.0.0.1 - - [21/Mar/2025 10:21:48] "POST /api/products/list HTTP/1.1" 200 -
+2025-03-21 10:22:52,822 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-21 10:22:52,823 - date_cleaner - INFO - 調度器已關閉
+2025-03-21 10:22:53,419 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-21 10:22:53,429 - date_cleaner - INFO - 調度器已關閉

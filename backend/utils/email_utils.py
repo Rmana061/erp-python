@@ -146,13 +146,21 @@ class EmailSender:
                             product_status = '已取消'
                         elif '已駁回' in str(item) or '駁回' in str(item):
                             product_status = '已駁回'
+                        elif '已出貨' in str(item) or '出貨' in str(item):
+                            product_status = '已出貨'
                         elif '待確認' in str(item):
                             product_status = '待確認'
                         elif '已確認' in str(item) or '確認' in str(item):
                             product_status = '已確認'
+                        elif 'shipping_date' in item and item['shipping_date']:
+                            # 如果有出貨日期，可能是已出貨狀態
+                            product_status = '已出貨'
                         else:
-                            # 根據項目中的實際狀態值設置默認值
-                            product_status = '已確認'  # 默認狀態
+                            # 根據郵件類型設置適當的默認狀態
+                            if '出貨' in subject:
+                                product_status = '已出貨'
+                            else:
+                                product_status = '已確認'
                     
                     # 設置產品狀態的顯示顏色
                     status_color = '#4CAF50'  # 綠色為默認（正常）
@@ -161,6 +169,8 @@ class EmailSender:
                             status_color = '#dc3545'  # 紅色
                         elif '待確認' in product_status or '待處理' in product_status:
                             status_color = '#ff9800'  # 橙色
+                        elif '已出貨' in product_status:
+                            status_color = '#2196F3'  # 藍色
                     
                     html_content += f"""
                         <tr>
