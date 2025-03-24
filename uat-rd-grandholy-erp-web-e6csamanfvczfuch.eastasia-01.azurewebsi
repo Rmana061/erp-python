@@ -1,0 +1,86 @@
+lockdown-install.js:1 Removing unpermitted intrinsics
+index-DOCg5KmI.js:128 正在尝试登录，用户名: 1
+index-DOCg5KmI.js:128 登录响应: Object
+index-DOCg5KmI.js:128 保存用户数据: Object
+index-DOCg5KmI.js:128 Fetching orders for customer: 1
+index-DOCg5KmI.js:127 Customer ID from localStorage: 1
+index-DOCg5KmI.js:127 Cached user info: {customer_id: 1, username: '1', company_name: '1111'}
+index-DOCg5KmI.js:127 Customer ID from localStorage: 1
+index-DOCg5KmI.js:127 Cached user info: {customer_id: 1, username: '1', company_name: '1111'}
+index-DOCg5KmI.js:127 Component created, fetching products...
+index-DOCg5KmI.js:127 Fetching products...
+index-DOCg5KmI.js:127 Fetching products for customer: 1
+index-DOCg5KmI.js:127 开始获取锁定日期...
+index-DOCg5KmI.js:127 锁定日期数组: Proxy(Array) {}
+index-DOCg5KmI.js:127 Available products count: 0
+index-DOCg5KmI.js:127 Products response: {data: Array(1), status: 'success'}
+index-DOCg5KmI.js:127 Raw product data: [{…}]
+index-DOCg5KmI.js:127 Processed available products: Proxy(Array) {0: {…}}
+index-DOCg5KmI.js:127 锁定日期数组: Proxy(Array) {}
+index-DOCg5KmI.js:127 Available products count: 1
+index-DOCg5KmI.js:127 锁定日期API响应: {data: Array(0), status: 'success'}
+index-DOCg5KmI.js:127 成功获取锁定日期: Proxy(Array) {}
+index-DOCg5KmI.js:127 锁定日期数组: Proxy(Array) {}
+index-DOCg5KmI.js:127 Fetching products...
+index-DOCg5KmI.js:127 Fetching products for customer: 1
+index-DOCg5KmI.js:127 开始获取锁定日期...
+index-DOCg5KmI.js:127 锁定日期API响应: {data: Array(0), status: 'success'}
+index-DOCg5KmI.js:127 成功获取锁定日期: Proxy(Array) {}
+index-DOCg5KmI.js:127 锁定日期数组: Proxy(Array) {}
+index-DOCg5KmI.js:127 Products response: {data: Array(1), status: 'success'}
+index-DOCg5KmI.js:127 Raw product data: [{…}]
+index-DOCg5KmI.js:127 Processed available products: Proxy(Array) {0: {…}}
+index-DOCg5KmI.js:127 锁定日期数组: Proxy(Array) {}
+index-DOCg5KmI.js:127 Available products count: 1
+index-DOCg5KmI.js:127 锁定日期数组: Proxy(Array) {}
+index-DOCg5KmI.js:127 Available products count: 1
+index-DOCg5KmI.js:127 选择了产品: 1 产品ID: 1
+index-DOCg5KmI.js:127 检查重复订单 - 产品ID: 1 客户ID: 1
+index-DOCg5KmI.js:23 
+            
+            
+           POST https://uat-rd-grandholy-erp-web-e6csamanfvczfuch.eastasia-01.azurewebsites.net/api/orders/check-recent 500 (INTERNAL SERVER ERROR)
+(anonymous) @ index-DOCg5KmI.js:23
+xhr @ index-DOCg5KmI.js:23
+pm @ index-DOCg5KmI.js:25
+_request @ index-DOCg5KmI.js:26
+request @ index-DOCg5KmI.js:25
+(anonymous) @ index-DOCg5KmI.js:26
+(anonymous) @ index-DOCg5KmI.js:21
+checkRecentOrder @ index-DOCg5KmI.js:127
+handleProductChange @ index-DOCg5KmI.js:127
+onChange @ index-DOCg5KmI.js:127
+Ps @ index-DOCg5KmI.js:13
+ta @ index-DOCg5KmI.js:13
+r @ index-DOCg5KmI.js:17
+handleMouseUp_ @ unknown
+index-DOCg5KmI.js:127 检查重复订单时出错: ht {message: 'Request failed with status code 500', name: 'AxiosError', code: 'ERR_BAD_RESPONSE', config: {…}, request: XMLHttpRequest, …}
+checkRecentOrder @ index-DOCg5KmI.js:127
+await in checkRecentOrder
+handleProductChange @ index-DOCg5KmI.js:127
+onChange @ index-DOCg5KmI.js:127
+Ps @ index-DOCg5KmI.js:13
+ta @ index-DOCg5KmI.js:13
+r @ index-DOCg5KmI.js:17
+handleMouseUp_ @ unknown
+index-DOCg5KmI.js:127 错误详情: {message: 'invalid input value for enum order_status: "已取消"\nL…                                               ^\n', status: 'error'}
+checkRecentOrder @ index-DOCg5KmI.js:127
+await in checkRecentOrder
+handleProductChange @ index-DOCg5KmI.js:127
+onChange @ index-DOCg5KmI.js:127
+Ps @ index-DOCg5KmI.js:13
+ta @ index-DOCg5KmI.js:13
+r @ index-DOCg5KmI.js:17
+handleMouseUp_ @ unknown
+index-DOCg5KmI.js:127 訂單狀態枚舉錯誤，繼續處理
+checkRecentOrder @ index-DOCg5KmI.js:127
+await in checkRecentOrder
+handleProductChange @ index-DOCg5KmI.js:127
+onChange @ index-DOCg5KmI.js:127
+Ps @ index-DOCg5KmI.js:13
+ta @ index-DOCg5KmI.js:13
+r @ index-DOCg5KmI.js:17
+handleMouseUp_ @ unknown
+index-DOCg5KmI.js:127 重复下单检查结果: {canOrder: true, limitDays: 0}
+index-DOCg5KmI.js:127 可以下单此产品
+index-DOCg5KmI.js:127 锁定日期数组: Proxy(Array) {}

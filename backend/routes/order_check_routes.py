@@ -54,7 +54,7 @@ def check_recent_order():
                 JOIN order_details od ON o.id = od.order_id
                 WHERE o.customer_id = %s
                   AND od.product_id = %s
-                  AND od.order_status != '已取消'
+                  AND (od.order_status IS NULL OR od.order_status NOT IN ('已取消'))
                   AND o.created_at >= CURRENT_DATE - INTERVAL '%s DAY'
                 LIMIT 1
             """, (customer_id, product_id, limit_days))
