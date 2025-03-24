@@ -252,7 +252,7 @@ def line_login_callback():
                 old_line_groups = [dict(zip(['id', 'line_group_id', 'group_name'], row)) for row in cursor.fetchall()]
                 old_customer_data['line_groups'] = old_line_groups
                 
-                # 为向后兼容，添加空的line_account字段
+                # 為向后兼容，添加空的line_account字段
                 old_customer_data['line_account'] = ''
                 
                 # 检查此LINE账号是否已经绑定到当前客户
@@ -569,8 +569,29 @@ def handle_message(event):
             is_group_message = True
             group_id = event.source.group_id
         
-        # 檢查是否為"功能"指令
-        if user_message.strip() == '功能':
+        # 定義訂單相關指令和群組特定指令
+        order_commands = ['近兩週訂單', '待確認訂單', '已確認訂單', '已完成訂單']
+        group_specific_commands = ['功能', '綁定帳號']
+        
+        # 檢查消息是否是各類指令
+        is_order_command = user_message.strip() in order_commands
+        is_bind_command = user_message.startswith('綁定帳號') and len(user_message.split()) >= 2
+        is_help_command = user_message.strip() == '功能'
+        
+        # 決定當前消息是否需要處理
+        if is_group_message:
+            # 群組消息：只處理訂單指令、綁定指令和功能指令
+            should_process = is_order_command or is_bind_command or is_help_command
+        else:
+            # 私聊消息：只處理訂單指令
+            should_process = is_order_command
+        
+        # 如果不需要處理這個消息，直接退出
+        if not should_process:
+            return
+        
+        # 處理"功能"指令 (只在群組中回應)
+        if is_group_message and is_help_command:
             feature_text = (
                 "📱 功能列表 📱\n\n"
                 "🔹 綁定帳號 [公司帳號名稱]\n"
@@ -593,8 +614,8 @@ def handle_message(event):
             )
             return
             
-        # 檢查是否為綁定帳號指令
-        if is_group_message and user_message.startswith('綁定帳號') and len(user_message.split()) >= 2:
+        # 檢查是否為綁定帳號指令 (只在群組中可用)
+        if is_group_message and is_bind_command:
             # 提取使用者名稱
             username = user_message.split(None, 1)[1].strip()
             
@@ -681,7 +702,7 @@ def handle_message(event):
                     old_line_groups = [dict(zip(['id', 'line_group_id', 'group_name'], row)) for row in cursor.fetchall()]
                     old_customer_data['line_groups'] = old_line_groups
                     
-                    # 為向後兼容，添加空的line_account字段
+                    # 為向后兼容，添加空的line_account字段
                     old_customer_data['line_account'] = ''
                     
                     # 綁定新的LINE群組
@@ -759,29 +780,43 @@ def handle_message(event):
         with get_db_connection() as conn:
             cursor = conn.cursor()
             
-            # 檢查是否為群組訊息，若是則檢查群組綁定
+            # 檢查對應的綁定情況
             if is_group_message:
+                # 群組消息：檢查群組綁定
                 cursor.execute("""
                     SELECT c.id, c.company_name 
                     FROM customers c
                     JOIN line_groups lg ON c.id = lg.customer_id
                     WHERE lg.line_group_id = %s AND c.status = 'active'
                 """, (group_id,))
-                
-                customer = cursor.fetchone()
             else:
-                # 檢查用戶是否已綁定
+                # 私聊消息：檢查用戶綁定
                 cursor.execute("""
                     SELECT c.id, c.company_name 
                     FROM customers c
                     JOIN line_users lu ON c.id = lu.customer_id
                     WHERE lu.line_user_id = %s AND c.status = 'active'
                 """, (user_id,))
-                
-                customer = cursor.fetchone()
             
-            # 以下是原有的訊息處理邏輯
-            if customer:
+            customer = cursor.fetchone()
+            
+            # 如果未綁定，提示用戶需要綁定
+            if not customer:
+                if is_group_message:
+                    reply_text = "此群組尚未綁定帳號，請先完成帳號綁定。\n\n您可以輸入「功能」查看如何綁定帳號。"
+                else:
+                    reply_text = "您尚未綁定帳號，請先完成帳號綁定。"
+                
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=reply_text)
+                )
+                return
+            
+            # 處理訂單相關指令
+            if is_order_command:
+                customer_id, company_name = customer
+                
                 if user_message == '近兩週訂單':
                     cursor.execute("""
                         SELECT DISTINCT o.order_number, o.created_at, 
@@ -813,11 +848,11 @@ def handle_message(event):
                         GROUP BY o.id, o.order_number, o.created_at, o.order_confirmed, o.order_shipped
                         ORDER BY o.created_at DESC
                         LIMIT 10
-                    """, (customer[0],))
+                    """, (customer_id,))
                     
                     orders = cursor.fetchall()
                     if orders:
-                        reply_text = f"您好 {customer[1]}，以下為最新的10筆近兩週訂單：\n\n"
+                        reply_text = f"您好 {company_name}，以下為最新的10筆近兩週訂單：\n\n"
                         for order in orders:
                             reply_text += f"訂單編號：{order[0]}\n"
                             reply_text += f"建立時間：{order[1].strftime('%Y-%m-%d')}\n"
@@ -854,11 +889,11 @@ def handle_message(event):
                         GROUP BY o.id, o.order_number, o.created_at
                         ORDER BY o.created_at DESC
                         LIMIT 10
-                    """, (customer[0],))
+                    """, (customer_id,))
                     
                     orders = cursor.fetchall()
                     if orders:
-                        reply_text = f"您好 {customer[1]}，以下為最新的10筆待確認訂單：\n\n"
+                        reply_text = f"您好 {company_name}，以下為最新的10筆待確認訂單：\n\n"
                         for order in orders:
                             reply_text += f"訂單編號：{order[0]}\n"
                             reply_text += f"建立時間：{order[1].strftime('%Y-%m-%d')}\n"
@@ -894,11 +929,11 @@ def handle_message(event):
                         GROUP BY o.id, o.order_number, o.created_at
                         ORDER BY o.created_at DESC
                         LIMIT 10
-                    """, (customer[0],))
+                    """, (customer_id,))
                     
                     orders = cursor.fetchall()
                     if orders:
-                        reply_text = f"您好 {customer[1]}，以下為最新的10筆已確認訂單：\n\n"
+                        reply_text = f"您好 {company_name}，以下為最新的10筆已確認訂單：\n\n"
                         for order in orders:
                             reply_text += f"訂單編號：{order[0]}\n"
                             reply_text += f"建立時間：{order[1].strftime('%Y-%m-%d')}\n"
@@ -933,11 +968,11 @@ def handle_message(event):
                         GROUP BY o.id, o.order_number, o.created_at
                         ORDER BY o.created_at DESC
                         LIMIT 10
-                    """, (customer[0],))
+                    """, (customer_id,))
                     
                     orders = cursor.fetchall()
                     if orders:
-                        reply_text = f"您好 {customer[1]}，以下為最新的10筆已完成訂單：\n\n"
+                        reply_text = f"您好 {company_name}，以下為最新的10筆已完成訂單：\n\n"
                         for order in orders:
                             reply_text += f"訂單編號：{order[0]}\n"
                             reply_text += f"建立時間：{order[1].strftime('%Y-%m-%d')}\n"
@@ -945,19 +980,19 @@ def handle_message(event):
                             reply_text += "-------------------\n"
                     else:
                         reply_text = "目前沒有已完成的訂單。"
-                else:
-                    reply_text = f"您好 {customer[1]}，請選擇您要查詢的訂單類型。\n\n若您需要查看所有功能介紹，請輸入「功能」。"
-            else:
-                reply_text = "您尚未綁定帳號，請先完成帳號綁定。\n\n若您需要查看所有功能介紹，請輸入「功能」。"
                 
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=reply_text)
-            )
+                # 回覆訂單查詢結果
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=reply_text)
+                )
             
     except Exception as e:
         print(f"Error handling message: {str(e)}")
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="抱歉，系統發生錯誤，請稍後再試。")
-        ) 
+        # 只在特定命令出錯時才發送錯誤訊息
+        order_commands = ['近兩週訂單', '待確認訂單', '已確認訂單', '已完成訂單']
+        if (user_message.strip() in order_commands) or (is_group_message and (user_message.strip() == '功能' or user_message.startswith('綁定帳號'))):
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="抱歉，系統發生錯誤，請稍後再試。")
+            ) 
