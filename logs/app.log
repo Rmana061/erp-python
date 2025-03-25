@@ -1,0 +1,102 @@
+2025-03-25 13:26:14 - date_cleaner - INFO - 初始化調度器
+2025-03-25 13:26:15 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-25T13:26:15.052010+08:00
+2025-03-25 13:26:15 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-25 13:26:15 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-25 13:26:15 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-25 13:26:15 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-25 13:26:15 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-25 13:26:15 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-25 13:26:15 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-25 13:26:25
+2025-03-25 13:26:15 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-26 00:05:00
+2025-03-25 13:26:15 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-25 13:26:15 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-25 13:26:15 - werkzeug - INFO -  * Restarting with stat
+2025-03-25 13:26:18 - date_cleaner - INFO - 初始化調度器
+2025-03-25 13:26:18 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-25T13:26:18.961041+08:00
+2025-03-25 13:26:18 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-25 13:26:18 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-25 13:26:18 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-25 13:26:18 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-25 13:26:18 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-25 13:26:18 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-25 13:26:18 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-25 13:26:28
+2025-03-25 13:26:18 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-26 00:05:00
+2025-03-25 13:26:19 - werkzeug - WARNING -  * Debugger is active!
+2025-03-25 13:26:19 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-25 13:26:25 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-25 13:26:25 CST], next run at: 2025-03-25 13:26:25 CST)" (scheduled at 2025-03-25 13:26:25.065973+08:00)
+2025-03-25 13:26:25 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-25 13:26:25 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-25 13:26:25 - date_cleaner - INFO - 當前日期: 2025-03-25
+2025-03-25 13:26:25 - date_cleaner - INFO - 資料庫中的所有日期: ['2025-03-21']
+2025-03-25 13:26:25 - date_cleaner - INFO - 已提交事務，刪除了 1 條記錄
+2025-03-25 13:26:25 - date_cleaner - INFO - 已刪除 1 個過期鎖定日期
+2025-03-25 13:26:25 - date_cleaner - INFO - 已刪除的日期: 2025-03-21
+2025-03-25 13:26:25 - date_cleaner - INFO - 已刪除的ID: 20
+2025-03-25 13:26:25 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-25 13:26:25 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-25 13:26:25 CST], next run at: 2025-03-25 13:26:25 CST)" executed successfully
+2025-03-25 13:26:25 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 1 個過期日期
+2025-03-25 13:26:28 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-25 13:26:28 CST], next run at: 2025-03-25 13:26:28 CST)" (scheduled at 2025-03-25 13:26:28.967043+08:00)
+2025-03-25 13:26:28 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-25 13:26:28 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-25 13:26:28 - date_cleaner - INFO - 當前日期: 2025-03-25
+2025-03-25 13:26:28 - date_cleaner - INFO - 資料庫中的所有日期: []
+2025-03-25 13:26:29 - date_cleaner - INFO - 已提交事務，刪除了 0 條記錄
+2025-03-25 13:26:29 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-25 13:26:29 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-25 13:26:29 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-25 13:26:28 CST], next run at: 2025-03-25 13:26:28 CST)" executed successfully
+2025-03-25 13:26:29 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-25 13:40:12 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-25 13:40:12 - date_cleaner - INFO - 調度器已正常關閉
+2025-03-25 13:40:12 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-25 13:40:12 - date_cleaner - INFO - 調度器已正常關閉
+2025-03-25 13:52:39 - date_cleaner - INFO - 初始化調度器
+2025-03-25 13:52:39 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-25T13:52:39.649696+08:00
+2025-03-25 13:52:39 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-25 13:52:39 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-25 13:52:39 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-25 13:52:39 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-25 13:52:39 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-25 13:52:39 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-25 13:52:39 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-25 13:52:49
+2025-03-25 13:52:39 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-26 00:05:00
+2025-03-25 13:52:39 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-25 13:52:39 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-25 13:52:39 - werkzeug - INFO -  * Restarting with stat
+2025-03-25 13:52:42 - date_cleaner - INFO - 初始化調度器
+2025-03-25 13:52:43 - date_cleaner - INFO - 使用時區: Asia/Taipei, 當前時間: 2025-03-25T13:52:43.117506+08:00
+2025-03-25 13:52:43 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-25 13:52:43 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-03-25 13:52:43 - apscheduler.scheduler - INFO - Added job "清理過期鎖定日期任務" to job store "default"
+2025-03-25 13:52:43 - apscheduler.scheduler - INFO - Added job "初始清理過期鎖定日期任務" to job store "default"
+2025-03-25 13:52:43 - apscheduler.scheduler - INFO - Scheduler started
+2025-03-25 13:52:43 - date_cleaner - INFO - 調度器已成功啟動
+2025-03-25 13:52:43 - date_cleaner - INFO - 已調度任務: initial_clean_job (初始清理過期鎖定日期任務), 下次執行時間: 2025-03-25 13:52:53
+2025-03-25 13:52:43 - date_cleaner - INFO - 已調度任務: clean_expired_dates_job (清理過期鎖定日期任務), 下次執行時間: 2025-03-26 00:05:00
+2025-03-25 13:52:43 - werkzeug - WARNING -  * Debugger is active!
+2025-03-25 13:52:43 - werkzeug - INFO -  * Debugger PIN: 869-741-475
+2025-03-25 13:52:49 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-25 13:52:49 CST], next run at: 2025-03-25 13:52:49 CST)" (scheduled at 2025-03-25 13:52:49.658677+08:00)
+2025-03-25 13:52:49 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-25 13:52:49 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-25 13:52:49 - date_cleaner - INFO - 當前日期: 2025-03-25
+2025-03-25 13:52:49 - date_cleaner - INFO - 資料庫中的所有日期: []
+2025-03-25 13:52:49 - date_cleaner - INFO - 已提交事務，刪除了 0 條記錄
+2025-03-25 13:52:49 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-25 13:52:49 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-25 13:52:49 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-25 13:52:49 CST], next run at: 2025-03-25 13:52:49 CST)" executed successfully
+2025-03-25 13:52:49 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-25 13:52:53 - apscheduler.executors.default - INFO - Running job "初始清理過期鎖定日期任務 (trigger: date[2025-03-25 13:52:53 CST], next run at: 2025-03-25 13:52:53 CST)" (scheduled at 2025-03-25 13:52:53.125486+08:00)
+2025-03-25 13:52:53 - apscheduler.scheduler - INFO - Removed job initial_clean_job
+2025-03-25 13:52:53 - date_cleaner - INFO - 開始執行過期日期清理任務
+2025-03-25 13:52:53 - date_cleaner - INFO - 當前日期: 2025-03-25
+2025-03-25 13:52:53 - date_cleaner - INFO - 資料庫中的所有日期: []
+2025-03-25 13:52:53 - date_cleaner - INFO - 已提交事務，刪除了 0 條記錄
+2025-03-25 13:52:53 - date_cleaner - INFO - 沒有過期的鎖定日期需要清理
+2025-03-25 13:52:53 - date_cleaner - INFO - 鎖定日期清理任務結束
+2025-03-25 13:52:53 - apscheduler.executors.default - INFO - Job "初始清理過期鎖定日期任務 (trigger: date[2025-03-25 13:52:53 CST], next run at: 2025-03-25 13:52:53 CST)" executed successfully
+2025-03-25 13:52:53 - date_cleaner - INFO - 任務 initial_clean_job 執行成功，清理了 0 個過期日期
+2025-03-25 13:59:41 - werkzeug - INFO -  * Detected change in 'c:\\Users\\MSI\\Desktop\\python\\erp-python1\\backend\\app.py', reloading
+2025-03-25 13:59:41 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-03-25 13:59:41 - date_cleaner - INFO - 調度器已正常關閉
+2025-03-25 13:59:41 - werkzeug - INFO -  * Restarting with stat

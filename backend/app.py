@@ -4,6 +4,48 @@ from dotenv import load_dotenv
 import base64
 import urllib.parse
 import atexit  # 添加atexit模块
+import logging
+from logging.handlers import RotatingFileHandler
+
+# 配置日誌系統
+def setup_logging():
+    """配置日誌系統"""
+    # 創建 logs 目錄
+    log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs')
+    os.makedirs(log_dir, exist_ok=True)
+    
+    # 配置根日誌記錄器
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    
+    # 配置日誌格式
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    
+    # 配置文件處理器
+    file_handler = RotatingFileHandler(
+        os.path.join(log_dir, 'app.log'),
+        maxBytes=10*1024*1024,  # 10MB
+        backupCount=5,
+        encoding='utf-8'
+    )
+    file_handler.setFormatter(formatter)
+    root_logger.addHandler(file_handler)
+    
+    # 配置控制台處理器
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+    root_logger.addHandler(console_handler)
+    
+    # 設置 Werkzeug 日誌級別
+    logging.getLogger('werkzeug').setLevel(logging.INFO)
+    
+    return root_logger
+
+# 初始化日誌系統
+logger = setup_logging()
 
 # 載入環境變數
 load_dotenv()
@@ -40,7 +82,7 @@ def extract_original_filename(dual_filename):
     except:
         return dual_filename  # 如果解析失敗，返回原文件名
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=None)
 
 # Session 配置
 app.secret_key = os.getenv('SESSION_SECRET_KEY')
@@ -67,20 +109,20 @@ def before_request():
     if request.method == 'OPTIONS':
         return
 
-    print("當前 session:", dict(session))
-    print(f"請求路徑: {request.path}")
-    print(f"請求方法: {request.method}")
-    print(f"Cookie: {request.cookies}")
-    print(f"Origin: {request.headers.get('Origin')}")
-    print(f"Authorization: {request.headers.get('Authorization')}")
+    logger.info("當前 session: %s", dict(session))
+    logger.info("請求路徑: %s", request.path)
+    logger.info("請求方法: %s", request.method)
+    logger.info("Cookie: %s", request.cookies)
+    logger.info("Origin: %s", request.headers.get('Origin'))
+    logger.info("Authorization: %s", request.headers.get('Authorization'))
     
-    # 打印前端傳遞的自定義頭部
+    # 記錄前端傳遞的自定義頭部
     customer_id = request.headers.get('X-Customer-ID')
     company_name = request.headers.get('X-Company-Name')
     if customer_id:
-        print(f"X-Customer-ID: {customer_id}")
+        logger.info("X-Customer-ID: %s", customer_id)
     if company_name:
-        print(f"X-Company-Name: {company_name}")
+        logger.info("X-Company-Name: %s", company_name)
     
     # 處理 Authorization header
     auth_header = request.headers.get('Authorization')
@@ -91,14 +133,14 @@ def before_request():
             session['admin_id'] = admin_id
             session.modified = True
         except ValueError:
-            print(f"Invalid admin_id format: {admin_id}")
+            logger.error("Invalid admin_id format: %s", admin_id)
 
 # 設置響應頭
 @app.after_request
 def after_request(response):
     origin = request.headers.get('Origin')
-    print(f"请求Origin: '{origin}'")
-    print(f"允许的Origins: {ALLOWED_ORIGINS}")
+    logger.info("请求Origin: '%s'", origin)
+    logger.info("允许的Origins: %s", ALLOWED_ORIGINS)
     
     if origin in ALLOWED_ORIGINS:
         response.headers.update({
@@ -110,16 +152,27 @@ def after_request(response):
             'Vary': 'Origin'
         })
     else:
-        print(f"Origin不匹配: '{origin}' 不在允许列表中")
+        logger.warning("Origin不匹配: '%s' 不在允许列表中", origin)
     return response
+# 前端靜態文件路由
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_static_files(path):
+    # 確定前端靜態文件所在的目錄
+    static_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'seatic', 'dist')
+    
+    if path and os.path.exists(os.path.join(static_folder, path)):
+        return send_from_directory(static_folder, path)
+    else:
+        return send_from_directory(static_folder, 'index.html')
 
 # 添加靜態文件路由，用於訪問上傳的文件
 @app.route('/uploads/<path:filename>')
 def serve_upload(filename):
     """提供靜態文件訪問"""
     try:
-        print(f"请求上传文件: {filename}")
-        print(f"完整路径: {os.path.join(UPLOAD_FOLDER, filename)}")
+        logger.info("请求上传文件: %s", filename)
+        logger.info("完整路径: %s", os.path.join(UPLOAD_FOLDER, filename))
         
         # 獲取文件的基本名稱(不含路徑)
         basename = os.path.basename(filename)
@@ -138,7 +191,7 @@ def serve_upload(filename):
                 # 使用RFC 5987編碼格式
                 encoded_filename = urllib.parse.quote(original_filename)
                 response.headers["Content-Disposition"] = f"inline; filename=\"{encoded_filename}\"; filename*=UTF-8''{encoded_filename}"
-                print(f"從資料庫獲取圖片原始文件名: {original_filename}")
+                logger.info("從資料庫獲取圖片原始文件名: %s", original_filename)
                 return response
                 
             # 嘗試查找匹配的文件
@@ -151,7 +204,7 @@ def serve_upload(filename):
                 # 使用RFC 5987編碼格式
                 encoded_filename = urllib.parse.quote(original_filename)
                 response.headers["Content-Disposition"] = f"inline; filename=\"{encoded_filename}\"; filename*=UTF-8''{encoded_filename}"
-                print(f"從資料庫獲取文件原始文件名: {original_filename}")
+                logger.info("從資料庫獲取文件原始文件名: %s", original_filename)
                 return response
         
         # 如果資料庫中沒有找到，嘗試從文件名中提取
@@ -162,14 +215,14 @@ def serve_upload(filename):
             # 使用RFC 5987編碼格式
             encoded_filename = urllib.parse.quote(original_filename)
             response.headers["Content-Disposition"] = f"inline; filename=\"{encoded_filename}\"; filename*=UTF-8''{encoded_filename}"
-            print(f"從文件名提取原始文件名: {original_filename}")
+            logger.info("從文件名提取原始文件名: %s", original_filename)
             return response
             
         # 如果都沒有找到，直接返回文件
         return send_from_directory(UPLOAD_FOLDER, filename)
         
     except Exception as e:
-        print(f"處理文件訪問出錯: {str(e)}")
+        logger.error("處理文件訪問出錯: %s", str(e))
         return send_from_directory(UPLOAD_FOLDER, filename)
 
 # 註冊藍圖
