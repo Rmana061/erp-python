@@ -6,6 +6,8 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 from pytz import timezone
 from backend.config.database import get_db_connection
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+import psycopg2
 
 # 配置日志系统，同时解决编码问题
 logging.basicConfig(
@@ -21,6 +23,19 @@ logger = logging.getLogger("date_cleaner")
 # 全局调度器
 scheduler = None
 
+def log_retry(retry_state):
+    """自定義重試日誌函數"""
+    if retry_state.attempt_number > 1:  # 只在重試時記錄
+        logger.info(f"重試清理任務 (第 {retry_state.attempt_number} 次嘗試)")
+    return True
+
+# 修改重試裝飾器
+@retry(
+    stop=stop_after_attempt(5),  # 增加重試次數
+    wait=wait_exponential(multiplier=2, min=4, max=60),  # 調整等待時間
+    retry=retry_if_exception_type((psycopg2.Error, psycopg2.InterfaceError)),  # 擴大重試的錯誤類型
+    before=log_retry  # 使用自定義的日誌函數
+)
 def clean_expired_dates():
     """清理过期的锁定日期"""
     logger.info("開始執行過期日期清理任務")
@@ -30,53 +45,63 @@ def clean_expired_dates():
     
     try:
         with get_db_connection() as conn:
-            cursor = conn.cursor()
-            
-            # 首先查询所有日期，检查是否有过期日期
-            cursor.execute("SELECT id, locked_date FROM locked_dates ORDER BY locked_date")
-            all_dates = cursor.fetchall()
-            logger.info(f"資料庫中的所有日期: {[row[1].isoformat() for row in all_dates]}")
-            
-            # 查询并删除过期的锁定日期（早于今天的日期）
-            cursor.execute("""
-                DELETE FROM locked_dates 
-                WHERE locked_date < %s::date
-                RETURNING id, locked_date
-            """, (today.isoformat(),))
-            
-            deleted_rows = cursor.fetchall()
-            deleted_count = len(deleted_rows)
-            
-            # 确保事务提交
-            conn.commit()
-            logger.info(f"已提交事務")
-            
-            if deleted_count > 0:
-                deleted_ids = [row[0] for row in deleted_rows]
-                deleted_dates = [row[1].strftime('%Y-%m-%d') for row in deleted_rows]
-                logger.info(f"已刪除 {deleted_count} 個過期鎖定日期")
-                logger.info(f"已刪除的日期: {', '.join(deleted_dates)}")
-                logger.info(f"已刪除的ID: {', '.join(map(str, deleted_ids))}")
-            else:
-                logger.info("沒有過期的鎖定日期需要清理")
+            with conn.cursor() as cursor:
+                try:
+                    # 檢查連接狀態
+                    if conn.closed:
+                        raise psycopg2.InterfaceError("資料庫連接已關閉")
+                    
+                    # 首先查询所有日期，检查是否有过期日期
+                    cursor.execute("SELECT id, locked_date FROM locked_dates ORDER BY locked_date")
+                    all_dates = cursor.fetchall()
+                    logger.info(f"資料庫中的所有日期: {[row[1].isoformat() for row in all_dates]}")
+                    
+                    # 查询并删除过期的锁定日期（早于今天的日期）
+                    cursor.execute("""
+                        DELETE FROM locked_dates 
+                        WHERE locked_date < %s::date
+                        RETURNING id, locked_date
+                    """, (today.isoformat(),))
+                    
+                    deleted_rows = cursor.fetchall()
+                    deleted_count = len(deleted_rows)
+                    
+                    # 提交事務
+                    conn.commit()
+                    logger.info(f"已提交事務，刪除了 {deleted_count} 條記錄")
+                    
+                    if deleted_count > 0:
+                        deleted_ids = [row[0] for row in deleted_rows]
+                        deleted_dates = [row[1].strftime('%Y-%m-%d') for row in deleted_rows]
+                        logger.info(f"已刪除 {deleted_count} 個過期鎖定日期")
+                        logger.info(f"已刪除的日期: {', '.join(deleted_dates)}")
+                        logger.info(f"已刪除的ID: {', '.join(map(str, deleted_ids))}")
+                    else:
+                        logger.info("沒有過期的鎖定日期需要清理")
+                    
+                except Exception as e:
+                    conn.rollback()
+                    logger.error(f"執行清理任務時發生錯誤，已回滾事務: {str(e)}")
+                    raise
                 
-            # 再次查询确认删除结果
-            cursor.execute("SELECT id, locked_date FROM locked_dates ORDER BY locked_date")
-            remaining_dates = cursor.fetchall()
-            logger.info(f"清理後資料庫中的日期: {[row[1].isoformat() for row in remaining_dates]}")
-            
-            return deleted_count
+    except psycopg2.Error as e:
+        logger.error(f"資料庫操作錯誤: {str(e)}")
+        logger.exception("詳細錯誤信息")
+        raise
     except Exception as e:
         logger.error(f"清理過期日期時發生錯誤: {str(e)}")
         logger.exception("詳細錯誤信息")
         raise
     finally:
         logger.info("鎖定日期清理任務結束")
+        
+    return deleted_count
 
 def job_listener(event):
     """作業執行監聽器"""
     if event.exception:
         logger.error(f"任務執行失敗: {str(event.exception)}")
+        logger.exception("詳細錯誤信息", exc_info=event.exception)
     else:
         job_id = event.job_id
         logger.info(f"任務 {job_id} 執行成功，清理了 {event.retval} 個過期日期")
@@ -92,11 +117,22 @@ def initialize_scheduler():
     logger.info("初始化調度器")
     
     try:
-        # 确保使用正确的时区
         tz = timezone('Asia/Taipei')
         logger.info(f"使用時區: {tz.zone}, 當前時間: {datetime.datetime.now(tz).isoformat()}")
         
-        scheduler = BackgroundScheduler(timezone=tz)
+        # 修改調度器配置
+        scheduler = BackgroundScheduler(
+            timezone=tz,
+            job_defaults={
+                'coalesce': True,  # 合併錯過的任務
+                'max_instances': 1,  # 限制同時運行的實例數
+                'misfire_grace_time': 300,  # 錯過執行的寬限時間（秒）
+                'retry': {  # 添加任務重試配置
+                    'max_attempts': 3,
+                    'delay': 30
+                }
+            }
+        )
         
         # 添加任务执行监听器
         scheduler.add_listener(
@@ -110,7 +146,8 @@ def initialize_scheduler():
             CronTrigger(hour=0, minute=5),  # 每天凌晨00:05执行
             id='clean_expired_dates_job',
             name='清理過期鎖定日期任務',
-            replace_existing=True
+            replace_existing=True,
+            max_instances=1  # 確保同一時間只有一個實例在運行
         )
         
         # 添加任务立即执行一次，确保系统启动时就清理过期日期
@@ -119,7 +156,8 @@ def initialize_scheduler():
             'date',
             run_date=datetime.datetime.now(tz) + datetime.timedelta(seconds=10),
             id='initial_clean_job',
-            name='初始清理過期鎖定日期任務'
+            name='初始清理過期鎖定日期任務',
+            max_instances=1
         )
         
         # 启动调度器
@@ -141,9 +179,14 @@ def shutdown_scheduler():
     """关闭调度器"""
     global scheduler
     if scheduler and scheduler.running:
-        scheduler.shutdown()
-        logger.info("調度器已關閉")
-        scheduler = None
+        try:
+            scheduler.shutdown(wait=True)  # 等待所有正在運行的任務完成
+            logger.info("調度器已正常關閉")
+        except Exception as e:
+            logger.error(f"關閉調度器時發生錯誤: {str(e)}")
+            logger.exception("詳細錯誤信息")
+        finally:
+            scheduler = None
 
 # 手动执行清理，用于测试
 def run_clean_task_manually():
