@@ -2,8 +2,8 @@ from flask import Blueprint, request, jsonify, send_from_directory, current_app,
 from backend.config.database import get_db_connection
 from backend.utils.file_handlers import (
     create_product_folder, 
-    allowed_image_file, 
-    allowed_doc_file, 
+    is_allowed_image, 
+    is_allowed_document, 
     UPLOAD_FOLDER,
     save_file,
     delete_file,
@@ -23,6 +23,9 @@ import time
 import shutil
 import urllib.parse
 from backend.utils.scheduler import run_clean_task_manually
+import logging
+
+logger = logging.getLogger(__name__)
 
 product_bp = Blueprint('product', __name__)
 
@@ -68,7 +71,7 @@ def remove_product_folder(product_folder):
         # 安全起见，检查文件夹名称合法性
         folder_name = secure_filename(product_folder)
         if not folder_name:
-            print("产品文件夹名称无效")
+            logger.warning("产品文件夹名称无效")
             return False
             
         # 检查该名称的文件夹是否存在
@@ -76,13 +79,13 @@ def remove_product_folder(product_folder):
         if os.path.exists(folder_path) and os.path.isdir(folder_path):
             # 删除文件夹及其内容
             shutil.rmtree(folder_path)
-            print(f"已删除产品文件夹: {folder_path}")
+            logger.info(f"已删除产品文件夹: {folder_path}")
             return True
         else:
-            print(f"产品文件夹不存在: {folder_path}")
+            logger.warning(f"产品文件夹不存在: {folder_path}")
             return False
     except Exception as e:
-        print(f"删除产品文件夹时出错: {str(e)}")
+        logger.error(f"删除产品文件夹时出错: {str(e)}")
         return False
 
 @product_bp.route('/products/list', methods=['POST'])
@@ -102,7 +105,7 @@ def get_products():
                     'message': 'Unauthorized access'
                 }), 401
             
-            print("管理員請求產品列表")
+            logger.info("管理員請求產品列表")
             
         elif request_type == 'customer':
             # 客戶請求產品，檢查客戶身份
@@ -121,7 +124,7 @@ def get_products():
             session_customer_id = session.get('customer_id')
             session_company_name = session.get('company_name')
             
-            print("當前會話狀態:", {
+            logger.info("當前會話狀態:", {
                 'customerId': customer_id,
                 'companyName': company_name,
                 'sessionCustomerId': session_customer_id,
@@ -137,7 +140,7 @@ def get_products():
                     'message': 'Unauthorized access'
                 }), 401
                 
-            print(f"獲取客戶 {customer_id}（{company_name}）的產品列表")
+            logger.info(f"獲取客戶 {customer_id}（{company_name}）的產品列表")
             
         else:
             return jsonify({
@@ -145,7 +148,7 @@ def get_products():
                 'message': 'Invalid request type'
             }), 400
         
-        print("正在獲取產品列表...")
+        logger.info("正在獲取產品列表...")
         
         with get_db_connection() as conn:
             # 使用ProductService獲取產品列表
@@ -188,7 +191,7 @@ def get_products():
                             product['original_image_filename'] = original_image_filename
                             product['image_original_filename'] = original_image_filename
                     except Exception as e:
-                        print(f"提取图片原始文件名出错: {str(e)}")
+                        logger.error("提取图片原始文件名出错: %s", str(e))
                 
                 if product.get('dm_url') and not product.get('original_dm_filename'):
                     dm_path = product['dm_url']
@@ -201,9 +204,9 @@ def get_products():
                             product['original_dm_filename'] = original_dm_filename
                             product['dm_original_filename'] = original_dm_filename
                     except Exception as e:
-                        print(f"提取文档原始文件名出错: {str(e)}")
+                        logger.error("提取文档原始文件名出错: %s", str(e))
             
-            print(f"API返回 {len(products)} 個產品")
+            logger.info(f"API返回 {len(products)} 個產品")
             
             return jsonify({
                 'status': 'success',
@@ -211,7 +214,7 @@ def get_products():
             })
     
     except Exception as e:
-        print(f"獲取產品列表錯誤: {str(e)}")
+        logger.error(f"獲取產品列表錯誤: {str(e)}")
         import traceback
         traceback.print_exc()
         return jsonify({
@@ -233,7 +236,7 @@ def add_product():
             
         # 顯示原始請求數據
         data = request.get_json()
-        print(f"收到的原始請求數據: {data}")
+        logger.debug("收到的原始請求數據: %s", data)
         
         # 過濾出需要的數據
         filtered_data = {
@@ -250,12 +253,12 @@ def add_product():
             'image_original_filename': data.get('image_original_filename', ''),
             'dm_original_filename': data.get('dm_original_filename', '')
         }
-        print(f"過濾後的數據: {filtered_data}")
+        logger.debug("過濾後的數據: %s", filtered_data)
         
         with get_db_connection() as conn:
             try:
                 # 添加產品
-                print(f"准備添加產品，數據: {filtered_data}")
+                logger.debug("准備添加產品，數據: %s", filtered_data)
                 product_service = ProductService(conn)
                 product_id = product_service.add_product(
                     name=filtered_data['name'],
@@ -271,7 +274,7 @@ def add_product():
                     image_original_filename=filtered_data['image_original_filename'],
                     dm_original_filename=filtered_data['dm_original_filename']
                 )
-                print(f"產品添加結果ID: {product_id}")
+                logger.info(f"產品添加結果ID: {product_id}")
                 
                 # 記錄操作日誌
                 try:
@@ -292,13 +295,13 @@ def add_product():
                     }
                     
                     log_service = LogServiceRegistry.get_service(conn, 'products')
-                    print("Received log operation request:")
-                    print(f"Table: products")
-                    print(f"Operation: 新增")
-                    print(f"Record ID: {product_id}")
-                    print(f"New data: {json.dumps(log_data)}")
-                    print(f"Performed by: {admin_id}")
-                    print(f"User type: 管理員")
+                    logger.debug("Received log operation request:")
+                    logger.debug("Table: products")
+                    logger.debug("Operation: 新增")
+                    logger.debug("Record ID: %s", product_id)
+                    logger.debug("New data: %s", json.dumps(log_data))
+                    logger.debug("Performed by: %s", admin_id)
+                    logger.debug("User type: 管理員")
                     
                     log_service.log_operation(
                         table_name='products',
@@ -309,9 +312,9 @@ def add_product():
                         performed_by=admin_id,
                         user_type='管理員'
                     )
-                    print("產品新增日誌記錄成功")
+                    logger.info("產品新增日誌記錄成功")
                 except Exception as e:
-                    print(f"日誌記錄錯誤: {str(e)}")
+                    logger.error("日誌記錄錯誤: %s", str(e))
                 
                 # 返回成功訊息
                 return jsonify({
@@ -320,14 +323,14 @@ def add_product():
                     'product_id': product_id
                 })
             except Exception as e:
-                print(f"添加產品時發生錯誤: {str(e)}")
+                logger.error("添加產品時發生錯誤: %s", str(e))
                 conn.rollback()
                 return jsonify({
                     'status': 'error',
                     'message': f'添加產品失敗: {str(e)}'
                 }), 500
     except Exception as e:
-        print(f"添加產品路由錯誤: {str(e)}")
+        logger.error(f"添加產品路由錯誤: {str(e)}")
         return jsonify({
             'status': 'error',
             'message': f'添加產品時發生錯誤: {str(e)}'
@@ -346,7 +349,7 @@ def update_product(product_id):
             }), 401
             
         data = request.get_json()
-        print(f"更新產品ID: {product_id}, 數據: {data}")
+        logger.debug("更新產品ID: %s, 數據: %s", product_id, data)
         
         # 獲取更新前的產品數據
         with get_db_connection() as conn:
@@ -374,9 +377,9 @@ def update_product(product_id):
                         # 用於日誌顯示的修改：替換URL中的文件名為原始文件名
                         old_product['image_url'] = original_image_filename
                         old_product['original_image_filename'] = original_image_filename
-                        print(f"圖片文件名: {image_filename} -> 原始文件名: {original_image_filename}")
+                        logger.debug("圖片文件名: %s -> 原始文件名: %s", image_filename, original_image_filename)
                 except Exception as e:
-                    print(f"提取圖片原始文件名出錯: {str(e)}")
+                    logger.error("提取圖片原始文件名出錯: %s", str(e))
             
             if old_product.get('dm_url'):
                 dm_path = old_product['dm_url']
@@ -392,21 +395,21 @@ def update_product(product_id):
                         # 用於日誌顯示的修改：替換URL中的文件名為原始文件名
                         old_product['dm_url'] = original_dm_filename
                         old_product['original_dm_filename'] = original_dm_filename
-                        print(f"文檔文件名: {dm_filename} -> 原始文件名: {original_dm_filename}")
+                        logger.debug("文檔文件名: %s -> 原始文件名: %s", dm_filename, original_dm_filename)
                 except Exception as e:
-                    print(f"提取文檔原始文件名出錯: {str(e)}")
+                    logger.error("提取文檔原始文件名出錯: %s", str(e))
             
             # 輸出完整的舊數據以便調試
-            print(f"更新前的原始數據: {old_product}")
+            logger.debug("更新前的原始數據: %s", old_product)
             
             # 檢查是否有新的圖片上傳
             if data.get('image_url') and (old_product.get('image_url_original') and data.get('image_url') != old_product.get('image_url_original')) and '/uploads/' in data.get('image_url', ''):
                 # 删除舊的圖片，使用原始的URL（包含加密文件名）
-                print(f"檢測到新的圖片URL: {data.get('image_url')}")
+                logger.debug("檢測到新的圖片URL: %s", data.get('image_url'))
                 if old_product.get('image_url_original'):  # 使用備份的原始URL進行刪除操作
                     try:
                         # 嘗試多種方式刪除舊文件
-                        print(f"準備刪除舊圖片文件: {old_product['image_url_original']}")
+                        logger.debug("準備刪除舊圖片文件: %s", old_product['image_url_original'])
                         
                         if USE_AZURE_STORAGE:
                             # 方法1: 使用完整URL
@@ -425,73 +428,73 @@ def update_product(product_id):
                             # 本地存儲，直接刪除文件
                             delete_file(old_product['image_url_original'], is_image=True)
                             
-                        print("舊圖片文件刪除處理完成")
+                        logger.debug("舊圖片文件刪除處理完成")
                     except Exception as e:
-                        print(f"刪除舊圖片文件時出錯: {str(e)}")
+                        logger.error("刪除舊圖片文件時出錯: %s", str(e))
                 
                 # 檢查URL格式是否異常（比如只有副檔名沒有文件名的情況）
                 image_path = data.get('image_url', '')
                 if image_path.endswith('/png') or image_path.endswith('/jpg') or image_path.endswith('/jpeg') or image_path.endswith('/gif') or image_path.endswith('/webp'):
-                    print(f"檢測到異常的圖片URL格式，使用原URL: {old_product['image_url_original']}")
+                    logger.warning("檢測到異常的圖片URL格式，使用原URL: %s", old_product['image_url_original'])
                     data['image_url'] = old_product['image_url_original']
             
             # 檢查是否有新的DM上傳
             if data.get('dm_url') and data.get('dm_url') != old_product.get('dm_url') and '/uploads/' in data.get('dm_url', ''):
                 # 如果有新的DM上傳，刪除舊的DM文件，使用原始的URL（包含加密文件名）
-                print(f"檢測到新的DM URL: {data.get('dm_url')}")
+                logger.debug("檢測到新的DM URL: %s", data.get('dm_url'))
                 
                 # 無論如何都嘗試刪除舊文件，即使沒有dm_url_original
                 try:
                     # 嘗試多種方式刪除舊文件
-                    print(f"準備刪除舊DM文件")
+                    logger.debug("準備刪除舊DM文件")
                     delete_success = False
                     
                     if USE_AZURE_STORAGE:
                         # 優先使用備份的原始URL進行刪除操作
                         if old_product.get('dm_url_original'):
-                            print(f"使用原始URL刪除: {old_product['dm_url_original']}")
+                            logger.debug("使用原始URL刪除: %s", old_product['dm_url_original'])
                             delete_result = delete_file(old_product['dm_url_original'], product_name=old_product['name'], is_image=False)
                             if delete_result:
                                 delete_success = True
-                                print(f"使用原始URL成功刪除舊DM文件")
+                                logger.debug("使用原始URL成功刪除舊DM文件")
                         
                         # 如果沒有原始URL或刪除失敗，嘗試使用dm_url
                         if not delete_success and old_product.get('dm_url'):
-                            print(f"使用dm_url刪除: {old_product['dm_url']}")
+                            logger.debug("使用dm_url刪除: %s", old_product['dm_url'])
                             # 如果dm_url包含協議頭，可能是完整的URL
                             if '://' in old_product['dm_url']:
                                 delete_result = delete_file(old_product['dm_url'], product_name=old_product['name'], is_image=False)
                                 if delete_result:
                                     delete_success = True
-                                    print(f"使用dm_url成功刪除舊DM文件")
+                                    logger.debug("使用dm_url成功刪除舊DM文件")
                             
                             # 如果不是完整URL，可能只是文件名
                             if not delete_success:
-                                print(f"嘗試拼接blob路徑")
+                                logger.debug("嘗試拼接blob路徑")
                                 dm_filename = os.path.basename(old_product['dm_url'])
                                 blob_path = f"{old_product['name']}/{dm_filename}"
                                 delete_result = delete_file(blob_path, product_name=old_product['name'], is_image=False)
                                 if delete_result:
                                     delete_success = True
-                                    print(f"使用拼接的blob路徑成功刪除舊DM文件")
+                                    logger.debug("使用拼接的blob路徑成功刪除舊DM文件")
                         
                         # 如果上面的方法都失敗，嘗試使用dm_encrypted_filename
                         if not delete_success and old_product.get('dm_encrypted_filename'):
-                            print(f"使用加密文件名刪除: {old_product['dm_encrypted_filename']}")
+                            logger.debug("使用加密文件名刪除: %s", old_product['dm_encrypted_filename'])
                             blob_path = f"{old_product['name']}/{old_product['dm_encrypted_filename']}"
                             delete_result = delete_file(blob_path, product_name=old_product['name'], is_image=False)
                             if delete_result:
                                 delete_success = True
-                                print(f"使用加密文件名成功刪除舊DM文件")
+                                logger.debug("使用加密文件名成功刪除舊DM文件")
                         
                         # 最後一個嘗試：從dm_url分解出文件路徑
                         if not delete_success and '/uploads/' in old_product.get('dm_url', ''):
-                            print(f"嘗試從dm_url提取blob路徑")
+                            logger.debug("嘗試從dm_url提取blob路徑")
                             old_dm_blob_path = old_product['dm_url'].split('/uploads/')[-1]
                             delete_result = delete_file(old_dm_blob_path, product_name=old_product['name'], is_image=False)
                             if delete_result:
                                 delete_success = True
-                                print(f"使用提取的blob路徑成功刪除舊DM文件")
+                                logger.debug("使用提取的blob路徑成功刪除舊DM文件")
                     else:
                         # 本地存儲，直接使用原始URL或dm_url刪除文件
                         if old_product.get('dm_url_original'):
@@ -499,28 +502,28 @@ def update_product(product_id):
                         elif old_product.get('dm_url'):
                             delete_file(old_product['dm_url'], is_image=False)
                         
-                    print("舊DM文件刪除處理完成")
+                    logger.debug("舊DM文件刪除處理完成")
                 except Exception as e:
-                    print(f"刪除舊DM文件時出錯: {str(e)}")
+                    logger.error("刪除舊DM文件時出錯: %s", str(e))
                 
                 # 檢查URL格式是否異常
                 dm_path = data.get('dm_url', '')
                 if dm_path.endswith('/pdf') or dm_path.endswith('/doc') or dm_path.endswith('/docx') or dm_path.endswith('/xls') or dm_path.endswith('/xlsx') or dm_path.endswith('/ppt') or dm_path.endswith('/pptx'):
-                    print(f"檢測到異常的DM URL格式，使用原URL: {old_product['dm_url_original']}")
+                    logger.warning("檢測到異常的DM URL格式，使用原URL: %s", old_product['dm_url_original'])
                     data['dm_url'] = old_product['dm_url_original']
             
             # 檢查產品名稱是否有變更，若有則需要處理文件夾重命名
             if data.get('name') and data.get('name') != old_product['name']:
-                print(f"產品名稱已變更：從 {old_product['name']} 到 {data.get('name')}")
+                logger.info("產品名稱已變更：從 %s 到 %s", old_product['name'], data.get('name'))
                 
                 # 對於Azure存儲，需要移動所有文件到新的產品名稱文件夾
                 if USE_AZURE_STORAGE:
                     try:
                         # 這裡只處理重新上傳和更新數據庫中的路徑，Azure無法直接重命名文件夾
-                        print("使用Azure存儲，將在新上傳時使用新產品名稱作為路徑")
+                        logger.debug("使用Azure存儲，將在新上傳時使用新產品名稱作為路徑")
                         # 將來如果需要實現文件移動，可以在這裡添加代碼
                     except Exception as e:
-                        print(f"處理Azure存儲產品名稱變更時出錯: {str(e)}")
+                        logger.error("處理Azure存儲產品名稱變更時出錯: %s", str(e))
                 else:
                     # 本地存儲處理文件夾重命名
                     try:
@@ -530,11 +533,11 @@ def update_product(product_id):
                         if os.path.exists(old_folder) and os.path.isdir(old_folder):
                             # 如果新文件夾已存在，先刪除它
                             if os.path.exists(new_folder):
-                                print(f"新文件夾已存在，刪除: {new_folder}")
+                                logger.debug("新文件夾已存在，刪除: %s", new_folder)
                                 shutil.rmtree(new_folder)
                                 
                             # 重命名文件夾
-                            print(f"重命名文件夾: {old_folder} -> {new_folder}")
+                            logger.debug("重命名文件夾: %s -> %s", old_folder, new_folder)
                             os.rename(old_folder, new_folder)
                             
                             # 更新URL中的文件夾名稱
@@ -542,17 +545,17 @@ def update_product(product_id):
                                 old_path = f"/uploads/{secure_filename(old_product['name'])}"
                                 new_path = f"/uploads/{secure_filename(data.get('name'))}"
                                 data['image_url'] = data['image_url'].replace(old_path, new_path)
-                                print(f"更新圖片URL: {data['image_url']}")
+                                logger.debug("更新圖片URL: %s", data['image_url'])
                                 
                             if data.get('dm_url') and '/uploads/' in data.get('dm_url'):
                                 old_path = f"/uploads/{secure_filename(old_product['name'])}"
                                 new_path = f"/uploads/{secure_filename(data.get('name'))}"
                                 data['dm_url'] = data['dm_url'].replace(old_path, new_path)
-                                print(f"更新DM URL: {data['dm_url']}")
+                                logger.debug("更新DM URL: %s", data['dm_url'])
                         else:
-                            print(f"舊產品文件夾不存在: {old_folder}")
+                            logger.warning("舊產品文件夾不存在: %s", old_folder)
                     except Exception as e:
-                        print(f"重命名產品文件夾時出錯: {str(e)}")
+                        logger.error("重命名產品文件夾時出錯: %s", str(e))
             
             # 過濾出需要的數據
             filtered_data = {
@@ -571,10 +574,10 @@ def update_product(product_id):
             # 處理原始文件名：只在有新文件時更新原始文件名字段
             # 檢查圖片URL是否發生了變化
             if 'image_url' in data and data.get('image_url') != old_product.get('image_url'):
-                print(f"圖片URL發生了變化，使用新的原始文件名: {data.get('image_original_filename', '')}")
+                logger.debug("圖片URL發生了變化，使用新的原始文件名: %s", data.get('image_original_filename', ''))
                 filtered_data['image_original_filename'] = data.get('image_original_filename', '')
             else:
-                print(f"圖片URL未變化，保留原始文件名: {old_product.get('image_original_filename', '')}")
+                logger.debug("圖片URL未變化，保留原始文件名: %s", old_product.get('image_original_filename', ''))
                 # 從資料庫獲取原始的檔案名
                 cursor = conn.cursor()
                 cursor.execute("SELECT image_original_filename FROM products WHERE id = %s", (product_id,))
@@ -586,10 +589,10 @@ def update_product(product_id):
             
             # 檢查文檔URL是否發生了變化
             if 'dm_url' in data and data.get('dm_url') != old_product.get('dm_url'):
-                print(f"文檔URL發生了變化，使用新的原始文件名: {data.get('dm_original_filename', '')}")
+                logger.debug("文檔URL發生了變化，使用新的原始文件名: %s", data.get('dm_original_filename', ''))
                 filtered_data['dm_original_filename'] = data.get('dm_original_filename', '')
             else:
-                print(f"文檔URL未變化，保留原始文件名: {old_product.get('dm_original_filename', '')}")
+                logger.debug("文檔URL未變化，保留原始文件名: %s", old_product.get('dm_original_filename', ''))
                 # 從資料庫獲取原始的檔案名
                 cursor = conn.cursor()
                 cursor.execute("SELECT dm_original_filename FROM products WHERE id = %s", (product_id,))
@@ -600,12 +603,12 @@ def update_product(product_id):
                     filtered_data['dm_original_filename'] = old_product.get('dm_original_filename', '') or old_product.get('original_dm_filename', '')
             
             # 打印最終要更新的數據
-            print(f"最終更新數據: {filtered_data}")
+            logger.debug("最終更新數據: %s", filtered_data)
             
             try:
                 # 更新產品
                 result = product_service.update_product(product_id, filtered_data)
-                print(f"產品更新結果: {result}")
+                logger.debug("產品更新結果: %s", result)
                 
                 if result:
                     # 記錄操作日誌
@@ -620,9 +623,9 @@ def update_product(product_id):
                             performed_by=admin_id,
                             user_type='管理員'
                         )
-                        print("產品修改日誌記錄成功")
+                        logger.info("產品修改日誌記錄成功")
                     except Exception as e:
-                        print(f"日誌記錄錯誤: {str(e)}")
+                        logger.error("日誌記錄錯誤: %s", str(e))
                         
                     # 獲取最新產品數據返回
                     updated_product = product_service.get_product_by_id(product_id)
@@ -644,14 +647,14 @@ def update_product(product_id):
                         'message': '產品更新失敗'
                     }), 500
             except Exception as e:
-                print(f"更新產品時發生錯誤: {str(e)}")
+                logger.error("更新產品時發生錯誤: %s", str(e))
                 conn.rollback()
                 return jsonify({
                     'status': 'error',
                     'message': f'更新產品失敗: {str(e)}'
                 }), 500
     except Exception as e:
-        print(f"更新產品路由錯誤: {str(e)}")
+        logger.error(f"更新產品路由錯誤: {str(e)}")
         return jsonify({
             'status': 'error',
             'message': f'更新產品時發生錯誤: {str(e)}'
@@ -674,7 +677,7 @@ def delete_product(product_id):
                 'message': 'Unauthorized access'
             }), 401
         
-        print(f"刪除產品ID: {product_id}, 軟刪除: {soft_delete}")
+        logger.info(f"刪除產品ID: {product_id}, 軟刪除: {soft_delete}")
         
         # 獲取要刪除的產品數據（用於日誌記錄）
         with get_db_connection() as conn:
@@ -694,7 +697,7 @@ def delete_product(product_id):
             # 嘗試刪除uploads文件夾
             if product_folder:
                 try:
-                    print(f"嘗試刪除產品文件夾: {product_folder}")
+                    logger.info(f"嘗試刪除產品文件夾: {product_folder}")
                     # 使用產品名稱作為文件夾名稱
                     folder_name = secure_filename(product_folder)
                     
@@ -703,29 +706,29 @@ def delete_product(product_id):
                         from backend.utils.azure_storage import list_product_files
                         product_files = list_product_files(folder_name)
                         if product_files:
-                            print(f"找到Azure存儲中的{len(product_files)}個文件需要刪除")
+                            logger.info(f"找到Azure存儲中的{len(product_files)}個文件需要刪除")
                             for file_info in product_files:
                                 try:
                                     # 從文件URL中提取blob路徑
                                     blob_name = file_info.get('name')
                                     if blob_name:
-                                        print(f"刪除Azure blob: {blob_name}")
+                                        logger.info(f"刪除Azure blob: {blob_name}")
                                         delete_file(blob_name, product_name=product_folder)
                                 except Exception as e:
-                                    print(f"刪除Azure blob時出錯: {str(e)}")
-                            print("已刪除所有產品相關的Azure存儲文件")
+                                    logger.error(f"刪除Azure blob時出錯: {str(e)}")
+                            logger.info("已刪除所有產品相關的Azure存儲文件")
                         else:
-                            print(f"Azure存儲中找不到產品文件夾: {folder_name}")
+                            logger.warning(f"Azure存儲中找不到產品文件夾: {folder_name}")
                     else:
                         # 本地存儲刪除
                         delete_folder_result = remove_product_folder(folder_name)
-                        print(f"刪除產品文件夾結果: {delete_folder_result}")
+                        logger.info(f"刪除產品文件夾結果: {delete_folder_result}")
                 except Exception as e:
-                    print(f"刪除產品文件夾時出錯: {str(e)}")
+                    logger.error(f"刪除產品文件夾時出錯: {str(e)}")
             
             # 刪除產品（軟刪除或硬刪除）
             result = product_service.delete_product(product_id, soft_delete=soft_delete)
-            print(f"刪除產品結果: {result}")
+            logger.info(f"刪除產品結果: {result}")
             
             if result:
                 # 記錄操作日誌
@@ -740,9 +743,9 @@ def delete_product(product_id):
                         performed_by=admin_id,
                         user_type='管理員'
                     )
-                    print("產品刪除日誌記錄成功")
+                    logger.info("產品刪除日誌記錄成功")
                 except Exception as e:
-                    print(f"日誌記錄錯誤: {str(e)}")
+                    logger.error("日誌記錄錯誤: %s", str(e))
                 
                 return jsonify({
                     'status': 'success',
@@ -754,7 +757,7 @@ def delete_product(product_id):
                     'message': '產品刪除失敗'
                 }), 500
     except Exception as e:
-        print(f"刪除產品時發生錯誤: {str(e)}")
+        logger.error(f"刪除產品時發生錯誤: {str(e)}")
         return jsonify({
             'status': 'error',
             'message': f'刪除產品失敗: {str(e)}'
@@ -772,7 +775,7 @@ def upload_image():
         file = request.files['file']
         product_name = request.form['productName']
         
-        print(f"收到圖片上傳請求，產品名稱: {product_name}, 檔案名: {file.filename}, 檔案類型: {file.content_type}")
+        logger.info(f"收到圖片上傳請求，產品名稱: {product_name}, 檔案名: {file.filename}, 檔案類型: {file.content_type}")
         
         if file.filename == '':
             return jsonify({
@@ -780,13 +783,13 @@ def upload_image():
                 'message': 'No selected file'
             }), 400
             
-        if file and allowed_image_file(file.filename):
+        if file and is_allowed_image(file.filename):
             # 保存原始文件名（这将用于数据库存储）
             original_filename = file.filename
             
             # 创建安全文件名用于存储
             safe_filename = create_dual_filename(original_filename)
-            print(f"圖片文件名處理: 原始={original_filename}, 安全文件名={safe_filename}")
+            logger.debug(f"圖片文件名處理: 原始={original_filename}, 安全文件名={safe_filename}")
             
             if USE_AZURE_STORAGE:
                 # 使用Azure Blob存儲
@@ -795,12 +798,12 @@ def upload_image():
                 for existing_file in existing_files:
                     try:
                         delete_file(existing_file['name'])
-                        print(f"已刪除舊圖片文件: {existing_file['filename']}")
+                        logger.info(f"已刪除舊圖片文件: {existing_file['filename']}")
                     except Exception as e:
-                        print(f"刪除舊圖片時出錯: {str(e)}")
+                        logger.error(f"刪除舊圖片時出錯: {str(e)}")
                 
                 # 保存新上傳的文件到Azure
-                print(f"開始上傳圖片到Azure，產品名: {product_name}")
+                logger.info(f"開始上傳圖片到Azure，產品名: {product_name}")
                 file_path = save_file(file, product_name, is_image=True)
                 
                 if not file_path:
@@ -809,7 +812,7 @@ def upload_image():
                         'message': 'Failed to upload file to Azure'
                     }), 500
                 
-                print(f"圖片上傳成功，Azure路徑: {file_path}，原始文件名: {original_filename}")
+                logger.info(f"圖片上傳成功，Azure路徑: {file_path}，原始文件名: {original_filename}")
                 return jsonify({
                     'status': 'success',
                     'data': {
@@ -829,9 +832,9 @@ def upload_image():
                     if file_ext in image_extensions:
                         try:
                             os.remove(os.path.join(product_folder, existing_file))
-                            print(f"已刪除舊圖片文件: {existing_file}")
+                            logger.info(f"已刪除舊圖片文件: {existing_file}")
                         except Exception as e:
-                            print(f"刪除舊圖片時出錯: {str(e)}")
+                            logger.error(f"刪除舊圖片時出錯: {str(e)}")
                 
                 # 保存新上传的文件
                 file.save(filepath)
@@ -839,7 +842,7 @@ def upload_image():
                 # 确保返回的路径包含安全文件名（用于存储）
                 relative_path = os.path.join('uploads', secure_filename(product_name), safe_filename)
                 
-                print(f"圖片上傳成功，完整路徑: {relative_path}，原始文件名: {original_filename}")
+                logger.info(f"圖片上傳成功，完整路徑: {relative_path}，原始文件名: {original_filename}")
                 return jsonify({
                     'status': 'success',
                     'data': {
@@ -848,13 +851,13 @@ def upload_image():
                     }
                 })
         else:
-            print(f"不支持的圖片類型: {file.filename}，文件內容類型: {file.content_type}")
+            logger.warning(f"不支持的圖片類型: {file.filename}，文件內容類型: {file.content_type}")
             return jsonify({
                 'status': 'error',
                 'message': f'不支持的圖片類型: {file.filename}'
             }), 400
     except Exception as e:
-        print(f"Error in upload_image: {str(e)}")
+        logger.error(f"Error in upload_image: {str(e)}")
         import traceback
         traceback.print_exc()
         return jsonify({
@@ -874,7 +877,7 @@ def upload_document():
         file = request.files['file']
         product_name = request.form['productName']
         
-        print(f"處理文件 - 名稱: {file.filename}, 內容類型: {file.content_type}")
+        logger.info(f"處理文件 - 名稱: {file.filename}, 內容類型: {file.content_type}")
         
         if file.filename == '':
             return jsonify({
@@ -882,13 +885,13 @@ def upload_document():
                 'message': 'No selected file'
             }), 400
             
-        if file and allowed_doc_file(file.filename):
+        if file and is_allowed_document(file.filename):
             # 保存原始文件名
             original_filename = file.filename
             
             # 创建安全文件名
             safe_filename = create_dual_filename(original_filename)
-            print(f"原始文件名: {original_filename} -> 雙軌文件名: {safe_filename}")
+            logger.debug(f"原始文件名: {original_filename} -> 雙軌文件名: {safe_filename}")
             
             if USE_AZURE_STORAGE:
                 # 使用Azure Blob存儲
@@ -900,11 +903,11 @@ def upload_document():
                         result = delete_file(existing_file['name'], product_name=product_name, is_image=False)
                         if result:
                             delete_count += 1
-                            print(f"已刪除舊DM文件: {existing_file['filename']}")
+                            logger.info(f"已刪除舊DM文件: {existing_file['filename']}")
                     except Exception as e:
-                        print(f"刪除舊DM文件時出錯: {str(e)}")
+                        logger.error(f"刪除舊DM文件時出錯: {str(e)}")
                 
-                print(f"已刪除 {delete_count} 個舊DM文件")
+                logger.info(f"已刪除 {delete_count} 個舊DM文件")
                 
                 # 保存新上傳的文件到Azure
                 file_path = save_file(file, product_name, is_image=False)
@@ -915,7 +918,7 @@ def upload_document():
                         'message': 'Failed to upload document to Azure'
                     }), 500
                 
-                print(f"文檔上傳成功，Azure路徑: {file_path}，原始文件名: {original_filename}")
+                logger.info(f"文檔上傳成功，Azure路徑: {file_path}，原始文件名: {original_filename}")
                 return jsonify({
                     'status': 'success',
                     'data': {
@@ -937,11 +940,11 @@ def upload_document():
                         try:
                             os.remove(os.path.join(product_folder, existing_file))
                             delete_count += 1
-                            print(f"已刪除舊文檔文件: {existing_file}")
+                            logger.info(f"已刪除舊文檔文件: {existing_file}")
                         except Exception as e:
-                            print(f"刪除舊文檔文件時出錯: {str(e)}")
+                            logger.error(f"刪除舊文檔文件時出錯: {str(e)}")
                             
-                print(f"已刪除 {delete_count} 個舊文檔文件")
+                logger.info(f"已刪除 {delete_count} 個舊文檔文件")
                             
                 # 保存新上傳的文件
                 file.save(filepath)
@@ -949,7 +952,7 @@ def upload_document():
                 # 返回相对路径
                 relative_path = os.path.join('uploads', secure_filename(product_name), safe_filename)
                 
-                print(f"文件上傳成功，完整路徑: {relative_path}，原始文件名: {original_filename}")
+                logger.info(f"文件上傳成功，完整路徑: {relative_path}，原始文件名: {original_filename}")
                 return jsonify({
                     'status': 'success',
                     'data': {
@@ -963,7 +966,7 @@ def upload_document():
             'message': 'File type not allowed'
         }), 400
     except Exception as e:
-        print(f"Error in upload_document: {str(e)}")
+        logger.error(f"Error in upload_document: {str(e)}")
         return jsonify({
             'status': 'error',
             'message': str(e)
@@ -992,7 +995,7 @@ def serve_product_file(filename):
                     basename
                 )
                 response.headers["Content-Disposition"] = f"inline; filename=\"{original_filename}\""
-                print(f"从数据库获取图片原始文件名: {original_filename}")
+                logger.debug(f"从数据库获取图片原始文件名: {original_filename}")
                 return response
                 
             # 尝试查找匹配的文档
@@ -1006,7 +1009,7 @@ def serve_product_file(filename):
                     basename
                 )
                 response.headers["Content-Disposition"] = f"inline; filename=\"{original_filename}\""
-                print(f"从数据库获取文档原始文件名: {original_filename}")
+                logger.debug(f"从数据库获取文档原始文件名: {original_filename}")
                 return response
                 
         # 如果数据库中没有找到，尝试从文件名中提取
@@ -1018,10 +1021,10 @@ def serve_product_file(filename):
                 basename
             )
             response.headers["Content-Disposition"] = f"inline; filename=\"{original_filename}\""
-            print(f"从文件名提取原始文件名: {original_filename}")
+            logger.debug(f"从文件名提取原始文件名: {original_filename}")
             return response
     except Exception as e:
-        print(f"处理文件访问出错: {str(e)}")
+        logger.error(f"处理文件访问出错: {str(e)}")
     
     # 默认返回
     return send_from_directory(
@@ -1063,7 +1066,7 @@ def get_viewable_products():
             })
 
     except Exception as e:
-        print(f"Error in get_viewable_products: {str(e)}")
+        logger.error(f"Error in get_viewable_products: {str(e)}")
         return jsonify({
             'status': 'error',
             'message': str(e)
@@ -1091,7 +1094,7 @@ def get_locked_dates():
             })
             
     except Exception as e:
-        print(f"Error in get_locked_dates: {str(e)}")
+        logger.error(f"Error in get_locked_dates: {str(e)}")
         return jsonify({
             "status": "error",
             "message": str(e)
@@ -1159,9 +1162,9 @@ def lock_date():
                         performed_by=admin_id,
                         user_type='管理員'
                     )
-                    print(f"已記錄鎖定日期操作: {locked_date_str}")
+                    logger.info(f"已記錄鎖定日期操作: {locked_date_str}")
             except Exception as log_error:
-                print(f"記錄鎖定日期日誌時出錯: {str(log_error)}")
+                logger.error(f"記錄鎖定日期日誌時出錯: {str(log_error)}")
                 # 继续执行，不要因为日志记录失败而中断主流程
             
             cursor.close()
@@ -1173,7 +1176,7 @@ def lock_date():
             })
             
     except Exception as e:
-        print(f"Error in lock_date: {str(e)}")
+        logger.error(f"Error in lock_date: {str(e)}")
         return jsonify({
             'status': 'error',
             'message': str(e)
@@ -1189,7 +1192,7 @@ def get_admin_id_from_session():
             admin_id = request.json.get('admin_id')
         return int(admin_id) if admin_id else None
     except Exception as e:
-        print(f"获取管理员ID时出错: {str(e)}")
+        logger.error(f"获取管理员ID时出错: {str(e)}")
         return None
 
 @product_bp.route('/products/unlock-date', methods=['POST'])
@@ -1254,9 +1257,9 @@ def unlock_date():
                         performed_by=admin_id,
                         user_type='管理員'
                     )
-                    print(f"已記錄解鎖日期操作: {locked_date_str}")
+                    logger.info(f"已記錄解鎖日期操作: {locked_date_str}")
             except Exception as log_error:
-                print(f"記錄解鎖日期日誌時出錯: {str(log_error)}")
+                logger.error(f"記錄解鎖日期日誌時出錯: {str(log_error)}")
                 # 继续执行，不要因为日志记录失败而中断主流程
             
             cursor.close()
@@ -1267,7 +1270,7 @@ def unlock_date():
             })
             
     except Exception as e:
-        print(f"Error in unlock_date: {str(e)}")
+        logger.error(f"Error in unlock_date: {str(e)}")
         return jsonify({
             'status': 'error',
             'message': str(e)
@@ -1289,7 +1292,7 @@ def clean_expired_dates_route():
         return jsonify(result)
             
     except Exception as e:
-        print(f"Error in clean_expired_dates: {str(e)}")
+        logger.error(f"Error in clean_expired_dates: {str(e)}")
         return jsonify({
             'status': 'error',
             'message': str(e)
@@ -1351,9 +1354,9 @@ def get_product_detail(product_id):
                     if original_image_filename != image_filename:
                         product['original_image_filename'] = original_image_filename
                         product['image_original_filename'] = original_image_filename
-                    print(f"图片文件名: {image_filename} -> 原始文件名: {original_image_filename}")
+                    logger.debug(f"图片文件名: {image_filename} -> 原始文件名: {original_image_filename}")
                 except Exception as e:
-                    print(f"提取图片原始文件名出错: {str(e)}")
+                    logger.error(f"提取图片原始文件名出错: {str(e)}")
             
             if product.get('dm_url') and not product.get('original_dm_filename'):
                 dm_path = product['dm_url']
@@ -1365,9 +1368,9 @@ def get_product_detail(product_id):
                     if original_dm_filename != dm_filename:
                         product['original_dm_filename'] = original_dm_filename
                         product['dm_original_filename'] = original_dm_filename
-                        print(f"文档文件名: {dm_filename} -> 原始文件名: {original_dm_filename}")
+                        logger.debug(f"文档文件名: {dm_filename} -> 原始文件名: {original_dm_filename}")
                 except Exception as e:
-                    print(f"提取文档原始文件名出错: {str(e)}")
+                    logger.error(f"提取文档原始文件名出错: {str(e)}")
             
             # 确保返回所有版本的原始文件名字段
             if product.get('original_image_filename') and not product.get('image_original_filename'):
@@ -1380,14 +1383,14 @@ def get_product_detail(product_id):
             elif product.get('dm_original_filename') and not product.get('original_dm_filename'):
                 product['original_dm_filename'] = product['dm_original_filename']
             
-            print(f"返回产品详情数据，原始文件名信息：图片={product.get('original_image_filename', '')}, 文档={product.get('original_dm_filename', '')}")
+            logger.info(f"返回产品详情数据，原始文件名信息：图片={product.get('original_image_filename', '')}, 文档={product.get('original_dm_filename', '')}")
             
             return jsonify({
                 'status': 'success',
                 'data': product
             })
     except Exception as e:
-        print(f"获取产品详情错误: {str(e)}")
+        logger.error(f"获取产品详情错误: {str(e)}")
         return jsonify({
             'status': 'error',
             'message': str(e)
@@ -1407,7 +1410,7 @@ def download_azure_blob():
                 'message': 'Missing blob URL or original filename'
             }), 400
         
-        print(f"準備下載的文件: URL={blob_url}, 原始檔名={original_filename}")
+        logger.info(f"準備下載的文件: URL={blob_url}, 原始檔名={original_filename}")
         
         # 正確解析Azure Blob URL
         from urllib.parse import urlparse, unquote, quote
@@ -1418,7 +1421,7 @@ def download_azure_blob():
             # 檢測到已經被雙重編碼的URL，需要解碼一次
             blob_url = unquote(blob_url)
             parsed_url = urlparse(blob_url)
-            print(f"URL解碼後: {blob_url}")
+            logger.info(f"URL解碼後: {blob_url}")
         
         # 獲取容器名稱和blob路徑
         path_parts = parsed_url.path.lstrip('/').split('/')
@@ -1432,7 +1435,7 @@ def download_azure_blob():
         container = path_parts[0]  # 第一部分是容器名稱
         blob_path = '/'.join(path_parts[1:])  # 其餘部分組成blob路徑
         
-        print(f"解析後的容器: {container}, Blob路徑: {blob_path}")
+        logger.info(f"解析後的容器: {container}, Blob路徑: {blob_path}")
         
         # 連接到Azure服務
         from backend.utils.azure_storage import get_blob_service_client
@@ -1443,20 +1446,20 @@ def download_azure_blob():
             
             # 檢查blob是否存在
             if not blob_client.exists():
-                print(f"文件不存在，嘗試使用未進行URL編碼的路徑")
+                logger.warning(f"文件不存在，嘗試使用未進行URL編碼的路徑")
                 # 嘗試使用未進行URL編碼的路徑
                 blob_path = unquote(blob_path)
                 blob_client = client.get_blob_client(container=container, blob=blob_path)
                 
                 if not blob_client.exists():
-                    print(f"blob不存在: {container}/{blob_path}")
+                    logger.warning(f"blob不存在: {container}/{blob_path}")
                     return jsonify({
                         'status': 'error',
                         'message': 'File not found'
                     }), 404
             
             # 獲取Blob數據
-            print(f"開始下載blob: {container}/{blob_path}")
+            logger.info(f"開始下載blob: {container}/{blob_path}")
             blob_data = blob_client.download_blob()
             
             # 創建響應
@@ -1479,7 +1482,7 @@ def download_azure_blob():
                 content_type = 'image/png'
                 disposition = 'inline'
             
-            print(f"文件類型: {content_type}, 處理方式: {disposition}")
+            logger.debug(f"文件類型: {content_type}, 處理方式: {disposition}")
             
             # 針對非ASCII字符的文件名進行處理
             # 使用RFC 5987編碼方式以支持UTF-8文件名，對所有文件類型都適用
@@ -1496,17 +1499,17 @@ def download_azure_blob():
             
             response.headers['Content-Type'] = content_type
             
-            print(f"文件下載響應頭: {response.headers}")
+            logger.debug(f"文件下載響應頭: {response.headers}")
             return response
             
         except Exception as blob_error:
-            print(f"訪問或下載blob時出錯: {str(blob_error)}")
+            logger.error(f"訪問或下載blob時出錯: {str(blob_error)}")
             import traceback
             traceback.print_exc()
             
             # 嘗試重定向到原始URL以便直接預覽
             if original_filename.lower().endswith('.pdf'):
-                print(f"嘗試重定向到原始URL進行預覽: {blob_url}")
+                logger.debug(f"嘗試重定向到原始URL進行預覽: {blob_url}")
                 return redirect(blob_url)
             
             return jsonify({
@@ -1515,7 +1518,7 @@ def download_azure_blob():
             }), 500
             
     except Exception as e:
-        print(f"下載Azure Blob時出錯: {str(e)}")
+        logger.error(f"下載Azure Blob時出錯: {str(e)}")
         import traceback
         traceback.print_exc()
         return jsonify({

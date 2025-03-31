@@ -13,6 +13,10 @@ from urllib.parse import quote
 import requests
 from flask_cors import CORS
 import psycopg2.extras
+import logging
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 # 載入環境變數
 load_dotenv()
@@ -52,8 +56,8 @@ def generate_bind_url():
         bind_type = data.get('bind_type', 'user')  # 默认为 'user'
         
         # 打印請求信息以便調試
-        print(f"Generate bind URL request: customer_id={customer_id}, bind_type={bind_type}")
-        print(f"Request headers: {dict(request.headers)}")
+        logger.debug("Generate bind URL request: customer_id=%s, bind_type=%s", customer_id, bind_type)
+        logger.debug("Request headers: %s", dict(request.headers))
         
         if not customer_id:
             return jsonify({
@@ -67,7 +71,7 @@ def generate_bind_url():
             f"?customer_id={quote(str(customer_id))}"
             f"&type={quote(bind_type)}"
         )
-        print(f"Generated LIFF URL: {line_login_url}")
+        logger.debug("Generated LIFF URL: %s", line_login_url)
         
         return jsonify({
             "status": "success",
@@ -78,7 +82,7 @@ def generate_bind_url():
         })
         
     except Exception as e:
-        print(f"Error generating bind URL: {str(e)}")
+        logger.error("Error generating bind URL: %s", str(e))
         import traceback
         traceback.print_exc()
         return jsonify({
@@ -96,14 +100,14 @@ def callback():
 
     try:
         # 打印出请求信息，方便调试
-        print("=== LINE Callback ===")
-        print(f"Headers: {dict(request.headers)}")
-        print(f"Body: {body}")
+        logger.debug("=== LINE Callback ===")
+        logger.debug("Headers: %s", dict(request.headers))
+        logger.debug("Body: %s", body)
         
         # 验证签名
         handler.handle(body, signature)
     except InvalidSignatureError:
-        print("Invalid signature error")
+        logger.warning("Invalid signature error")
         abort(400)
 
     return 'OK'
@@ -118,8 +122,8 @@ def line_login_callback():
         if not data:
             data = request.form
             
-        print("Received callback with data:", data)
-        print("Headers:", dict(request.headers))
+        logger.debug("Received callback with data: %s", data)
+        logger.debug("Headers: %s", dict(request.headers))
         
         code = data.get('code')
         customer_id = data.get('customer_id')
@@ -127,14 +131,14 @@ def line_login_callback():
         error_description = data.get('error_description')
 
         if error:
-            print(f"Authorization error: {error} - {error_description}")
+            logger.warning("Authorization error: %s - %s", error, error_description)
             return jsonify({
                 "status": "error",
                 "message": error_description or "授權失敗"
             }), 400
 
         if not code:
-            print("Missing code parameter")
+            logger.warning("Missing code parameter")
             return jsonify({
                 "status": "error",
                 "message": "缺少必要參數"
@@ -150,16 +154,16 @@ def line_login_callback():
             "client_secret": LINE_CHANNEL_SECRET
         }
         
-        print("Token request data:", token_data)
+        logger.debug("Token request data: %s", token_data)
         
         token_response = requests.post(token_url, data=token_data)
         token_json = token_response.json()
         
-        print("Token response:", token_json)
+        logger.debug("Token response: %s", token_json)
 
         if 'error' in token_json:
             error_msg = f"獲取訪問令牌失敗: {token_json.get('error_description')}"
-            print(error_msg)
+            logger.error(error_msg)
             return jsonify({
                 "status": "error",
                 "message": error_msg
@@ -171,16 +175,16 @@ def line_login_callback():
             "Authorization": f"Bearer {token_json['access_token']}"
         }
         
-        print("Profile request headers:", headers)
+        logger.debug("Profile request headers: %s", headers)
         
         profile_response = requests.get(profile_url, headers=headers)
         profile_json = profile_response.json()
         
-        print("Profile response:", profile_json)
+        logger.debug("Profile response: %s", profile_json)
 
         if 'error' in profile_json:
             error_msg = f"獲取用戶信息失敗: {profile_json.get('error_description')}"
-            print(error_msg)
+            logger.error(error_msg)
             return jsonify({
                 "status": "error",
                 "message": error_msg
@@ -320,7 +324,7 @@ def line_login_callback():
                     )
                 except Exception as log_error:
                     # 日志记录失败不影响主要功能
-                    print(f"Error logging LINE bind operation: {str(log_error)}")
+                    logger.error("Error logging LINE bind operation: %s", str(log_error))
                 
                 return jsonify({
                     "status": "success",
@@ -328,14 +332,14 @@ def line_login_callback():
                 })
                 
         except Exception as e:
-            print(f"Database error: {str(e)}")
+            logger.error("Database error: %s", str(e))
             return jsonify({
                 "status": "error",
                 "message": f"資料庫錯誤: {str(e)}"
             }), 500
 
     except Exception as e:
-        print(f"Error in LINE login callback: {str(e)}")
+        logger.error("Error in LINE login callback: %s", str(e))
         return jsonify({
             "status": "error",
             "message": str(e)
@@ -351,8 +355,8 @@ def bind():
         customer_id = data.get('customer_id')
         line_user_id = data.get('line_user_id')
         
-        print("Received bind request:", data)
-        print("Headers:", dict(request.headers))
+        logger.debug("Received bind request: %s", data)
+        logger.debug("Headers: %s", dict(request.headers))
         
         if not customer_id or not line_user_id:
             return jsonify({
@@ -487,7 +491,7 @@ def bind():
                     )
                 except Exception as log_error:
                     # 日誌記錄失敗不影響主要功能
-                    print(f"Error logging LINE bind operation: {str(log_error)}")
+                    logger.error("Error logging LINE bind operation: %s", str(log_error))
                 
                 # 发送欢迎消息
                 try:
@@ -496,7 +500,7 @@ def bind():
                         TextSendMessage(text=f'您好！您的帳號已成功綁定。')
                     )
                 except Exception as e:
-                    print(f"Error sending welcome message: {str(e)}")
+                    logger.error("Error sending welcome message: %s", str(e))
                 
                 return jsonify({
                     "status": "success",
@@ -504,14 +508,14 @@ def bind():
                 })
                 
         except Exception as e:
-            print(f"Database error: {str(e)}")
+            logger.error("Database error: %s", str(e))
             return jsonify({
                 "status": "error",
                 "message": f"資料庫錯誤: {str(e)}"
             }), 500
             
     except Exception as e:
-        print(f"Error in bind: {str(e)}")
+        logger.error("Error in bind: %s", str(e))
         return jsonify({
             "status": "error",
             "message": str(e)
@@ -543,7 +547,7 @@ def handle_join(event):
         )
         
     except Exception as e:
-        print(f"處理加入群組事件時發生錯誤: {str(e)}")
+        logger.error("處理加入群組事件時發生錯誤: %s", str(e))
         import traceback
         traceback.print_exc()
         # 發送錯誤訊息
@@ -761,7 +765,7 @@ def handle_message(event):
                         )
                     except Exception as log_error:
                         # 日誌記錄失敗不影響主要功能
-                        print(f"Error logging LINE group bind operation: {str(log_error)}")
+                        logger.error("Error logging LINE group bind operation: %s", str(log_error))
                     
                     # 回覆綁定成功訊息
                     line_bot_api.reply_message(
@@ -988,7 +992,7 @@ def handle_message(event):
                 )
             
     except Exception as e:
-        print(f"Error handling message: {str(e)}")
+        logger.error("Error handling message: %s", str(e))
         # 只在特定命令出錯時才發送錯誤訊息
         order_commands = ['近兩週訂單', '待確認訂單', '已確認訂單', '已完成訂單']
         if (user_message.strip() in order_commands) or (is_group_message and (user_message.strip() == '功能' or user_message.startswith('綁定帳號'))):

@@ -122,7 +122,14 @@ def before_request():
     if customer_id:
         logger.info("X-Customer-ID: %s", customer_id)
     if company_name:
-        logger.info("X-Company-Name: %s", company_name)
+        try:
+            # 解碼公司名稱
+            decoded_company_name = urllib.parse.unquote(company_name)
+            logger.info("X-Company-Name (decoded): %s", decoded_company_name)
+            # 將解碼後的公司名稱存儲在請求環境中，供後續使用
+            request.environ['decoded_company_name'] = decoded_company_name
+        except Exception as e:
+            logger.error("解碼公司名稱時出錯: %s", str(e))
     
     # 處理 Authorization header
     auth_header = request.headers.get('Authorization')

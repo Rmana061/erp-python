@@ -1,6 +1,10 @@
 import json
 from datetime import datetime
 from typing import Dict, Any, Optional
+import logging
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 class BaseLogService:
     """基礎日誌服務類，提供共享的日誌邏輯"""
@@ -17,10 +21,10 @@ class BaseLogService:
                      performed_by: int, user_type: str) -> bool:
         """記錄操作日誌"""
         try:
-            print(f"Received log operation request:")
-            print(f"Table: {table_name}")
-            print(f"Operation: {operation_type}")
-            print(f"Record ID: {record_id}")
+            logger.debug("收到日誌操作請求:")
+            logger.debug("表格: %s", table_name)
+            logger.debug("操作: %s", operation_type)
+            logger.debug("記錄ID: %s", record_id)
 
             # 序列化日期時間
             def serialize_datetime(obj):
@@ -34,9 +38,9 @@ class BaseLogService:
             if new_data:
                 new_data = json.loads(json.dumps(new_data, default=serialize_datetime, ensure_ascii=False))
 
-            print(f"New data: {json.dumps(new_data, ensure_ascii=False)}")
-            print(f"Performed by: {performed_by}")
-            print(f"User type: {user_type}")
+            logger.debug("新數據: %s", json.dumps(new_data, ensure_ascii=False))
+            logger.debug("執行者: %s", performed_by)
+            logger.debug("用戶類型: %s", user_type)
 
             cursor = self.conn.cursor()
             
@@ -45,14 +49,14 @@ class BaseLogService:
             
             # 檢查是否有變更
             if not operation_detail:
-                print(f"No changes detected, skipping log entry")
+                logger.info("未檢測到變更，跳過日誌記錄")
                 return False
                 
             # 檢查是否是無變更的消息
             if isinstance(operation_detail, dict):
                 message = operation_detail.get('message', '')
                 if message == '無變更' or operation_detail.get('operation_type') is None:
-                    print(f"No significant changes detected, skipping log entry")
+                    logger.info("未檢測到重要變更，跳過日誌記錄")
                     return False
             
             # 如果operation_detail中沒有operation_type，使用傳入的operation_type
@@ -74,11 +78,11 @@ class BaseLogService:
                 user_type
             ))
             self.conn.commit()
-            print(f"日志记录成功: {operation_type} - {table_name} - ID: {record_id}")
+            logger.info("日誌記錄成功: %s - %s - ID: %s", operation_type, table_name, record_id)
             return True
             
         except Exception as e:
-            print(f"Error logging operation: {str(e)}")
+            logger.error("記錄操作日誌時發生錯誤: %s", str(e))
             self.conn.rollback()
             return False
 
@@ -133,9 +137,8 @@ class BaseLogService:
                         WHEN l.table_name = 'products' AND ((l.operation_detail)::jsonb->'message'->>'locked_date') IS NOT NULL THEN 
                             CASE
                                 WHEN (l.operation_detail)::jsonb->>'message' IS NOT NULL AND 
-                                     (l.operation_detail)::jsonb->'message'->>'locked_date' IS NOT NULL AND
-                                     (l.operation_detail)::jsonb->'message'->'locked_date'->>'date' IS NOT NULL
-                                THEN (l.operation_detail)::jsonb->'message'->'locked_date'->>'date'
+                                     (l.operation_detail)::jsonb->'message'->>'locked_date' IS NOT NULL
+                                THEN (l.operation_detail)::jsonb->'message'->>'locked_date'
                                 ELSE CAST(l.record_id AS TEXT)
                             END
                         WHEN l.table_name = 'products' THEN COALESCE(p.name, CAST(l.record_id AS TEXT))
@@ -235,9 +238,10 @@ class BaseLogService:
             # 構建 WHERE 子句
             where_clause = " AND ".join(conditions) if conditions else "1=1"
             
-            print(f"過濾條件: table_name={table_name}, operation_type={operation_type}, start_date={start_date}, end_date={end_date}, user_type={user_type}, performed_by={performed_by}, record_detail={record_detail}, record_only_search={record_only_search}")
-            print(f"WHERE 子句: {where_clause}")
-            print(f"參數: {params}")
+            logger.debug("過濾條件: table_name=%s, operation_type=%s, start_date=%s, end_date=%s, user_type=%s, performed_by=%s, record_detail=%s, record_only_search=%s", 
+                        table_name, operation_type, start_date, end_date, user_type, performed_by, record_detail, record_only_search)
+            logger.debug("WHERE 子句: %s", where_clause)
+            logger.debug("參數: %s", params)
 
             # 計算總數量
             count_query = f"""
@@ -251,15 +255,15 @@ class BaseLogService:
             """
             
             try:
-                print(f"執行計數查詢: {count_query}")
-                print(f"參數: {params}")
+                logger.debug("執行計數查詢: %s", count_query)
+                logger.debug("參數: %s", params)
                 cursor.execute(count_query, params)
                 result = cursor.fetchone()
-                print(f"計數查詢結果: {result}")
+                logger.debug("計數查詢結果: %s", result)
                 total_count = result[0] if result else 0
-                print(f"計算得到總記錄數: {total_count}")
+                logger.debug("計算得到總記錄數: %s", total_count)
             except Exception as count_error:
-                print(f"計算總記錄數時出錯: {str(count_error)}")
+                logger.error("計算總記錄數時出錯: %s", str(count_error))
                 total_count = 0
                 # 不中斷執行，繼續嘗試獲取記錄
 
@@ -283,10 +287,8 @@ class BaseLogService:
                         WHEN l.table_name = 'orders' THEN COALESCE(o.order_number, CAST(l.record_id AS TEXT))
                         WHEN l.table_name = 'products' AND ((l.operation_detail)::jsonb->'message'->>'locked_date') IS NOT NULL THEN 
                             CASE
-                                WHEN (l.operation_detail)::jsonb->>'message' IS NOT NULL AND 
-                                     (l.operation_detail)::jsonb->'message'->>'locked_date' IS NOT NULL AND
-                                     (l.operation_detail)::jsonb->'message'->'locked_date'->>'date' IS NOT NULL
-                                THEN (l.operation_detail)::jsonb->'message'->'locked_date'->>'date'
+                                WHEN (l.operation_detail)::jsonb->'message'->>'locked_date' IS NOT NULL
+                                THEN (l.operation_detail)::jsonb->'message'->>'locked_date'
                                 ELSE CAST(l.record_id AS TEXT)
                             END
                         WHEN l.table_name = 'products' THEN COALESCE(p.name, CAST(l.record_id AS TEXT))
@@ -308,11 +310,11 @@ class BaseLogService:
             params_copy.extend([limit, offset])
             
             try:
-                print(f"執行記錄查詢: {query}")
-                print(f"參數: {params_copy}")
+                logger.debug("執行記錄查詢: %s", query)
+                logger.debug("參數: %s", params_copy)
                 cursor.execute(query, params_copy)
                 rows = cursor.fetchall()
-                print(f"查詢到 {len(rows)} 條記錄")
+                logger.debug("查詢到 %d 條記錄", len(rows))
                 
                 log_list = []
                 for row in rows:
@@ -332,18 +334,18 @@ class BaseLogService:
                         }
                         log_list.append(log_dict)
                     else:
-                        print(f"警告: 跳過不完整的日誌記錄，只有 {len(row)} 個欄位: {row}")
+                        logger.warning("警告: 跳過不完整的日誌記錄，只有 %d 個欄位: %s", len(row), row)
                 
                 # 如果沒有記錄，返回空列表
                 if not log_list:
-                    print("沒有找到符合條件的日誌記錄")
+                    logger.info("沒有找到符合條件的日誌記錄")
                     
                 return log_list, total_count
             except Exception as query_error:
-                print(f"執行日誌查詢時出錯: {str(query_error)}")
+                logger.error("執行日誌查詢時出錯: %s", str(query_error))
                 return [], total_count
                 
         except Exception as e:
-            print(f"Error getting logs: {str(e)}")
-            print(f"錯誤堆疊: ", e.__traceback__)
+            logger.error("獲取日誌時發生錯誤: %s", str(e))
+            logger.error("錯誤堆疊: %s", e.__traceback__)
             return [], 0 

@@ -8,14 +8,19 @@ import sys
 import traceback
 import base64
 import re
+import logging
 
 # 加載環境變數
 load_dotenv()
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 class EmailSender:
     def __init__(self):
         # 默認郵件賬號
         self.sender_email = os.getenv('GMAIL_USER', 'grandholyorder@gmail.com')
+        self.sender_name = os.getenv('EMAIL_SENDER_NAME', '訂單系統')
         
         # 郵件功能選項
         self.force_enabled = False  # 如果需要跳過密碼檢查，設置為True
@@ -48,13 +53,13 @@ class EmailSender:
         
         # 如果啟用了模擬模式，停用實際發送
         if self.dummy_mode:
-            print("📢 郵件模擬模式已啟用，系統將模擬發送郵件但不會實際發送")
+            logger.info("📢 郵件模擬模式已啟用，系統將模擬發送郵件但不會實際發送")
             self.email_enabled = False
             
         if not self.email_enabled:
-            print("⚠️ 警告：未設置有效的郵件密碼，郵件功能已禁用。訂單操作將繼續，但不會發送郵件通知。")
+            logger.warning("⚠️ 警告：未設置有效的郵件密碼，郵件功能已禁用。訂單操作將繼續，但不會發送郵件通知。")
         else:
-            print(f"郵件功能已啟用，使用賬號: {self.sender_email}")
+            logger.info("郵件功能已啟用，使用賬號: %s", self.sender_email)
 
     def _clean_password(self, password):
         """清理密碼，確保它只包含有效字符"""
@@ -72,17 +77,17 @@ class EmailSender:
     def _send_email(self, recipient_email, subject, title, content_data, is_order_items=True, show_notes=False, show_status=False):
         # 模擬模式檢查
         if self.dummy_mode:
-            print(f"📧 [模擬模式] 模擬發送郵件到: {recipient_email}，主題: {subject}")
+            logger.info("📧 [模擬模式] 模擬發送郵件到: %s，主題: %s", recipient_email, subject)
             return True, "郵件模擬模式已啟用，不會實際發送郵件"
             
         # 如果郵件功能被禁用，記錄日誌並返回
         if not self.email_enabled:
-            print(f"📧 模擬發送郵件到: {recipient_email}，主題: {subject}")
+            logger.info("📧 模擬發送郵件到: %s，主題: %s", recipient_email, subject)
             return True, "郵件功能已禁用，但系統將繼續運行"
             
         try:
-            print(f"準備發送郵件到: {recipient_email}")
-            print(f"使用郵件帳號: {self.sender_email}")
+            logger.info("準備發送郵件到: %s", recipient_email)
+            logger.debug("使用郵件帳號: %s", self.sender_email)
             
             # 構建郵件
             message = MIMEMultipart()
@@ -207,100 +212,75 @@ class EmailSender:
                         server.set_debuglevel(1)
                         
                     server.starttls()
-                    print("開始 SMTP 登入...")
+                    logger.info("開始 SMTP 登入...")
                     
                     try:
                         server.login(self.sender_email, self.sender_password)
                     except UnicodeEncodeError as ue:
-                        print(f"密碼包含非ASCII字符，無法用於SMTP登入: {str(ue)}")
+                        logger.error("密碼包含非ASCII字符，無法用於SMTP登入: %s", str(ue))
                         raise ValueError("郵件密碼包含非ASCII字符，請檢查您的應用程式密碼設置")
                     except smtplib.SMTPAuthenticationError as auth_error:
-                        print(f"SMTP認證失敗: {str(auth_error)}")
+                        logger.error("SMTP認證失敗: %s", str(auth_error))
                         
                         # 提供故障排除指南
-                        print("\n可能的原因和解決方案：")
-                        print("1. 密碼錯誤 - 請確認您的應用密碼是否正確")
-                        print("2. 需要啟用兩步驗證 - 訪問 https://myaccount.google.com/security")
-                        print("3. 請確認.env文件中的格式正確，沒有多餘的引號或特殊字符")
+                        logger.info("\n可能的原因和解決方案：")
+                        logger.info("1. 密碼錯誤 - 請確認您的應用密碼是否正確")
+                        logger.info("2. 需要啟用兩步驗證 - 訪問 https://myaccount.google.com/security")
+                        logger.info("3. 請確認.env文件中的格式正確，沒有多餘的引號或特殊字符")
                         
                         raise
                     except Exception as auth_error:
-                        print(f"SMTP登入時發生未知錯誤: {str(auth_error)}")
+                        logger.error("SMTP登入時發生未知錯誤: %s", str(auth_error))
                         raise
                     
-                    print("SMTP 登入成功")
+                    logger.info("SMTP 登入成功")
                     
                     # 發送郵件
                     mail_string = message.as_string()
                     server.sendmail(self.sender_email, recipient_email, mail_string)
-                    print("郵件發送成功")
+                    logger.info("郵件發送成功")
                 
                 return True, "郵件發送成功"
             except Exception as smtp_error:
-                print(f"SMTP發送錯誤: {str(smtp_error)}")
-                print("錯誤詳情:")
+                logger.error("SMTP發送錯誤: %s", str(smtp_error))
+                logger.error("錯誤詳情:")
                 traceback.print_exc()
-                print("⚠️ 郵件發送失敗，但系統將繼續運行")
+                logger.warning("⚠️ 郵件發送失敗，但系統將繼續運行")
                 return False, str(smtp_error)
 
         except Exception as e:
-            print(f"發送郵件時出錯: {str(e)}")
-            print("錯誤詳情:")
+            logger.error("發送郵件時出錯: %s", str(e))
+            logger.error("錯誤詳情:")
             traceback.print_exc()
-            print("⚠️ 郵件發送失敗，但系統將繼續運行")
+            logger.warning("⚠️ 郵件發送失敗，但系統將繼續運行")
             return False, str(e)
 
     def send_order_confirmation(self, recipient_email, order_data):
-        return self._send_email(
-            recipient_email=recipient_email,
-            subject='訂單下單通知',
-            title='訂單下單通知',
-            content_data=order_data,
-            is_order_items=True,
-            show_notes=False,
-            show_status=False
-        )
+        """發送訂單確認郵件"""
+        subject = f"訂單確認通知 - {order_data.get('order_number', '')}"
+        title = "訂單確認通知"
+        return self._send_email(recipient_email, subject, title, order_data, show_notes=True, show_status=True)
 
     def send_order_cancellation(self, recipient_email, order_data):
-        return self._send_email(
-            recipient_email=recipient_email,
-            subject='訂單取消通知',
-            title='訂單取消通知',
-            content_data=order_data,
-            is_order_items=True,
-            show_notes=False,
-            show_status=False
-        )
+        """發送訂單取消郵件"""
+        subject = f"訂單取消通知 - {order_data.get('order_number', '')}"
+        title = "訂單取消通知"
+        return self._send_email(recipient_email, subject, title, order_data, show_notes=True, show_status=True)
 
     def send_order_approved(self, recipient_email, order_data):
-        return self._send_email(
-            recipient_email=recipient_email,
-            subject='訂單已確認通知',
-            title='訂單已確認通知',
-            content_data=order_data,
-            is_order_items=True,
-            show_notes=True,
-            show_status=True  # 在訂單確認郵件中顯示產品狀態
-        )
+        """發送訂單審核通過郵件"""
+        subject = f"訂單審核通過通知 - {order_data.get('order_number', '')}"
+        title = "訂單審核通過通知"
+        return self._send_email(recipient_email, subject, title, order_data, show_notes=True, show_status=True)
 
     def send_order_rejected(self, recipient_email, order_data):
-        return self._send_email(
-            recipient_email=recipient_email,
-            subject='訂單已駁回通知',
-            title='訂單已駁回通知',
-            content_data=order_data,
-            is_order_items=True,
-            show_notes=True,
-            show_status=True  # 在訂單駁回郵件中顯示產品狀態
-        )
+        """發送訂單駁回郵件"""
+        subject = f"訂單駁回通知 - {order_data.get('order_number', '')}"
+        title = "訂單駁回通知"
+        return self._send_email(recipient_email, subject, title, order_data, show_notes=True, show_status=True)
 
     def send_order_shipped(self, recipient_email, order_data):
-        return self._send_email(
-            recipient_email=recipient_email,
-            subject='訂單已出貨通知',
-            title='訂單已出貨通知',
-            content_data=order_data,
-            is_order_items=True,
-            show_notes=True,
-            show_status=True  # 在訂單出貨郵件中顯示產品狀態
-        ) 
+        """發送訂單出貨郵件"""
+        subject = f"訂單出貨通知 - {order_data.get('order_number', '')}"
+        title = "訂單出貨通知"
+        return self._send_email(recipient_email, subject, title, order_data, show_notes=True, show_status=True) 

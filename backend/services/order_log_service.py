@@ -5,6 +5,12 @@ import uuid  # 添加uuid模块
 import traceback  # 添加用于异常跟踪的模块
 from typing import Dict, Any, Optional, List
 from .base_log_service import BaseLogService
+from datetime import datetime, timedelta
+from backend.config.database import get_db_connection
+import logging
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 class OrderLogService(BaseLogService):
     """訂單日誌服務類，處理訂單相關的日誌邏輯"""
@@ -41,12 +47,12 @@ class OrderLogService(BaseLogService):
                     # 每秒檢查一次
                     time.sleep(1)
                 except Exception as e:
-                    print(f"監控線程錯誤: {str(e)}")
+                    logger.error("監控線程錯誤: %s", str(e))
         
         # 創建並啟動監控線程
         monitor_thread = threading.Thread(target=monitor_buffers, daemon=True)
         monitor_thread.start()
-        print("訂單日誌監控線程已啟動")
+        logger.info("訂單日誌監控線程已啟動")
         
     def _check_expired_buffers(self):
         """檢查並處理過期的緩衝項"""
@@ -58,13 +64,13 @@ class OrderLogService(BaseLogService):
                 for key, last_time in list(self._last_log_time.items()):
                     if current_time - last_time > 10:  # 10秒未更新則視為過期
                         expired_keys.append(key)
-                        print(f"處理過期緩衝項: {key}")
+                        logger.debug("處理過期緩衝項: %s", key)
                         try:
                             self._process_buffer_item(key)
                         except Exception as e:
-                            print(f"處理過期緩衝項 {key} 出錯: {str(e)}")
+                            logger.error("處理過期緩衝項 %s 出錯: %s", key, str(e))
         except Exception as e:
-            print(f"檢查過期緩衝項出錯: {str(e)}")
+            logger.error("檢查過期緩衝項出錯: %s", str(e))
     
     def _normalize_order_number(self, order_number):
         """標準化訂單號，去除前綴"""
@@ -79,9 +85,9 @@ class OrderLogService(BaseLogService):
                      performed_by: int, user_type: str) -> bool:
         """記錄訂單操作日誌，支持合併同一訂單的多個變更"""
         try:
-            print(f"訂單日誌服務收到操作請求:")
-            print(f"表: {table_name}, 操作: {operation_type}, 記錄ID: {record_id}")
-            print(f"新數據: {json.dumps(new_data, ensure_ascii=False, indent=2) if new_data else None}")
+            logger.info("訂單日誌服務收到操作請求:")
+            logger.info("表: %s, 操作: %s, 記錄ID: %s", table_name, operation_type, record_id)
+            logger.debug("新數據: %s", json.dumps(new_data, ensure_ascii=False, indent=2) if new_data else None)
             
             # 對於非修改操作，直接使用基類方法
             if operation_type != '修改':
@@ -94,7 +100,7 @@ class OrderLogService(BaseLogService):
                     order_number = new_data['message']['order_number']
             
             if not order_number:
-                print("無法獲取訂單號，使用基類方法記錄日誌")
+                logger.warning("無法獲取訂單號，使用基類方法記錄日誌")
                 return super().log_operation(table_name, operation_type, record_id, old_data, new_data, performed_by, user_type)
             
             # 標準化訂單號
@@ -103,7 +109,7 @@ class OrderLogService(BaseLogService):
             
             # 生成請求ID，用於日誌追蹤
             request_id = str(uuid.uuid4())[:8]
-            print(f"請求ID {request_id}: 處理訂單 {order_number} 的變更")
+            logger.info("請求ID %s: 處理訂單 %s 的變更", request_id, order_number)
             
             # 在检查缓冲区前引入短暂延迟，增加并发请求被合并的可能性
             # 这个延迟时间很短，不会明显影响性能，但可以减少重复日志
@@ -119,12 +125,13 @@ class OrderLogService(BaseLogService):
                     if buffer_key in self._processed_orders:
                         elapsed = current_time - self._processed_orders[buffer_key]
                         if elapsed < 0.5:  # 500毫秒內已處理過
-                            print(f"請求ID {request_id}: 訂單 {order_number} 剛剛被處理過 ({elapsed:.3f}秒前)，跳過本次記錄")
+                            logger.info("請求ID %s: 訂單 %s 剛剛被處理過 (%0.3f秒前)，跳過本次記錄", 
+                                      request_id, order_number, elapsed)
                             return True
                 
                 # 檢查緩衝區中是否已有此訂單的變更
                 if buffer_key in self._buffer:
-                    print(f"請求ID {request_id}: 合併到現有緩衝項")
+                    logger.info("請求ID %s: 合併到現有緩衝項", request_id)
                     
                     try:
                         # 合併變更到現有緩衝項
@@ -138,14 +145,15 @@ class OrderLogService(BaseLogService):
                         is_duplicate = False
                         for existing_log in buffer_data['order_logs']:
                             if existing_log == new_data:
-                                print(f"請求ID {request_id}: 發現重複的日誌，跳過")
+                                logger.info("請求ID %s: 發現重複的日誌，跳過", request_id)
                                 is_duplicate = True
                                 break
                         
                         if not is_duplicate:
                             # 添加到日誌列表
                             buffer_data['order_logs'].append(new_data)
-                            print(f"請求ID {request_id}: 添加到現有緩衝項，現有 {len(buffer_data['order_logs'])} 條日誌")
+                            logger.info("請求ID %s: 添加到現有緩衝項，現有 %d 條日誌", 
+                                      request_id, len(buffer_data['order_logs']))
                             
                             # 合併產品變更
                             all_products = []
@@ -177,10 +185,11 @@ class OrderLogService(BaseLogService):
                             
                             # 更新緩衝區數據
                             buffer_data['new_data'] = merged_data
-                            print(f"請求ID {request_id}: 更新合併後數據，含 {len(product_map)} 個產品變更")
+                            logger.info("請求ID %s: 更新合併後數據，含 %d 個產品變更", 
+                                      request_id, len(product_map))
                     except Exception as e:
-                        print(f"請求ID {request_id}: 合併緩衝項時出錯: {str(e)}")
-                        print(traceback.format_exc())
+                        logger.error("請求ID %s: 合併緩衝項時出錯: %s", request_id, str(e))
+                        logger.error(traceback.format_exc())
                     
                     # 重設定時器
                     if buffer_key in self._timers and self._timers[buffer_key]:
@@ -188,7 +197,7 @@ class OrderLogService(BaseLogService):
                     
                     # 設置較短的延遲時間，避免等待太久
                     delay = max(0.5, min(2.0, len(buffer_data['order_logs']) * 0.3))
-                    print(f"請求ID {request_id}: 設置 {delay:.1f} 秒後處理")
+                    logger.info("請求ID %s: 設置 %0.1f 秒後處理", request_id, delay)
                     
                     timer = threading.Timer(delay, self._process_buffer_item, args=[buffer_key])
                     timer.daemon = True
@@ -196,7 +205,7 @@ class OrderLogService(BaseLogService):
                     timer.start()
                 else:
                     # 創建新的緩衝項
-                    print(f"請求ID {request_id}: 創建新緩衝項")
+                    logger.info("請求ID %s: 創建新緩衝項", request_id)
                     self._buffer[buffer_key] = {
                         'table_name': table_name,
                         'operation_type': operation_type,
@@ -213,7 +222,7 @@ class OrderLogService(BaseLogService):
                     # 設置處理定時器
                     # 对于新建的缓冲项，使用固定的短延迟
                     delay = 1.0  # 固定1秒延迟
-                    print(f"請求ID {request_id}: 設置 {delay:.1f} 秒後處理")
+                    logger.info("請求ID %s: 設置 %0.1f 秒後處理", request_id, delay)
                     
                     timer = threading.Timer(delay, self._process_buffer_item, args=[buffer_key])
                     timer.daemon = True
@@ -226,8 +235,8 @@ class OrderLogService(BaseLogService):
             return True
         
         except Exception as e:
-            print(f"記錄訂單日誌時發生錯誤: {str(e)}")
-            print(traceback.format_exc())
+            logger.error("記錄訂單日誌時發生錯誤: %s", str(e))
+            logger.error(traceback.format_exc())
             # 出錯時嘗試使用基類方法記錄
             return super().log_operation(table_name, operation_type, record_id, old_data, new_data, performed_by, user_type)
     
@@ -243,7 +252,7 @@ class OrderLogService(BaseLogService):
             
             with self._global_lock:
                 if buffer_key not in self._buffer:
-                    print(f"緩衝項 {buffer_key} 不存在或已被處理")
+                    logger.warning("緩衝項 %s 不存在或已被處理", buffer_key)
                     return
                 
                 # 獲取並移除緩衝項
@@ -261,7 +270,7 @@ class OrderLogService(BaseLogService):
                     self._timers[buffer_key] = None
             
             if not buffer_data:
-                print(f"請求ID {request_id}: 緩衝項 {buffer_key} 數據為空")
+                logger.warning("請求ID %s: 緩衝項 %s 數據為空", request_id, buffer_key)
                 return
             
             # 提取必要信息
@@ -271,17 +280,18 @@ class OrderLogService(BaseLogService):
             performed_by = buffer_data.get('performed_by')
             user_type = buffer_data.get('user_type')
             
-            print(f"請求ID {request_id}: 處理緩衝項 {buffer_key}，包含 {len(buffer_data.get('order_logs', []))} 條日誌")
+            logger.info("請求ID %s: 處理緩衝項 %s，包含 %d 條日誌", 
+                      request_id, buffer_key, len(buffer_data.get('order_logs', [])))
             
             try:
                 # 首先尝试使用合并后的数据
                 if 'new_data' in buffer_data and buffer_data['new_data']:
-                    print(f"請求ID {request_id}: 使用合併後的數據記錄日誌")
+                    logger.info("請求ID %s: 使用合併後的數據記錄日誌", request_id)
                     new_data = buffer_data['new_data']
                     
                     if isinstance(new_data, dict) and 'message' in new_data and 'products' in new_data['message']:
                         products = new_data['message']['products']
-                        print(f"請求ID {request_id}: 記錄含 {len(products)} 個產品變更的日誌")
+                        logger.info("請求ID %s: 記錄含 %d 個產品變更的日誌", request_id, len(products))
                     
                     # 调用基类方法记录日志
                     result = super().log_operation(
@@ -290,7 +300,7 @@ class OrderLogService(BaseLogService):
                         new_data,
                         performed_by, user_type
                     )
-                    print(f"請求ID {request_id}: 日誌記錄結果 - {'成功' if result else '失敗'}")
+                    logger.info("請求ID %s: 日誌記錄結果 - %s", request_id, '成功' if result else '失敗')
                     
                     # 标记为已处理
                     with self._processed_lock:
@@ -301,7 +311,7 @@ class OrderLogService(BaseLogService):
                     
                     return result
                 else:
-                    print(f"請求ID {request_id}: 緩衝項中沒有合併數據，使用最後一條日誌")
+                    logger.info("請求ID %s: 緩衝項中沒有合併數據，使用最後一條日誌", request_id)
                     # 如果没有合并数据，使用最后一条日志
                     if 'order_logs' in buffer_data and buffer_data['order_logs']:
                         last_log = buffer_data['order_logs'][-1]
@@ -317,28 +327,28 @@ class OrderLogService(BaseLogService):
                         
                         return result
             except Exception as e:
-                print(f"請求ID {request_id}: 處理緩衝項時出錯: {str(e)}")
-                print(traceback.format_exc())
+                logger.error("請求ID %s: 處理緩衝項時出錯: %s", request_id, str(e))
+                logger.error(traceback.format_exc())
                 
                 # 出错时尝试使用原始数据
                 try:
                     old_data = buffer_data.get('old_data')
                     original_new_data = buffer_data.get('new_data')
                     
-                    print(f"請求ID {request_id}: 嘗試使用原始數據記錄日誌")
+                    logger.info("請求ID %s: 嘗試使用原始數據記錄日誌", request_id)
                     return super().log_operation(
                         table_name, operation_type, record_id,
                         old_data, original_new_data,
                         performed_by, user_type
                     )
                 except Exception as e2:
-                    print(f"請求ID {request_id}: 使用原始數據記錄日誌時出錯: {str(e2)}")
-                    print(traceback.format_exc())
+                    logger.error("請求ID %s: 使用原始數據記錄日誌時出錯: %s", request_id, str(e2))
+                    logger.error(traceback.format_exc())
                     return False
         
         except Exception as e:
-            print(f"處理緩衝項時發生未預期錯誤: {str(e)}")
-            print(traceback.format_exc())
+            logger.error("處理緩衝項時發生未預期錯誤: %s", str(e))
+            logger.error(traceback.format_exc())
             return False
     
     def _extract_products_from_log(self, log_data: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -374,7 +384,7 @@ class OrderLogService(BaseLogService):
                     }
                     products.append(product)
             except Exception as e:
-                print(f"解析產品信息失敗: {str(e)}")
+                logger.error("解析產品信息失敗: %s", str(e))
         
         return products
     
@@ -388,7 +398,7 @@ class OrderLogService(BaseLogService):
                     order_number = modify_log['message']['order_number']
             
             if not order_number:
-                print("無法獲取訂單號，返回原始日誌數據")
+                logger.warning("無法獲取訂單號，返回原始日誌數據")
                 return modify_log
             
             # 收集所有產品變更
@@ -404,7 +414,7 @@ class OrderLogService(BaseLogService):
                 products = self._extract_products_from_log(modify_log)
                 all_products.extend(products)
             
-            print(f"收集到 {len(all_products)} 個產品變更")
+            logger.info("收集到 %d 個產品變更", len(all_products))
             
             # 合併相同產品的變更
             merged_products = []
@@ -431,7 +441,7 @@ class OrderLogService(BaseLogService):
             
             # 將合併後的產品添加到結果中
             merged_products = list(product_map.values())
-            print(f"合併後有 {len(merged_products)} 個產品")
+            logger.info("合併後有 %d 個產品", len(merged_products))
             
             # 構建最終的合併數據
             merged_data = {
@@ -442,18 +452,18 @@ class OrderLogService(BaseLogService):
                 'operation_type': '修改'
             }
             
-            print(f"最終合併數據: {json.dumps(merged_data, ensure_ascii=False, indent=2)}")
+            logger.debug("最終合併數據: %s", json.dumps(merged_data, ensure_ascii=False, indent=2))
             return merged_data
             
         except Exception as e:
-            print(f"處理修改日誌錯誤: {str(e)}")
+            logger.error("處理修改日誌錯誤: %s", str(e))
             import traceback
             traceback.print_exc()
             return modify_log
         
     def _get_changes(self, old_data: Optional[Dict[str, Any]], new_data: Optional[Dict[str, Any]], operation_type: str = None) -> Dict[str, Any]:
         """處理訂單變更的方法"""
-        print(f"處理訂單變更 - 操作類型: {operation_type}")
+        logger.info("處理訂單變更 - 操作類型: %s", operation_type)
 
         try:
             # 處理新增和刪除操作
@@ -484,7 +494,7 @@ class OrderLogService(BaseLogService):
                         'operation_type': operation_type
                     }
         except Exception as e:
-            print(f"處理變更錯誤: {str(e)}")
+            logger.error("處理變更錯誤: %s", str(e))
             import traceback
             traceback.print_exc()
             return {'message': '處理變更時發生錯誤', 'operation_type': None}
@@ -502,7 +512,7 @@ class OrderLogService(BaseLogService):
                     try:
                         message = json.loads(message)
                     except json.JSONDecodeError:
-                        print("無法解析 JSON 消息")
+                        logger.error("無法解析 JSON 消息")
                         return {'message': '無變更', 'operation_type': None}
                 
                 if isinstance(message, dict):
@@ -517,7 +527,7 @@ class OrderLogService(BaseLogService):
                     }
             
         except Exception as e:
-            print(f"處理新增/刪除操作錯誤: {str(e)}")
+            logger.error("處理新增/刪除操作錯誤: %s", str(e))
             import traceback
             traceback.print_exc()
         return {'message': '無變更', 'operation_type': None}
@@ -597,7 +607,7 @@ class OrderLogService(BaseLogService):
             return {'message': '無變更', 'operation_type': None}
             
         except Exception as e:
-            print(f"處理審核操作錯誤: {str(e)}")
+            logger.error("處理審核操作錯誤: %s", str(e))
             import traceback
             traceback.print_exc()
             return {'message': '無變更', 'operation_type': None}
@@ -666,7 +676,7 @@ class OrderLogService(BaseLogService):
             
             return result
         except Exception as e:
-            print(f"Error processing update: {str(e)}")
+            logger.error("Error processing update: %s", str(e))
             return {
                 'message': '无法处理修改记录',
                 'operation_type': '修改'

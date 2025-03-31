@@ -6,6 +6,10 @@ from flask_cors import CORS, cross_origin
 import os
 import json
 from backend.services.log_service_registry import LogServiceRegistry
+import logging
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 log_bp = Blueprint('log', __name__)
 
@@ -35,68 +39,68 @@ def after_request(response):
 
 def get_admin_id():
     """获取管理员ID"""
-    print(f"當前 session: {dict(session)}")
-    print(f"Authorization 頭部: {request.headers.get('Authorization')}")
+    logger.debug("當前 session: %s", dict(session))
+    logger.debug("Authorization 頭部: %s", request.headers.get('Authorization'))
     
     # 首先尝试从 Authorization header 获取
     auth_header = request.headers.get('Authorization')
     if auth_header:
-        print(f"找到 Authorization 頭部: {auth_header}")
+        logger.debug("找到 Authorization 頭部: %s", auth_header)
         # 支持 Bearer token 格式
         if auth_header.startswith('Bearer '):
             try:
                 admin_id = int(auth_header.split(' ')[1])
-                print(f"從 Bearer token 獲取到 admin_id: {admin_id}")
+                logger.debug("從 Bearer token 獲取到 admin_id: %s", admin_id)
                 # 将 admin_id 存入 session
                 session['admin_id'] = admin_id
                 return admin_id
             except (IndexError, ValueError) as e:
-                print(f"Bearer token 格式無效: {str(e)}")
+                logger.warning("Bearer token 格式無效: %s", str(e))
         # 直接支持纯数字格式
         else:
             try:
                 admin_id = int(auth_header)
-                print(f"從純數字 Authorization 獲取到 admin_id: {admin_id}")
+                logger.debug("從純數字 Authorization 獲取到 admin_id: %s", admin_id)
                 session['admin_id'] = admin_id
                 return admin_id
             except ValueError as e:
-                print(f"Authorization 頭部不是有效的數字: {str(e)}")
+                logger.warning("Authorization 頭部不是有效的數字: %s", str(e))
             
     # 如果没有 Authorization header，尝试从 session 获取
     admin_id = session.get('admin_id')
     if admin_id:
         try:
             admin_id = int(admin_id)
-            print(f"從 session 獲取到 admin_id: {admin_id}")
+            logger.debug("從 session 獲取到 admin_id: %s", admin_id)
             return admin_id
         except ValueError as e:
-            print(f"Session 中的 admin_id 無效: {str(e)}")
+            logger.warning("Session 中的 admin_id 無效: %s", str(e))
     
-    print("無法獲取 admin_id")        
+    logger.warning("無法獲取 admin_id")        
     return None
 
 def check_view_log_permission():
     """檢查管理員是否有查看日誌的權限"""
     try:
         admin_id = get_admin_id()
-        print(f"Checking view log permission for admin_id: {admin_id}")
+        logger.debug("Checking view log permission for admin_id: %s", admin_id)
         
         if not admin_id:
-            print("No admin_id found in session or header")
+            logger.warning("No admin_id found in session or header")
             return False
         
         # 直接從會話中獲取權限信息
         permissions = session.get('permissions', {})
         is_active = True  # 假設管理員是活躍的，因為他們能夠登錄
         
-        print(f"Admin {admin_id} permission check:")
-        print(f"- Has view_system_logs permission: {permissions.get('can_view_system_logs', False)}")
+        logger.debug("Admin %s permission check:", admin_id)
+        logger.debug("- Has view_system_logs permission: %s", permissions.get('can_view_system_logs', False))
         
         # 檢查管理員是否有查看系統日誌的權限
         return permissions.get('can_view_system_logs', False)
     
     except Exception as e:
-        print(f"Permission check error: {str(e)}")
+        logger.error("Permission check error: %s", str(e))
         return False
 
 def admin_required(f):
@@ -118,7 +122,7 @@ def get_logs():
     try:
         # 獲取請求參數
         data = request.get_json()
-        print(f"接收到的請求數據: {data}")
+        logger.debug("接收到的請求數據: %s", data)
         
         table_name = data.get('table_name')
         operation_type = data.get('operation_type')
@@ -131,8 +135,9 @@ def get_logs():
         page = data.get('page', 1)
         per_page = data.get('per_page', 10)
 
-        print(f"過濾條件: table_name={table_name}, operation_type={operation_type}, start_date={start_date}, end_date={end_date}, user_type={user_type}, performed_by={performed_by}, record_detail={record_detail}, record_only_search={record_only_search}")
-        print(f"分頁: page={page}, per_page={per_page}")
+        logger.debug("過濾條件: table_name=%s, operation_type=%s, start_date=%s, end_date=%s, user_type=%s, performed_by=%s, record_detail=%s, record_only_search=%s", 
+                    table_name, operation_type, start_date, end_date, user_type, performed_by, record_detail, record_only_search)
+        logger.debug("分頁: page=%s, per_page=%s", page, per_page)
 
         # 計算分頁偏移量
         offset = (page - 1) * per_page
@@ -141,7 +146,7 @@ def get_logs():
         with get_db_connection() as db_connection:
             # 創建日誌服務實例
             log_service = LogServiceRegistry.get_service(db_connection)
-            print(f"使用的日誌服務: {log_service.__class__.__name__}")
+            logger.debug("使用的日誌服務: %s", log_service.__class__.__name__)
             
             # 獲取日誌記錄
             logs, total_count = log_service.get_logs(
@@ -160,7 +165,7 @@ def get_logs():
             # 確保logs是列表
             logs = logs if isinstance(logs, list) else []
             
-            print(f"獲取到的日誌記錄數量: {len(logs)}, 總記錄數: {total_count}")
+            logger.debug("獲取到的日誌記錄數量: %s, 總記錄數: %s", len(logs), total_count)
             
             # 計算總頁數，確保不為零
             total_pages = max(1, (total_count + per_page - 1) // per_page if total_count and total_count > 0 else 1)
@@ -175,7 +180,7 @@ def get_logs():
             })
 
     except Exception as e:
-        print(f"返回日誌記錄時發生錯誤: {str(e)}")
+        logger.error("返回日誌記錄時發生錯誤: %s", str(e))
         # 即使發生錯誤，也返回一個有效的響應
         return jsonify({
             "status": "error",
@@ -202,7 +207,7 @@ def record_log():
             if field not in data:
                 return jsonify({"status": "error", "message": f"缺少參數: {field}"}), 400
         
-        print(f"记录日志操作: {data['operation_type']} - {data['table_name']} - ID: {data['record_id']}")
+        logger.debug("记录日志操作: %s - %s - ID: %s", data['operation_type'], data['table_name'], data['record_id'])
         
         with get_db_connection() as conn:
             log_service = LogService(conn)
@@ -217,14 +222,14 @@ def record_log():
             )
             
             if success:
-                print(f"日志记录成功: {data['operation_type']} - {data['table_name']} - ID: {data['record_id']}")
+                logger.info("日志记录成功: %s - %s - ID: %s", data['operation_type'], data['table_name'], data['record_id'])
                 return jsonify({"status": "success", "message": "日誌記錄成功"})
             else:
-                print(f"日志记录失败: {data['operation_type']} - {data['table_name']} - ID: {data['record_id']}")
+                logger.error("日志记录失败: %s - %s - ID: %s", data['operation_type'], data['table_name'], data['record_id'])
                 return jsonify({"status": "error", "message": "日誌記錄失敗"}), 500
                 
     except Exception as e:
-        print(f"记录日志时发生错误: {str(e)}")
+        logger.error("记录日志时发生错误: %s", str(e))
         return jsonify({
             "status": "error",
             "message": str(e)

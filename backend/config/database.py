@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 connection_pool = pool.SimpleConnectionPool(
     minconn=5,
     maxconn=50,
-    host="127.0.0.1",
+    host="uat-rd-grandholy-postgre-server.postgres.database.azure.com",
     port="5432",
-    user="postgres",
-    password="1qaz2wsx",
+    user="raindeer",
+    password="!@#QWEasdzxc",
     database="postgres",
     # 添加連接超時設置
     connect_timeout=3,

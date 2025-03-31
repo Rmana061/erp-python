@@ -2,6 +2,9 @@ import json
 from datetime import datetime
 from typing import Dict, Any, Optional
 from .log_service_registry import LogServiceRegistry
+import logging
+
+logger = logging.getLogger(__name__)
 
 class LogService:
     """日誌服務類，處理日誌記錄和查詢"""
@@ -27,7 +30,7 @@ class LogService:
                 user_type=user_type
             )
         except Exception as e:
-            print(f"Error logging operation: {str(e)}")
+            logger.error("Error logging operation: %s", str(e))
             raise
     
     def get_logs(self, table_name=None, operation_type=None, start_date=None, end_date=None, user_type=None, performed_by=None, limit=50, offset=0):
@@ -48,14 +51,14 @@ class LogService:
                 offset=offset
             )
         except Exception as e:
-            print(f"Error getting logs: {str(e)}")
+            logger.error("Error getting logs: %s", str(e))
             raise
 
     def _get_changes(self, old_data: Optional[Dict[str, Any]], new_data: Optional[Dict[str, Any]], operation_type: str = None) -> Dict[str, Any]:
         """計算數據變更"""
-        print(f"Processing changes - operation_type: {operation_type}")
-        print(f"Old data: {json.dumps(old_data, ensure_ascii=False, indent=2) if old_data else None}")
-        print(f"New data: {json.dumps(new_data, ensure_ascii=False, indent=2) if new_data else None}")
+        logger.debug("Processing changes - operation_type: %s", operation_type)
+        logger.debug("Old data: %s", json.dumps(old_data, ensure_ascii=False, indent=2) if old_data else None)
+        logger.debug("New data: %s", json.dumps(new_data, ensure_ascii=False, indent=2) if new_data else None)
 
         # 處理新增和刪除操作
         if operation_type in ['新增', '刪除']:
@@ -290,7 +293,7 @@ class LogService:
                     }
                 
             except Exception as e:
-                print(f"Error processing changes: {str(e)}")
+                logger.error("Error processing changes: %s", str(e))
                 return {'message': '處理變更時發生錯誤', 'operation_type': None}
         
         return {'message': '無變更', 'operation_type': None} 

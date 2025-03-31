@@ -1,4 +1,10 @@
 from typing import Dict, Any, List, Optional, Tuple
+from backend.config.database import get_db_connection
+from backend.utils.file_handlers import save_file, delete_file
+import logging
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 class ProductService:
     """產品服務類，處理產品相關的業務邏輯"""
@@ -41,7 +47,7 @@ class ProductService:
             return product
             
         except Exception as e:
-            print(f"获取产品信息错误: {str(e)}")
+            logger.error("获取产品信息错误: %s", str(e))
             return None
     
     def add_product(self, name, description, image_url='', dm_url='', 
@@ -78,7 +84,7 @@ class ProductService:
             # 返回新插入的產品ID
             return cursor.lastrowid
         except Exception as e:
-            print(f"添加产品错误: {str(e)}")
+            logger.error("添加产品错误: %s", str(e))
             self.db_connection.rollback()
             return 0
     
@@ -109,7 +115,7 @@ class ProductService:
             self.db_connection.commit()
             return True
         except Exception as e:
-            print(f"更新产品失败: {str(e)}")
+            logger.error("更新产品失败: %s", str(e))
             self.db_connection.rollback()
             return False
     
@@ -140,7 +146,7 @@ class ProductService:
             return cursor.rowcount > 0
             
         except Exception as e:
-            print(f"删除产品错误: {str(e)}")
+            logger.error("删除产品错误: %s", str(e))
             self.db_connection.rollback()
             raise e
     
@@ -157,7 +163,7 @@ class ProductService:
         try:
             cursor = self.db_connection.cursor()
             
-            print(f"正在獲取產品列表，limit: {limit}, offset: {offset}")
+            logger.info("正在獲取產品列表，limit: %s, offset: %s", limit, offset)
             
             # 確保使用適合PostgreSQL的SQL
             query = """
@@ -182,14 +188,17 @@ class ProductService:
             for row in product_rows:
                 product_dict = dict(zip(columns, row))
                 products.append(product_dict)
-                print(f"找到產品: ID={product_dict.get('id')}, 名稱={product_dict.get('name')}, 創建時間={product_dict.get('created_at')}")
+                logger.debug("找到產品: ID=%s, 名稱=%s, 創建時間=%s", 
+                           product_dict.get('id'), 
+                           product_dict.get('name'), 
+                           product_dict.get('created_at'))
             
             cursor.close()
             
-            print(f"成功獲取 {len(products)} 個產品")
+            logger.info("成功獲取 %d 個產品", len(products))
             return products
         except Exception as e:
-            print(f"獲取產品列表錯誤: {str(e)}")
+            logger.error("獲取產品列表錯誤: %s", str(e))
             import traceback
             traceback.print_exc()
             return [] 

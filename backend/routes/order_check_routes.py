@@ -2,6 +2,10 @@ from flask import Blueprint, request, jsonify, session
 from ..config.database import get_db_connection
 import psycopg2.extras
 from datetime import datetime, timedelta
+import logging
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 order_check_bp = Blueprint('order_check', __name__)
 
@@ -63,7 +67,7 @@ def check_recent_order():
             
             if recent_order:
                 # 找到了最近的订单，不允许下单
-                print(f"找到最近订单: 客户ID={customer_id}, 产品ID={product_id}, 限制天数={limit_days}")
+                logger.info("找到最近订单: 客户ID=%s, 产品ID=%s, 限制天数=%s", customer_id, product_id, limit_days)
                 return jsonify({
                     "status": "success",
                     "data": {
@@ -74,7 +78,7 @@ def check_recent_order():
                 })
             
             # 没有找到最近的订单，允许下单
-            print(f"没有找到最近订单: 客户ID={customer_id}, 产品ID={product_id}")
+            logger.debug("没有找到最近订单: 客户ID=%s, 产品ID=%s", customer_id, product_id)
             return jsonify({
                 "status": "success",
                 "data": {
@@ -84,7 +88,7 @@ def check_recent_order():
             })
             
     except Exception as e:
-        print(f"Error in check_recent_order: {str(e)}")
+        logger.error("Error in check_recent_order: %s", str(e))
         return jsonify({
             "status": "error",
             "message": str(e)

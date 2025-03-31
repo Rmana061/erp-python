@@ -1,13 +1,17 @@
 import json
 from typing import Dict, Any, Optional
 from .base_log_service import BaseLogService
+import logging
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 class AdminLogService(BaseLogService):
     """管理員日誌服務類，處理管理員相關的日誌邏輯"""
     
     def _get_changes(self, old_data: Optional[Dict[str, Any]], new_data: Optional[Dict[str, Any]], operation_type: str = None) -> Dict[str, Any]:
         """處理管理員變更的方法"""
-        print(f"Processing admin changes - operation_type: {operation_type}")
+        logger.debug("處理管理員變更 - 操作類型: %s", operation_type)
         
         # 處理新增操作
         if operation_type == '新增' and new_data:
@@ -42,7 +46,7 @@ class AdminLogService(BaseLogService):
                 'operation_type': '新增'
             }
         except Exception as e:
-            print(f"Error processing admin create: {str(e)}")
+            logger.error("處理管理員新增時發生錯誤: %s", str(e))
             return {'message': '處理管理員新增時發生錯誤', 'operation_type': None}
     
     def _process_delete(self, old_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -64,7 +68,7 @@ class AdminLogService(BaseLogService):
                 'operation_type': '刪除'
             }
         except Exception as e:
-            print(f"Error processing admin delete: {str(e)}")
+            logger.error("處理管理員刪除時發生錯誤: %s", str(e))
             return {'message': '處理管理員刪除時發生錯誤', 'operation_type': None}
     
     def _process_update(self, old_data: Dict[str, Any], new_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -104,7 +108,7 @@ class AdminLogService(BaseLogService):
                     }
             
             if not changes and not password_changed:
-                print(f"Admin update - No changes detected for admin_id: {new_data.get('id')}")
+                logger.info("管理員更新 - 未檢測到變更，管理員ID: %s", new_data.get('id'))
                 return None
                 
             admin_info = {
@@ -122,5 +126,5 @@ class AdminLogService(BaseLogService):
                 'operation_type': '修改'
             }
         except Exception as e:
-            print(f"Error processing admin update: {str(e)}")
+            logger.error("處理管理員更新時發生錯誤: %s", str(e))
             return None 

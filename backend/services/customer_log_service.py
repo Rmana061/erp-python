@@ -3,6 +3,10 @@ from typing import Dict, Any, Optional
 from .base_log_service import BaseLogService
 from ..config.database import get_db_connection  # 导入数据库连接
 import psycopg2.extras
+import logging
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 class CustomerLogService(BaseLogService):
     """客戶日誌服務類，處理客戶相關的日誌邏輯"""
@@ -56,12 +60,12 @@ class CustomerLogService(BaseLogService):
             return ', '.join(product_names)
             
         except Exception as e:
-            print(f"Error getting product names: {str(e)}")
+            logger.error("獲取產品名稱時發生錯誤: %s", str(e))
             return product_ids_str  # 發生錯誤時返回原始ID
     
     def _get_changes(self, old_data: Optional[Dict[str, Any]], new_data: Optional[Dict[str, Any]], operation_type: str = None) -> Dict[str, Any]:
         """處理客戶變更的方法"""
-        print(f"Processing customer changes - operation_type: {operation_type}")
+        logger.debug("處理客戶變更 - 操作類型: %s", operation_type)
         
         # 處理新增操作
         if operation_type == '新增' and new_data:
@@ -205,7 +209,7 @@ class CustomerLogService(BaseLogService):
                 'operation_type': '新增'
             }
         except Exception as e:
-            print(f"Error processing customer create: {str(e)}")
+            logger.error("處理客戶新增時發生錯誤: %s", str(e))
             return {'message': '處理客戶新增時發生錯誤', 'operation_type': None}
     
     def _process_delete(self, old_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -246,7 +250,7 @@ class CustomerLogService(BaseLogService):
                 'operation_type': '刪除'
             }
         except Exception as e:
-            print(f"Error processing customer delete: {str(e)}")
+            logger.error("處理客戶刪除時發生錯誤: %s", str(e))
             return {'message': '處理客戶刪除時發生錯誤', 'operation_type': None}
     
     def _process_update(self, old_data: Dict[str, Any], new_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -263,7 +267,7 @@ class CustomerLogService(BaseLogService):
             line_changes = new_data.get('line_changes')
             
             if line_changes:
-                print(f"Detected LINE changes for customer_id: {new_data.get('id')}")
+                logger.debug("檢測到客戶ID %s 的LINE變更", new_data.get('id'))
                 # 将LINE变更信息合并到changes中
                 if isinstance(line_changes, dict):
                     if 'line_users' in line_changes:
@@ -294,12 +298,12 @@ class CustomerLogService(BaseLogService):
                 }
             
             if not changes and not password_changed and not has_line_changes:
-                print(f"Customer update - No changes detected for customer_id: {new_data.get('id')}")
+                logger.info("客戶更新 - 未檢測到變更，客戶ID: %s", new_data.get('id'))
                 return None
             
             # 即使只有密碼變更，也要產生記錄
             if password_changed and len(changes) <= 1:  # 只有密碼變更或許多__password_changed__標記
-                print(f"Customer password changed for customer_id: {new_data.get('id')}")
+                logger.debug("客戶密碼已更改，客戶ID: %s", new_data.get('id'))
                 changes['password'] = {
                     'before': '********',
                     'after': '********（已更新）'
@@ -335,7 +339,7 @@ class CustomerLogService(BaseLogService):
                 'operation_type': '修改'
             }
         except Exception as e:
-            print(f"客户更新日志处理错误: {str(e)}")
+            logger.error("客戶更新日誌處理錯誤: %s", str(e))
             import traceback
             traceback.print_exc()
             return None 

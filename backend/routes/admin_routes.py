@@ -4,6 +4,10 @@ from backend.models.admin import Admin
 from backend.utils.auth_utils import require_permission
 from hash_password import verify_password, hash_password
 import psycopg2.extras
+import logging
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -38,7 +42,7 @@ def get_admin_list():
                 "data": admins
             })
     except Exception as e:
-        print(f"Error in get_admin_list: {str(e)}")
+        logger.error("Error in get_admin_list: %s", str(e))
         return jsonify({
             "status": "error",
             "message": f"獲取管理員列表失敗: {str(e)}"
@@ -49,7 +53,7 @@ def get_admin_list():
 def add_admin():
     try:
         data = request.json
-        print("接收到的数据:", data)
+        logger.debug("接收到的數據: %s", data)
         
         # 获取当前管理员ID
         admin_id = session.get('admin_id')
@@ -160,7 +164,7 @@ def add_admin():
             })
             
     except Exception as e:
-        print(f"Error in add_admin: {str(e)}")
+        logger.error("Error in add_admin: %s", str(e))
         return jsonify({
             "status": "error",
             "message": f"新增管理員失敗: {str(e)}"
@@ -317,7 +321,7 @@ def update_admin():
             })
 
     except Exception as e:
-        print(f"Error in update_admin: {str(e)}")
+        logger.error("Error in update_admin: %s", str(e))
         return jsonify({
             "status": "error",
             "message": f"更新管理員資料失敗: {str(e)}"
@@ -335,7 +339,7 @@ def delete_admin():
             }), 400
 
         # 检查用户权限（即使已有装饰器，再次显式检查）
-        print("手动检查权限...")
+        logger.debug("手動檢查權限...")
         # 获取当前管理员ID
         current_admin_id = session.get('admin_id')
         if not current_admin_id:
@@ -362,13 +366,13 @@ def delete_admin():
             
             permission_result = cursor.fetchone()
             if not permission_result or not permission_result[0]:
-                print(f"权限检查失败: admin_id={current_admin_id}, 权限查询结果:", permission_result)
+                logger.warning("權限檢查失敗: admin_id=%s, 權限查詢結果: %s", current_admin_id, permission_result)
                 return jsonify({
                     "status": "error",
                     "message": "您沒有足夠的權限執行此操作"
                 }), 403
             
-            print(f"权限检查成功: admin_id={current_admin_id}, can_add_personnel=True")
+            logger.debug("權限檢查成功: admin_id=%s, can_add_personnel=True", current_admin_id)
             
             # 先获取要删除的管理员数据（用于日志记录）
             cursor.execute("""
@@ -425,7 +429,7 @@ def delete_admin():
             })
             
     except Exception as e:
-        print(f"Error in delete_admin: {str(e)}")
+        logger.error("Error in delete_admin: %s", str(e))
         return jsonify({
             "status": "error",
             "message": f"刪除管理員失敗: {str(e)}"
@@ -434,9 +438,9 @@ def delete_admin():
 @admin_bp.route('/admin/info', methods=['POST'])
 def get_admin_info():
     try:
-        print("開始獲取管理員信息...")
-        print("當前 session:", dict(session))
-        print("請求 headers:", dict(request.headers))
+        logger.debug("開始獲取管理員信息...")
+        logger.debug("當前 session: %s", dict(session))
+        logger.debug("請求 headers: %s", dict(request.headers))
         
         # 获取请求中的特定管理员ID
         data = request.get_json()
@@ -452,11 +456,11 @@ def get_admin_info():
                 current_admin_id = auth_header.split(' ')[1]
                 session['admin_id'] = current_admin_id
         
-        print("當前管理員 ID:", current_admin_id)
-        print("目標管理員 ID:", target_admin_id)
+        logger.debug("當前管理員 ID: %s", current_admin_id)
+        logger.debug("目標管理員 ID: %s", target_admin_id)
         
         if not current_admin_id:
-            print("未找到當前管理員 ID")
+            logger.warning("未找到當前管理員 ID")
             return jsonify({"status": "error", "message": "未登入或登入已過期"}), 401
 
         with get_db_connection() as conn:
@@ -476,10 +480,10 @@ def get_admin_info():
             cursor.close()
             
             if not admin:
-                print("管理員不存在")
+                logger.warning("管理員不存在")
                 return jsonify({"status": "error", "message": "管理員不存在"}), 404
             
-            print("查詢到的管理員信息:", dict(admin))
+            logger.debug("查詢到的管理員信息: %s", dict(admin))
             
             result = {
                 "status": "success",
@@ -502,11 +506,11 @@ def get_admin_info():
                 }
             }
             
-            print("Response:", result)
+            logger.debug("Response: %s", result)
             return jsonify(result)
 
     except Exception as e:
-        print(f"Error in get_admin_info: {str(e)}")
+        logger.error("Error in get_admin_info: %s", str(e))
         return jsonify({"status": "error", "message": "獲取管理員資訊失敗"}), 500
 
 @admin_bp.route('/admin/check-permissions', methods=['POST'])
@@ -530,7 +534,7 @@ def check_permissions():
                 "data": permissions
             })
     except Exception as e:
-        print(f"Error in check_permissions: {str(e)}")
+        logger.error("Error in check_permissions: %s", str(e))
         return jsonify({
             "status": "error",
             "message": f"檢查權限失敗: {str(e)}"

@@ -2,6 +2,11 @@ import json
 from typing import Dict, Any, Optional
 from .base_log_service import BaseLogService
 import os
+from backend.config.database import get_db_connection
+import logging
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 class ProductLogService(BaseLogService):
     """產品日誌服務類，處理產品相關的日誌邏輯"""
@@ -47,7 +52,7 @@ class ProductLogService(BaseLogService):
                 'operation_type': '鎖定日期'
             }
         except Exception as e:
-            print(f"处理锁定日期日志错误: {str(e)}")
+            logger.error("处理锁定日期日志错误: %s", str(e))
             return {
                 'message': {
                     'locked_date': {}
@@ -71,7 +76,7 @@ class ProductLogService(BaseLogService):
                 'operation_type': '解鎖日期'
             }
         except Exception as e:
-            print(f"处理解锁日期日志错误: {str(e)}")
+            logger.error("处理解锁日期日志错误: %s", str(e))
             return {
                 'message': {
                     'locked_date': {}
@@ -104,7 +109,7 @@ class ProductLogService(BaseLogService):
                 'operation_type': '新增'
             }
         except Exception as e:
-            print(f"处理产品新增日志错误: {str(e)}")
+            logger.error("处理产品新增日志错误: %s", str(e))
             return {
                 'message': {
                     'product': {}
@@ -137,7 +142,7 @@ class ProductLogService(BaseLogService):
                 'operation_type': '刪除'
             }
         except Exception as e:
-            print(f"处理产品删除日志错误: {str(e)}")
+            logger.error("处理产品删除日志错误: %s", str(e))
             return {
                 'message': {
                     'product': {}
@@ -225,7 +230,7 @@ class ProductLogService(BaseLogService):
             
             # 检查是否有任何实际变更
             if not changes:
-                print(f"Product update - No changes detected for product_id: {new_data.get('id')}")
+                logger.info("Product update - No changes detected for product_id: %s", new_data.get('id'))
                 return None
             
             # 构建产品信息
@@ -243,7 +248,7 @@ class ProductLogService(BaseLogService):
                 'operation_type': '修改'
             }
         except Exception as e:
-            print(f"处理产品更新日志错误: {str(e)}")
+            logger.error("处理产品更新日志错误: %s", str(e))
             return None
     
     def _get_friendly_filename(self, file_url, original_filename):
@@ -257,4 +262,258 @@ class ProductLogService(BaseLogService):
         
         # 否则尝试从URL中提取文件名
         filename = os.path.basename(file_url)
-        return filename 
+        return filename
+
+def log_lock_date(product_id, admin_id, lock_date):
+    """
+    記錄產品鎖定日期的日誌
+    :param product_id: 產品ID
+    :param admin_id: 管理員ID
+    :param lock_date: 鎖定日期
+    :return: 是否記錄成功
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            
+            # 獲取產品信息
+            cursor.execute("""
+                SELECT name FROM products WHERE id = %s
+            """, (product_id,))
+            product = cursor.fetchone()
+            
+            if not product:
+                return False
+            
+            # 獲取管理員信息
+            cursor.execute("""
+                SELECT username FROM admins WHERE id = %s
+            """, (admin_id,))
+            admin = cursor.fetchone()
+            
+            if not admin:
+                return False
+            
+            # 記錄日誌
+            cursor.execute("""
+                INSERT INTO product_logs (product_id, admin_id, operation_type, details)
+                VALUES (%s, %s, 'lock_date', %s)
+            """, (
+                product_id,
+                admin_id,
+                f"管理員 {admin['username']} 將產品 {product['name']} 的訂購截止日期設為 {lock_date}"
+            ))
+            
+            conn.commit()
+            return True
+            
+    except Exception as e:
+        logger.error("处理锁定日期日志错误: %s", str(e))
+        return False
+
+def log_unlock_date(product_id, admin_id):
+    """
+    記錄產品解鎖日期的日誌
+    :param product_id: 產品ID
+    :param admin_id: 管理員ID
+    :return: 是否記錄成功
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            
+            # 獲取產品信息
+            cursor.execute("""
+                SELECT name FROM products WHERE id = %s
+            """, (product_id,))
+            product = cursor.fetchone()
+            
+            if not product:
+                return False
+            
+            # 獲取管理員信息
+            cursor.execute("""
+                SELECT username FROM admins WHERE id = %s
+            """, (admin_id,))
+            admin = cursor.fetchone()
+            
+            if not admin:
+                return False
+            
+            # 記錄日誌
+            cursor.execute("""
+                INSERT INTO product_logs (product_id, admin_id, operation_type, details)
+                VALUES (%s, %s, 'unlock_date', %s)
+            """, (
+                product_id,
+                admin_id,
+                f"管理員 {admin['username']} 解除了產品 {product['name']} 的訂購截止日期"
+            ))
+            
+            conn.commit()
+            return True
+            
+    except Exception as e:
+        logger.error("处理解锁日期日志错误: %s", str(e))
+        return False
+
+def log_product_add(product_id, admin_id, product_data):
+    """
+    記錄新增產品的日誌
+    :param product_id: 產品ID
+    :param admin_id: 管理員ID
+    :param product_data: 產品數據
+    :return: 是否記錄成功
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            
+            # 獲取管理員信息
+            cursor.execute("""
+                SELECT username FROM admins WHERE id = %s
+            """, (admin_id,))
+            admin = cursor.fetchone()
+            
+            if not admin:
+                return False
+            
+            # 記錄日誌
+            cursor.execute("""
+                INSERT INTO product_logs (product_id, admin_id, operation_type, details, data)
+                VALUES (%s, %s, 'add', %s, %s)
+            """, (
+                product_id,
+                admin_id,
+                f"管理員 {admin['username']} 新增了產品 {product_data.get('name')}",
+                product_data
+            ))
+            
+            conn.commit()
+            return True
+            
+    except Exception as e:
+        logger.error("处理产品新增日志错误: %s", str(e))
+        return False
+
+def log_product_delete(product_id, admin_id):
+    """
+    記錄刪除產品的日誌
+    :param product_id: 產品ID
+    :param admin_id: 管理員ID
+    :return: 是否記錄成功
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            
+            # 獲取產品信息
+            cursor.execute("""
+                SELECT name FROM products WHERE id = %s
+            """, (product_id,))
+            product = cursor.fetchone()
+            
+            if not product:
+                return False
+            
+            # 獲取管理員信息
+            cursor.execute("""
+                SELECT username FROM admins WHERE id = %s
+            """, (admin_id,))
+            admin = cursor.fetchone()
+            
+            if not admin:
+                return False
+            
+            # 記錄日誌
+            cursor.execute("""
+                INSERT INTO product_logs (product_id, admin_id, operation_type, details)
+                VALUES (%s, %s, 'delete', %s)
+            """, (
+                product_id,
+                admin_id,
+                f"管理員 {admin['username']} 刪除了產品 {product['name']}"
+            ))
+            
+            conn.commit()
+            return True
+            
+    except Exception as e:
+        logger.error("处理产品删除日志错误: %s", str(e))
+        return False
+
+def log_product_update(product_id, admin_id, old_data, new_data):
+    """
+    記錄更新產品的日誌
+    :param product_id: 產品ID
+    :param admin_id: 管理員ID
+    :param old_data: 舊的產品數據
+    :param new_data: 新的產品數據
+    :return: 是否記錄成功
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            
+            # 獲取管理員信息
+            cursor.execute("""
+                SELECT username FROM admins WHERE id = %s
+            """, (admin_id,))
+            admin = cursor.fetchone()
+            
+            if not admin:
+                return False
+            
+            # 比較變更
+            changes = []
+            if old_data.get('name') != new_data.get('name'):
+                changes.append(f"名稱從 '{old_data.get('name')}' 改為 '{new_data.get('name')}'")
+            
+            if old_data.get('description') != new_data.get('description'):
+                changes.append("修改了描述")
+            
+            if old_data.get('price') != new_data.get('price'):
+                changes.append(f"價格從 {old_data.get('price')} 改為 {new_data.get('price')}")
+            
+            if old_data.get('unit') != new_data.get('unit'):
+                changes.append(f"單位從 '{old_data.get('unit')}' 改為 '{new_data.get('unit')}'")
+            
+            if old_data.get('min_order_quantity') != new_data.get('min_order_quantity'):
+                changes.append(f"最小訂購量從 {old_data.get('min_order_quantity')} 改為 {new_data.get('min_order_quantity')}")
+            
+            # 比較可見客戶列表
+            old_customers = set(old_data.get('viewable_customers', []))
+            new_customers = set(new_data.get('viewable_customers', []))
+            
+            if old_customers != new_customers:
+                added = new_customers - old_customers
+                removed = old_customers - new_customers
+                
+                if added:
+                    changes.append(f"新增了 {len(added)} 個可見客戶")
+                if removed:
+                    changes.append(f"移除了 {len(removed)} 個可見客戶")
+            
+            if not changes:
+                logger.info("Product update - No changes detected for product_id: %s", new_data.get('id'))
+                return True
+            
+            # 記錄日誌
+            details = f"管理員 {admin['username']} 更新了產品 {new_data.get('name')}：" + "、".join(changes)
+            
+            cursor.execute("""
+                INSERT INTO product_logs (product_id, admin_id, operation_type, details, data)
+                VALUES (%s, %s, 'update', %s, %s)
+            """, (
+                product_id,
+                admin_id,
+                details,
+                {'old': old_data, 'new': new_data}
+            ))
+            
+            conn.commit()
+            return True
+            
+    except Exception as e:
+        logger.error("处理产品更新日志错误: %s", str(e))
+        return False 

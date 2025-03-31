@@ -7,23 +7,21 @@ from backend.services.log_service import LogService
 from functools import wraps
 import requests
 import json
+import logging
+
+# 獲取 logger
+logger = logging.getLogger(__name__)
 
 order_bp = Blueprint('order', __name__, url_prefix='/api')
 
 # 通用的郵件發送函數
 def send_email_async(email_func, recipient_email, order_data):
+    """異步發送郵件"""
     try:
-        email_sender = EmailSender()
-        thread = threading.Thread(
-            target=email_func,
-            args=(email_sender, recipient_email, order_data)
-        )
-        thread.start()
+        email_func(recipient_email, order_data)
+        logger.info("郵件發送成功: %s", recipient_email)
     except Exception as e:
-        print(f"郵件線程啟動錯誤: {str(e)}")
-        print("系統將繼續正常運行，但不會發送郵件通知")
-        import traceback
-        traceback.print_exc()
+        logger.error("郵件發送失敗: %s, 錯誤: %s", recipient_email, str(e))
 
 # 常量定義
 ORDER_DETAIL_SQL = """
@@ -51,6 +49,8 @@ ORDER_DETAIL_SQL = """
 
 # 通用的錯誤響應函數
 def error_response(message, status_code=400):
+    """返回錯誤響應"""
+    logger.error("錯誤響應: %s, 狀態碼: %s", message, status_code)
     return jsonify({
         'status': 'error',
         'message': message
@@ -58,6 +58,8 @@ def error_response(message, status_code=400):
 
 # 通用的成功響應函數
 def success_response(data=None, message=None):
+    """返回成功響應"""
+    logger.debug("成功響應: %s, 數據: %s", message, data)
     response = {'status': 'success'}
     if message:
         response['message'] = message
@@ -67,12 +69,19 @@ def success_response(data=None, message=None):
 
 # 格式化日期時間
 def format_datetime(dt):
-    return dt.strftime('%Y-%m-%d %H:%M:%S') if dt else None
+    """格式化日期時間"""
+    if not dt:
+        return None
+    return dt.strftime('%Y-%m-%d %H:%M:%S')
 
 def format_date(dt):
-    return dt.strftime('%Y-%m-%d') if dt else None
+    """格式化日期"""
+    if not dt:
+        return None
+    return dt.strftime('%Y-%m-%d')
 
 def send_order_email(customer_email, order_data):
+    """發送訂單郵件"""
     try:
         # 確保order_data中的所有資料都是字符串
         for key, value in order_data.items():
@@ -89,15 +98,14 @@ def send_order_email(customer_email, order_data):
         email_sender = EmailSender()
         result, message = email_sender.send_order_confirmation(customer_email, order_data)
         if not result:
-            print(f"訂單確認郵件發送失敗: {message}")
-            print("此錯誤不會影響訂單處理")
+            logger.error("訂單郵件發送失敗: %s, 錯誤: %s", customer_email, message)
+        else:
+            logger.info("訂單郵件發送成功: %s", customer_email)
     except Exception as e:
-        print(f"發送郵件時出錯: {str(e)}")
-        print("錯誤不會影響訂單處理")
-        import traceback
-        traceback.print_exc()
+        logger.error("訂單郵件發送失敗: %s, 錯誤: %s", customer_email, str(e))
 
 def send_cancel_email(customer_email, order_data):
+    """發送取消訂單郵件"""
     try:
         # 確保order_data中的所有資料都是字符串
         for key, value in order_data.items():
@@ -114,33 +122,27 @@ def send_cancel_email(customer_email, order_data):
         email_sender = EmailSender()
         result, message = email_sender.send_order_cancellation(customer_email, order_data)
         if not result:
-            print(f"訂單取消郵件發送失敗: {message}")
-            print("此錯誤不會影響訂單取消處理")
+            logger.error("取消訂單郵件發送失敗: %s, 錯誤: %s", customer_email, message)
+        else:
+            logger.info("取消訂單郵件發送成功: %s", customer_email)
     except Exception as e:
-        print(f"發送取消郵件時出錯: {str(e)}")
-        print("錯誤不會影響訂單取消處理")
-        import traceback
-        traceback.print_exc()
+        logger.error("取消訂單郵件發送失敗: %s, 錯誤: %s", customer_email, str(e))
 
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not session.get('admin_id'):
-            return jsonify({"status": "error", "message": "需要管理員權限"}), 401
+            logger.warning("未登入或登入已過期")
+            return error_response("未登入或登入已過期", 401)
         return f(*args, **kwargs)
     return decorated_function
 
 def log_operation(table_name, operation_type, record_id, old_data, new_data, performed_by, user_type):
-    """记录操作日志的辅助函数"""
+    """記錄操作日誌"""
     try:
         with get_db_connection() as conn:
             log_service = LogService(conn)
-            print(f"Logging operation: {operation_type} on {table_name} with ID {record_id}")
-            print(f"Old data: {json.dumps(old_data, ensure_ascii=False) if old_data else None}")
-            print(f"New data: {json.dumps(new_data, ensure_ascii=False) if new_data else None}")
-            print(f"Performed by: {performed_by}, User type: {user_type}")
-            
-            result = log_service.log_operation(
+            success = log_service.log_operation(
                 table_name=table_name,
                 operation_type=operation_type,
                 record_id=record_id,
@@ -149,17 +151,12 @@ def log_operation(table_name, operation_type, record_id, old_data, new_data, per
                 performed_by=performed_by,
                 user_type=user_type
             )
-            
-            if result:
-                print(f"Successfully logged {operation_type} operation")
-                conn.commit()
+            if success:
+                logger.info("日誌記錄成功: %s - %s - ID: %s", operation_type, table_name, record_id)
             else:
-                print(f"Failed to log {operation_type} operation")
-                
-            return result
+                logger.error("日誌記錄失敗: %s - %s - ID: %s", operation_type, table_name, record_id)
     except Exception as e:
-        print(f"Error logging operation: {str(e)}")
-        return False
+        logger.error("記錄日誌時發生錯誤: %s", str(e))
 
 @order_bp.route('/orders/create', methods=['POST'])
 def create_order():
@@ -200,6 +197,12 @@ def create_order():
             
             # 創建訂單項目
             for product in data['products']:
+                # 確保數量是有效的數值
+                try:
+                    product_quantity = float(product.get('product_quantity', 0))
+                except (ValueError, TypeError):
+                    return error_response(f'產品 {product.get("product_id")} 的數量無效')
+
                 cursor.execute("""
                     INSERT INTO order_details (
                         order_id, product_id, product_quantity,
@@ -211,10 +214,10 @@ def create_order():
                 """, (
                     order_id,
                     product['product_id'],
-                    product['product_quantity'],
-                    product['product_unit'],
-                    product['order_status'],
-                    product['shipping_date'],
+                    product_quantity,
+                    product.get('product_unit', ''),
+                    product.get('order_status', '待確認'),
+                    product.get('shipping_date'),
                     product.get('remark', ''),
                     product.get('supplier_note', ''),
                 ))
